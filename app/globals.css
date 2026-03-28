@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+/* Dark mode solo cuando html tiene clase .dark (no por prefers-color-scheme) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  /* Custom Colors */
+  --color-primary: #1301b2;
+  --color-primary-dark: #0e018a;
+  --color-background-light: #ffffff;
+  --color-background-subtle: #f8f8fc;
+  --color-background-dark: #110f23;
+  --color-surface-light: #f8f9fa;
+  --color-surface-dark: #1a1d24;
+  --color-text-main: #0e0c1d;
+  --color-text-secondary: #4e45a1;
+  --color-text-main-light: #111827;
+  --color-text-main-dark: #f9fafb;
+  --color-text-sec-light: #4b5563;
+  --color-text-sec-dark: #9ca3af;
+
+  /* Semantic theme colors (resolve from --app-* for light/dark switching) */
+  --color-app-bg: var(--app-bg);
+  --color-app-bg-subtle: var(--app-bg-subtle);
+  --color-app-surface: var(--app-surface);
+  --color-app-text: var(--app-text);
+  --color-app-text-sec: var(--app-text-sec);
+  --color-app-border: var(--app-border);
+  --color-app-text-on-dark: var(--app-text-on-dark);
+
+  /* Fonts */
+  --font-display: "Inter", sans-serif;
+  --font-sans: "Inter", sans-serif;
+
+  /* Border Radius */
+  --radius: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-full: 9999px;
+}
+
+/* Light theme (default) */
+:root,
+html {
+  --app-bg: #ffffff;
+  --app-bg-subtle: #f8f8fc;
+  --app-surface: #f8f9fa;
+  --app-text: #0e0c1d;
+  --app-text-sec: #4b5563;
+  --app-border: #e7e6f4;
+  --app-text-on-dark: #0e0c1d; /* text on dark bg in light mode (e.g. not used) */
+}
+
+/* Dark theme: text/icons on dark surfaces = white + high weight for contrast */
+html.dark {
+  --app-bg: #110f23;
+  --app-bg-subtle: #1a1729;
+  --app-surface: #1a1d24;
+  --app-text: #f9fafb;
+  --app-text-sec: #9ca3af;
+  --app-border: #2d2a3e;
+  --app-text-on-dark: #ffffff;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--app-bg);
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Hide scrollbar for chips */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Dark mode only: extra weight for text/icons on dark surfaces (color must come from Tailwind dark:text-white) */
+html.dark .text-on-dark-surface {
+  font-weight: 700;
+}
+html.dark .text-on-dark-surface.font-semibold {
+  font-weight: 600;
+}
+html.dark .material-symbols-outlined.text-on-dark-surface {
+  font-variation-settings: "FILL" 0, "wght" 600, "GRAD" 0, "opsz" 24;
+}

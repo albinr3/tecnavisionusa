@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Product {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  name            String
+  model           String
+  subtitle        String?
+  description     String?
+  badge           String?
+  rating          Int      @default(5)
+  reviewsCount    Int      @default(0)
+  
+  // Images
+  mainImage       String?
+  galleryImages   String[] @default([])
+  nightVisionImg  String?
+  appDemoImg      String?
+  appDemoBadge    String?
+  appDemoTitle    String?
+  appDemoDesc     String?
+  aiSectionIcon   String?
+  nightVisionIcon String?
+  specsSectionIcon String?
+  guaranteeIcon   String?
+  supportIcon     String?
+  
+  // Specs
+  protection      String?
+  compression     String?
+  lens            String?
+  power           String?
+  resolutionOpts  String[] // Array de opciones de resolución
+  
+  // Features
+  aiDetection     String[] // Array de funciones IA
+  guarantee       String?
+  support         String?
+  
+  // Relations
+  categoryId      String?
+  category        Category? @relation(fields: [categoryId], references: [id])
+  
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Variants
+  variants        ProductVariant[]
+}
+
+model ProductVariant {
+  id          String   @id @default(cuid())
+  name        String   // Ej: "4 Megapixel", "8 MP (4K)"
+  description String?  // Diferencias específicas
+  
+  // Overrides (si es vacío, usa el del producto padre en la lógica de front)
+  manual      String?  
+  datasheet   String?
+  price       Decimal? // Futuro uso
+  
+  // Relación
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  icon        String?   // Material icon name
+  description String?
+  products    Product[]
+  createdAt   DateTime  @default(now())
+}
+
+model Quote {
+  id          String   @id @default(cuid())
+  productSlug String?
+  productName String
+  clientName  String
+  clientEmail String
+  clientPhone String?
+  company     String?
+  message     String?
+  status      String   @default("pending") // pending, contacted, completed, cancelled
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Distributor {
+  id          String   @id @default(cuid())
+  name        String
+  icon        String   // Material icon name
+  address     String
+  city        String   // Para filtrado
+  state       String?
+  phone       String
+  email       String
+  mapUrl      String?  // Google Maps URL
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

@@ -1,0 +1,9 @@
+Loaded Prisma config from prisma.config.ts.
+
+Running seed command `npx ts-node --compiler-options {"module":"CommonJS"} prisma/seed.ts` ...
+≡ƒî▒ Seeding database...
+Γ£à Created 4 categories
+Γ£à Created products: Bullet Cam, Guardian Eye
+≡ƒÄë Seeding complete!
+
+The seed command has been executed.

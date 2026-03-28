@@ -1,0 +1,52 @@
+{
+  "name": "tecnovision-nextjs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "lint": "eslint",
+    "postinstall": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "npx ts-node --project prisma/tsconfig.seed.json prisma/seed.ts",
+    "db:seed:export": "npx ts-node --project prisma/tsconfig.seed.json prisma/seed-export.ts",
+    "db:seed:from-data": "npx ts-node --project prisma/tsconfig.seed.json prisma/seed-from-data.ts",
+    "db:seed:distributors-rd": "npx ts-node --project prisma/tsconfig.seed.json prisma/update-distributors-rd.ts",
+    "db:push": "prisma db push",
+    "db:migrate:uploads": "npx ts-node --project prisma/tsconfig.seed.json prisma/migrate-legacy-uploads.ts",
+    "db:migrate:uploads:dry": "npx ts-node --project prisma/tsconfig.seed.json prisma/migrate-legacy-uploads.ts --dry-run"
+  },
+  "prisma": {
+    "seed": "npx ts-node --project prisma/tsconfig.seed.json prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.3.0",
+    "next": "16.1.6",
+    "nodemailer": "^8.0.1",
+    "prisma": "^7.3.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-hot-toast": "^2.6.0",
+    "sonner": "^2.0.7",
+    "uploadthing": "^7.7.4"
+  },
+  "devDependencies": {
+    "@prisma/adapter-pg": "^7.3.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/nodemailer": "^7.0.9",
+    "@types/pg": "^8.16.0",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/uuid": "^10.0.0",
+    "babel-plugin-react-compiler": "1.0.0",
+    "dotenv": "^17.2.3",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "pg": "^8.17.2",
+    "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5"
+  }
+}
