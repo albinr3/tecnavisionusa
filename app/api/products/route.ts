@@ -1,10 +1,26 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { normalizeMarket, sanitizeMarkets } from "@/lib/market";
 
 // GET /api/products - List all products
-export async function GET() {
+export async function GET(request: NextRequest) {
     try {
+        const marketParam = request.nextUrl.searchParams.get("market");
+        const market = normalizeMarket(marketParam);
+        if (marketParam && !market) {
+            return NextResponse.json(
+                { error: "Invalid market. Use RD or US." },
+                { status: 400 }
+            );
+        }
         const products = await prisma.product.findMany({
+            where: market
+                ? {
+                    availableMarkets: {
+                        has: market,
+                    },
+                }
+                : undefined,
             include: {
                 category: true,
             },
@@ -55,7 +71,20 @@ export async function POST(request: Request) {
             aiDetection,
             guarantee,
             support,
+            availableMarkets,
+            title_es,
+            title_en,
+            description_es,
+            description_en,
         } = body;
+
+        const sanitizedMarkets = sanitizeMarkets(availableMarkets);
+        if (sanitizedMarkets.length === 0) {
+            return NextResponse.json(
+                { error: "Select at least one market (RD or US)." },
+                { status: 400 }
+            );
+        }
 
         // Generate slug from name and model
         const slug = `${name}-${model}`
@@ -79,8 +108,13 @@ export async function POST(request: Request) {
                 slug,
                 name,
                 model,
+                title_es: title_es?.trim() || null,
+                title_en: title_en?.trim() || null,
                 subtitle,
                 description,
+                description_es: description_es?.trim() || null,
+                description_en: description_en?.trim() || null,
+                availableMarkets: sanitizedMarkets,
                 badge,
                 mainImage,
                 galleryImages: galleryImages || [],

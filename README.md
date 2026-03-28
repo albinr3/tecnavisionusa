@@ -1,5 +1,5 @@
 # TecnaVision - Next.js Application
-
+Esta es la web de estados unidos.
 Aplicación web de TecnaVision convertida de HTML a Next.js, manteniendo el diseño exacto original.
 
 ## 🚀 Inicio Rápido
@@ -11,6 +11,22 @@ npm run dev
 ```
 
 Abrir [http://localhost:3000](http://localhost:3000) en el navegador.
+
+## 🌎 Multi-mercado (RD/US)
+
+Este proyecto soporta filtrado de productos por mercado usando la variable de entorno:
+
+```bash
+SITE_MARKET=US   # o RD
+```
+
+Si `SITE_MARKET` no está definida o es inválida, el sistema usa `US` por defecto.
+
+Después de actualizar esquema Prisma, aplica migraciones:
+
+```bash
+npx prisma migrate deploy
+```
 
 ## 📁 Estructura del Proyecto
 

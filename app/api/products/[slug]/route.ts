@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { normalizeMarket, sanitizeMarkets } from "@/lib/market";
 
 type Props = {
     params: Promise<{ slug: string }>;
@@ -9,13 +10,33 @@ type Props = {
 export async function GET(request: Request, { params }: Props) {
     try {
         const { slug } = await params;
+        const { searchParams } = new URL(request.url);
+        const market = normalizeMarket(searchParams.get("market"));
+        if (searchParams.has("market") && !market) {
+            return NextResponse.json(
+                { error: "Invalid market. Use RD or US." },
+                { status: 400 }
+            );
+        }
 
-        const product = await prisma.product.findUnique({
-            where: { slug },
-            include: {
-                category: true,
-            },
-        });
+        const product = market
+            ? await prisma.product.findFirst({
+                where: {
+                    slug,
+                    availableMarkets: {
+                        has: market,
+                    },
+                },
+                include: {
+                    category: true,
+                },
+            })
+            : await prisma.product.findUnique({
+                where: { slug },
+                include: {
+                    category: true,
+                },
+            });
 
         if (!product) {
             return NextResponse.json(
@@ -39,14 +60,27 @@ export async function PUT(request: Request, { params }: Props) {
     try {
         const { slug } = await params;
         const body = await request.json();
+        const sanitizedMarkets = sanitizeMarkets(body.availableMarkets);
+
+        if (sanitizedMarkets.length === 0) {
+            return NextResponse.json(
+                { error: "Select at least one market (RD or US)." },
+                { status: 400 }
+            );
+        }
 
         const product = await prisma.product.update({
             where: { slug },
             data: {
                 name: body.name,
                 model: body.model,
+                title_es: body.title_es?.trim() || null,
+                title_en: body.title_en?.trim() || null,
                 subtitle: body.subtitle,
                 description: body.description,
+                description_es: body.description_es?.trim() || null,
+                description_en: body.description_en?.trim() || null,
+                availableMarkets: sanitizedMarkets,
                 badge: body.badge,
                 mainImage: body.mainImage,
                 galleryImages: body.galleryImages || [],

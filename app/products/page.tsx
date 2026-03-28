@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Footer from "@/app/components/Footer";
 import Header from "@/app/components/Header";
 import { prisma } from "@/lib/db";
+import { getSiteMarket, type MarketCode } from "@/lib/market";
+import { getLocalizedProductDescription, getLocalizedProductName } from "@/lib/product-localization";
 import Link from "next/link";
 import Image from "next/image";
 import type { Prisma } from "@prisma/client";
@@ -11,6 +13,7 @@ const PRODUCTS_PER_PAGE = 9;
 const EAGER_PRODUCT_IMAGE_COUNT = 8;
 
 async function getProducts(
+    market: MarketCode,
     categoryFilters: string[] = [],
     resolutionFilters: string[] = [],
     featureFilters: string[] = [],
@@ -18,7 +21,13 @@ async function getProducts(
     page = 1
 ) {
     try {
-        const filters: Prisma.ProductWhereInput[] = [];
+        const filters: Prisma.ProductWhereInput[] = [
+            {
+                availableMarkets: {
+                    has: market,
+                },
+            },
+        ];
 
         if (categoryFilters.length > 0) {
             filters.push({
@@ -54,12 +63,22 @@ async function getProducts(
         }
 
         if (searchFilter) {
+            const localizedTextFields = market === "RD"
+                ? [
+                    { title_es: { contains: searchFilter, mode: "insensitive" as const } },
+                    { description_es: { contains: searchFilter, mode: "insensitive" as const } },
+                ]
+                : [
+                    { title_en: { contains: searchFilter, mode: "insensitive" as const } },
+                    { description_en: { contains: searchFilter, mode: "insensitive" as const } },
+                ];
             filters.push({
                 OR: [
                     { name: { contains: searchFilter, mode: "insensitive" } },
                     { model: { contains: searchFilter, mode: "insensitive" } },
                     { subtitle: { contains: searchFilter, mode: "insensitive" } },
                     { description: { contains: searchFilter, mode: "insensitive" } },
+                    ...localizedTextFields,
                 ],
             });
         }
@@ -72,7 +91,7 @@ async function getProducts(
         const totalPages = Math.max(1, Math.ceil(total / PRODUCTS_PER_PAGE));
         const safePage = Math.min(Math.max(page, 1), totalPages);
 
-        const items = await prisma.product.findMany({
+        const rawItems = await prisma.product.findMany({
             where,
             include: {
                 category: true
@@ -83,6 +102,12 @@ async function getProducts(
             skip: (safePage - 1) * PRODUCTS_PER_PAGE,
             take: PRODUCTS_PER_PAGE,
         });
+
+        const items = rawItems.map((product) => ({
+            ...product,
+            localizedName: getLocalizedProductName(product, market),
+            localizedDescription: getLocalizedProductDescription(product, market),
+        }));
 
         return { total, items, page: safePage, totalPages };
     } catch (error) {
@@ -151,6 +176,7 @@ export async function generateMetadata({ searchParams }: ShopPageProps): Promise
 }
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {
+    const activeMarket = getSiteMarket();
     const resolvedSearchParams = searchParams
         ? ("then" in searchParams ? await searchParams : searchParams)
         : {};
@@ -162,6 +188,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     const requestedPage = Number.parseInt(resolveFirstParam(resolvedSearchParams.page), 10);
     const currentPage = Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : 1;
     const { total, items: products, page: safeCurrentPage, totalPages } = await getProducts(
+        activeMarket,
         requestedCategories,
         requestedResolutions,
         requestedFeatures,
@@ -187,6 +214,11 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
             { id: "accesorios", name: "Accesorios", slug: "accesorios" },
         ];
     const filterSourceProducts = await prisma.product.findMany({
+        where: {
+            availableMarkets: {
+                has: activeMarket,
+            },
+        },
         select: {
             resolutionOpts: true,
             aiDetection: true,
@@ -334,7 +366,10 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                                     </div>
                                     <div className="p-5 flex flex-col flex-1">
                                         <div className="flex-1">
-                                            <h3 className="text-app-text text-lg font-bold mb-2 group-hover:text-primary transition-colors">{product.name} {product.model}</h3>
+                                            <h3 className="text-app-text text-lg font-bold mb-2 group-hover:text-primary transition-colors">{product.localizedName} {product.model}</h3>
+                                            {product.localizedDescription && (
+                                                <p className="text-xs text-app-text-sec mb-3 line-clamp-2">{product.localizedDescription}</p>
+                                            )}
                                             <div className="flex flex-wrap gap-2 mb-4">
                                                 <span className="text-[11px] font-medium text-app-text-sec bg-app-bg-subtle px-2 py-1 rounded-md">{product.category?.name || 'General'}</span>
                                                 {product.resolutionOpts.slice(0, 2).map((opt) => (

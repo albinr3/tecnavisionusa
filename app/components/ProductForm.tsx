@@ -33,6 +33,10 @@ const NVR_SPEC_TEMPLATE = [
 
 const CAMERA_NIGHT_VISION_DEFAULT = "/NIGHT.webp";
 const NVR_NIGHT_VISION_DEFAULT = "/graficonvr.webp";
+const MARKET_OPTIONS = [
+    { code: "RD", label: "República Dominicana (RD)" },
+    { code: "US", label: "Estados Unidos (US)" },
+] as const;
 
 export default function ProductForm({ categories, initialData }: ProductFormProps) {
     const router = useRouter();
@@ -50,6 +54,15 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
     const [model, setModel] = useState(initialData?.model || "");
     const [subtitle, setSubtitle] = useState(initialData?.subtitle || "");
     const [description, setDescription] = useState(initialData?.description || "");
+    const [titleEs, setTitleEs] = useState(initialData?.title_es || "");
+    const [titleEn, setTitleEn] = useState(initialData?.title_en || "");
+    const [descriptionEs, setDescriptionEs] = useState(initialData?.description_es || "");
+    const [descriptionEn, setDescriptionEn] = useState(initialData?.description_en || "");
+    const [availableMarkets, setAvailableMarkets] = useState<string[]>(
+        initialData?.availableMarkets?.length
+            ? initialData.availableMarkets
+            : ["RD", "US"]
+    );
     const [badge, setBadge] = useState(initialData?.badge || "");
     const [category, setCategory] = useState(initialData?.categoryId || "");
     const [mainImage, setMainImage] = useState(initialData?.mainImage || "");
@@ -200,6 +213,14 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
         const updated = [...variants];
         updated[index] = { ...updated[index], [field]: value };
         setVariants(updated);
+    };
+
+    const toggleMarket = (marketCode: string) => {
+        setAvailableMarkets((prev) =>
+            prev.includes(marketCode)
+                ? prev.filter((market) => market !== marketCode)
+                : [...prev, marketCode]
+        );
     };
 
     const uploadImageFile = async (
@@ -360,6 +381,12 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
             toast.warning(msg);
             return;
         }
+        if (availableMarkets.length === 0) {
+            const msg = "Selecciona al menos un mercado disponible (RD o US).";
+            setError(msg);
+            toast.warning(msg);
+            return;
+        }
 
         setIsSubmitting(true);
         setError(null);
@@ -378,6 +405,11 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                     model,
                     subtitle,
                     description,
+                    title_es: titleEs || null,
+                    title_en: titleEn || null,
+                    description_es: descriptionEs || null,
+                    description_en: descriptionEn || null,
+                    availableMarkets,
                     badge: badge || null,
                     mainImage: mainImage || null,
                     galleryImages,
@@ -620,6 +652,27 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                                 </div>
                             </div>
                         </label>
+                        <div className="md:col-span-2 rounded-lg border border-app-border bg-app-bg-subtle p-4">
+                            <span className="text-sm font-medium text-app-text block mb-3">
+                                Mercados Disponibles <span className="text-red-500">*</span>
+                            </span>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                {MARKET_OPTIONS.map((market) => (
+                                    <label key={market.code} className="flex items-center gap-2 text-sm text-app-text">
+                                        <input
+                                            type="checkbox"
+                                            checked={availableMarkets.includes(market.code)}
+                                            onChange={() => toggleMarket(market.code)}
+                                            className="h-4 w-4 rounded border-app-border text-primary focus:ring-primary"
+                                        />
+                                        {market.label}
+                                    </label>
+                                ))}
+                            </div>
+                            <p className="mt-2 text-xs text-app-text-sec">
+                                El producto debe pertenecer al menos a un mercado para poder publicarse.
+                            </p>
+                        </div>
                     </div>
                 </div>
 
@@ -648,6 +701,57 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                             placeholder="Escribe una descripción detallada del producto aquí..."
                         />
                     </label>
+                </div>
+
+                {/* Section 2.1: Localized Content */}
+                <div className="bg-app-surface rounded-xl border border-app-border shadow-sm p-6">
+                    <h3 className="text-lg font-bold text-app-text mb-5 flex items-center gap-2">
+                        <span className="material-symbols-outlined text-primary">translate</span>
+                        Contenido Multi-idioma (Opcional)
+                    </h3>
+                    <p className="text-xs text-app-text-sec mb-4">
+                        Si un campo no se completa, el sitio usa el valor base (`name`/`description`) como fallback.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <label className="flex flex-col gap-2">
+                            <span className="text-sm font-medium text-app-text">Título (Español)</span>
+                            <input
+                                type="text"
+                                value={titleEs}
+                                onChange={(e) => setTitleEs(e.target.value)}
+                                className="w-full rounded-lg border border-app-border bg-app-surface h-11 px-4 text-sm text-app-text focus:border-primary focus:ring-0 placeholder:text-app-text-sec/70"
+                                placeholder="Ej. Cámara Bullet para exterior"
+                            />
+                        </label>
+                        <label className="flex flex-col gap-2">
+                            <span className="text-sm font-medium text-app-text">Título (Inglés)</span>
+                            <input
+                                type="text"
+                                value={titleEn}
+                                onChange={(e) => setTitleEn(e.target.value)}
+                                className="w-full rounded-lg border border-app-border bg-app-surface h-11 px-4 text-sm text-app-text focus:border-primary focus:ring-0 placeholder:text-app-text-sec/70"
+                                placeholder="Ex. Outdoor Bullet Camera"
+                            />
+                        </label>
+                        <label className="flex flex-col gap-2">
+                            <span className="text-sm font-medium text-app-text">Descripción (Español)</span>
+                            <textarea
+                                value={descriptionEs}
+                                onChange={(e) => setDescriptionEs(e.target.value)}
+                                className="w-full h-28 p-4 text-sm text-app-text border border-app-border rounded-lg focus:border-primary focus:ring-0 resize-y outline-none placeholder:text-app-text-sec/70"
+                                placeholder="Descripción para mercado RD..."
+                            />
+                        </label>
+                        <label className="flex flex-col gap-2">
+                            <span className="text-sm font-medium text-app-text">Descripción (Inglés)</span>
+                            <textarea
+                                value={descriptionEn}
+                                onChange={(e) => setDescriptionEn(e.target.value)}
+                                className="w-full h-28 p-4 text-sm text-app-text border border-app-border rounded-lg focus:border-primary focus:ring-0 resize-y outline-none placeholder:text-app-text-sec/70"
+                                placeholder="Description for US market..."
+                            />
+                        </label>
+                    </div>
                 </div>
 
                 {/* Section 3: Specs & Features */}
