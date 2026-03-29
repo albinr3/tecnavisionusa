@@ -3,10 +3,19 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Category } from "@prisma/client";
+
+type EditableCategory = {
+    id: string;
+    name: string;
+    name_es?: string | null;
+    name_en?: string | null;
+    slug: string;
+    icon: string | null;
+    description: string | null;
+};
 
 interface EditCategoryFormProps {
-    category: Category;
+    category: EditableCategory;
 }
 
 export default function EditCategoryForm({ category }: EditCategoryFormProps) {
@@ -14,6 +23,8 @@ export default function EditCategoryForm({ category }: EditCategoryFormProps) {
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         name: category.name,
+        name_es: category.name_es || "",
+        name_en: category.name_en || "",
         slug: category.slug,
         icon: category.icon || "",
         description: category.description || "",
@@ -32,6 +43,9 @@ export default function EditCategoryForm({ category }: EditCategoryFormProps) {
         setLoading(true);
 
         try {
+            if (!formData.name_es.trim() && !formData.name_en.trim() && !formData.name.trim()) {
+                throw new Error("Please provide at least one category name (ES or EN).");
+            }
             const res = await fetch(`/api/categories/${category.id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
@@ -51,14 +65,37 @@ export default function EditCategoryForm({ category }: EditCategoryFormProps) {
 
     return (
         <form onSubmit={handleSubmit} className="bg-app-surface rounded-xl border border-app-border shadow-sm p-6 md:p-8 space-y-6">
-            {/* Name */}
+            {/* Names */}
             <div>
-                <label htmlFor="name" className="block text-sm font-semibold text-app-text mb-2">Nombre</label>
+                <label htmlFor="name_es" className="block text-sm font-semibold text-app-text mb-2">Name (ES)</label>
+                <input
+                    type="text"
+                    id="name_es"
+                    name="name_es"
+                    value={formData.name_es}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2.5 bg-app-bg-subtle border border-app-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-app-text"
+                />
+            </div>
+
+            <div>
+                <label htmlFor="name_en" className="block text-sm font-semibold text-app-text mb-2">Name (EN)</label>
+                <input
+                    type="text"
+                    id="name_en"
+                    name="name_en"
+                    value={formData.name_en}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2.5 bg-app-bg-subtle border border-app-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-app-text"
+                />
+            </div>
+
+            <div>
+                <label htmlFor="name" className="block text-sm font-semibold text-app-text mb-2">Legacy/Fallback Name</label>
                 <input
                     type="text"
                     id="name"
                     name="name"
-                    required
                     value={formData.name}
                     onChange={handleChange}
                     className="w-full px-4 py-2.5 bg-app-bg-subtle border border-app-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-app-text"
@@ -81,7 +118,7 @@ export default function EditCategoryForm({ category }: EditCategoryFormProps) {
 
             {/* Icon */}
             <div>
-                <label htmlFor="icon" className="block text-sm font-semibold text-app-text mb-2">Icono (Material Symbols)</label>
+                <label htmlFor="icon" className="block text-sm font-semibold text-app-text mb-2">Icon (Material Symbols)</label>
                 <div className="flex gap-4">
                     <input
                         type="text"
@@ -99,7 +136,7 @@ export default function EditCategoryForm({ category }: EditCategoryFormProps) {
 
             {/* Description */}
             <div>
-                <label htmlFor="description" className="block text-sm font-semibold text-app-text mb-2">Descripción</label>
+                <label htmlFor="description" className="block text-sm font-semibold text-app-text mb-2">Description</label>
                 <textarea
                     id="description"
                     name="description"
@@ -116,16 +153,17 @@ export default function EditCategoryForm({ category }: EditCategoryFormProps) {
                     href="/admin/categories"
                     className="px-4 py-2 text-sm font-semibold text-app-text-sec hover:text-app-text transition-colors"
                 >
-                    Cancelar
+                    Cancel
                 </Link>
                 <button
                     type="submit"
                     disabled={loading}
                     className="px-6 py-2 bg-primary text-white text-sm font-semibold rounded-lg shadow-sm hover:bg-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    {loading ? "Guardando..." : "Guardar Cambios"}
+                    {loading ? "Saving..." : "Save Changes"}
                 </button>
             </div>
         </form>
     );
 }
+

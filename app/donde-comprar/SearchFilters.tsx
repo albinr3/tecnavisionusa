@@ -3,13 +3,19 @@
 import { useState, useEffect } from "react";
 
 interface SearchFiltersProps {
-    onSearch?: (name: string, location: string) => void;
+    onSearch?: (name: string, location: string, country: string) => void;
 }
 
 export default function SearchFilters({ onSearch }: SearchFiltersProps) {
     const [searchName, setSearchName] = useState("");
     const [location, setLocation] = useState("");
+    const [country, setCountry] = useState("Dominican Republic");
     const [provinces, setProvinces] = useState<string[]>([]);
+
+    // When country changes, empty location
+    useEffect(() => {
+        setLocation("");
+    }, [country]);
 
     useEffect(() => {
         // Fetch all distributors to get unique provinces
@@ -22,6 +28,7 @@ export default function SearchFilters({ onSearch }: SearchFiltersProps) {
                 const uniqueProvinces = Array.from(
                     new Set(
                         distributors
+                            .filter((d: any) => d.country === country)
                             .map((d: any) => d.state)
                             .filter((state: string | null) => state !== null && state !== "")
                     )
@@ -34,11 +41,11 @@ export default function SearchFilters({ onSearch }: SearchFiltersProps) {
         };
 
         fetchProvinces();
-    }, []);
+    }, [country]);
 
     const handleSearch = () => {
         if (onSearch) {
-            onSearch(searchName, location);
+            onSearch(searchName, location, country);
         }
     };
 
@@ -53,7 +60,7 @@ export default function SearchFilters({ onSearch }: SearchFiltersProps) {
             <div className="flex flex-col md:flex-row items-stretch md:items-end gap-4">
                 <label className="flex flex-col w-full md:flex-[2]">
                     <span className="text-app-text text-sm font-bold pb-2 ml-1">
-                        Buscar por nombre
+                        Search by name
                     </span>
                     <div className="relative">
                         <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-app-text-sec">
@@ -71,7 +78,28 @@ export default function SearchFilters({ onSearch }: SearchFiltersProps) {
                 </label>
                 <label className="flex flex-col w-full md:flex-1">
                     <span className="text-app-text text-sm font-bold pb-2 ml-1">
-                        Provincia
+                        Country
+                    </span>
+                    <div className="relative">
+                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-app-text-sec">
+                            public
+                        </span>
+                        <select
+                            className="w-full bg-app-bg-subtle border border-app-border rounded-xl px-4 pl-12 py-3.5 text-app-text appearance-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none cursor-pointer"
+                            value={country}
+                            onChange={(e) => setCountry(e.target.value)}
+                        >
+                            <option value="Dominican Republic">Dominican Republic</option>
+                            <option value="Estados Unidos">Estados Unidos</option>
+                        </select>
+                        <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-app-text-sec pointer-events-none">
+                            expand_more
+                        </span>
+                    </div>
+                </label>
+                <label className="flex flex-col w-full md:flex-1">
+                    <span className="text-app-text text-sm font-bold pb-2 ml-1">
+                        {country === "Estados Unidos" ? "Estado" : "Provincia"}
                     </span>
                     <div className="relative">
                         <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-app-text-sec">
@@ -82,7 +110,7 @@ export default function SearchFilters({ onSearch }: SearchFiltersProps) {
                             value={location}
                             onChange={(e) => setLocation(e.target.value)}
                         >
-                            <option value="">Todas las Provincias</option>
+                            <option value="">{country === "Estados Unidos" ? "Todos los Estados" : "Todas las Provincias"}</option>
                             {provinces.map((province) => (
                                 <option key={province} value={province}>
                                     {province}
@@ -98,9 +126,11 @@ export default function SearchFilters({ onSearch }: SearchFiltersProps) {
                     className="w-full md:w-auto h-[50px] bg-primary hover:bg-primary-dark text-white font-bold px-8 rounded-xl transition-colors shadow-lg shadow-primary/20 flex items-center justify-center gap-2"
                     onClick={handleSearch}
                 >
-                    <span>Buscar</span>
+                    <span>Search</span>
                 </button>
             </div>
         </div>
     );
 }
+
+

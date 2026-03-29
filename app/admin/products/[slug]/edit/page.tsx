@@ -19,6 +19,7 @@ export default async function EditProductPage(props: EditProductPageProps) {
             include: { variants: true }
         }),
         prisma.category.findMany({
+            select: { id: true, name: true, slug: true },
             orderBy: { name: 'asc' }
         })
     ]);
@@ -34,19 +35,19 @@ export default async function EditProductPage(props: EditProductPageProps) {
                 <div>
                     <div className="flex items-center gap-2 text-[#645e8d] text-sm mb-1">
                         <Link href="/admin/products" className="hover:text-primary transition-colors">
-                            Productos
+                            Products
                         </Link>
                         <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-                        <span className="text-app-text font-medium">Editar Detalle</span>
+                        <span className="text-app-text font-medium">Edit Details</span>
                     </div>
-                    <h2 className="text-app-text text-2xl font-bold tracking-tight">Editar Producto</h2>
+                    <h2 className="text-app-text text-2xl font-bold tracking-tight">Edit Product</h2>
                 </div>
                 <div className="flex items-center gap-3">
                     <Link
                         href="/admin/products"
                         className="flex h-10 items-center justify-center rounded-lg px-4 border border-app-border bg-app-surface text-app-text text-sm font-semibold hover:bg-app-bg-subtle transition-colors"
                     >
-                        Cancelar
+                        Cancel
                     </Link>
                     <button
                         form="product-form"
@@ -54,7 +55,7 @@ export default async function EditProductPage(props: EditProductPageProps) {
                         className="flex h-10 items-center justify-center rounded-lg px-6 bg-primary text-white text-sm font-semibold shadow-sm hover:bg-blue-800 transition-colors gap-2 disabled:opacity-50"
                     >
                         <span className="material-symbols-outlined text-[18px]">save</span>
-                        Guardar Cambios
+                        Save Changes
                     </button>
                 </div>
             </header>
@@ -66,3 +67,4 @@ export default async function EditProductPage(props: EditProductPageProps) {
         </>
     );
 }
+

@@ -5,21 +5,21 @@ import Header from "../components/Header";
 import ContactForm from "./ContactForm";
 
 export const metadata: Metadata = {
-    title: "Contacto - TecnaVision",
-    description: "Estamos aquí para asegurar tu tranquilidad. Hablemos de tus necesidades de seguridad hoy mismo.",
+    title: "Contact - TecnaVision",
+    description: "We are here to ensure your peace of mind. Let's talk about your security needs today.",
     alternates: {
-        canonical: "/contacto",
+        canonical: "/contact",
     },
     openGraph: {
-        title: "Contacto - TecnaVision",
-        description: "Estamos aquí para asegurar tu tranquilidad. Hablemos de tus necesidades de seguridad hoy mismo.",
-        url: "/contacto",
+        title: "Contact - TecnaVision",
+        description: "We are here to ensure your peace of mind. Let's talk about your security needs today.",
+        url: "/contact",
         type: "website",
     },
     twitter: {
         card: "summary_large_image",
-        title: "Contacto - TecnaVision",
-        description: "Estamos aquí para asegurar tu tranquilidad. Hablemos de tus necesidades de seguridad hoy mismo.",
+        title: "Contact - TecnaVision",
+        description: "We are here to ensure your peace of mind. Let's talk about your security needs today.",
     },
 };
 
@@ -34,10 +34,10 @@ export default function ContactPage() {
                     {/* Header Section */}
                     <div className="flex flex-col gap-4 mb-16 max-w-2xl">
                         <h1 className="text-app-text text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight">
-                            Contáctanos
+                            Contact Us
                         </h1>
                         <p className="text-app-text-sec text-lg sm:text-xl font-normal leading-relaxed">
-                            Estamos aquí para asegurar tu tranquilidad. Hablemos de tus necesidades de seguridad hoy mismo.
+                            We are here to ensure your peace of mind. Let&apos;s talk about your security needs today.
                         </p>
                     </div>
 
@@ -47,7 +47,7 @@ export default function ContactPage() {
                         <div className="flex flex-col gap-8 order-2 lg:order-1">
                             {/* Contact Details Card */}
                             <div className="bg-app-surface rounded-2xl p-6 sm:p-8 shadow-sm border border-app-border">
-                                <h3 className="text-app-text font-bold text-xl mb-6">Información de Contacto</h3>
+                                <h3 className="text-app-text font-bold text-xl mb-6">Contact Information</h3>
                                 <div className="flex flex-col gap-1">
                                     {/* Address */}
                                     <div className="flex items-start gap-4 py-4 border-b border-app-border last:border-0">
@@ -55,8 +55,8 @@ export default function ContactPage() {
                                             <span className="material-symbols-outlined">location_on</span>
                                         </div>
                                         <div>
-                                            <p className="text-xs font-semibold text-app-text-sec uppercase tracking-wider mb-1">Ubicación</p>
-                                            <p className="text-app-text text-base font-medium">Cibao, República Dominicana</p>
+                                            <p className="text-xs font-semibold text-app-text-sec uppercase tracking-wider mb-1">Location</p>
+                                            <p className="text-app-text text-base font-medium">New Jersey, USA</p>
                                         </div>
                                     </div>
 
@@ -66,7 +66,7 @@ export default function ContactPage() {
                                             <span className="material-symbols-outlined">call</span>
                                         </div>
                                         <div>
-                                            <p className="text-xs font-semibold text-app-text-sec uppercase tracking-wider mb-1">Teléfono</p>
+                                            <p className="text-xs font-semibold text-app-text-sec uppercase tracking-wider mb-1">Phone</p>
                                             <p className="text-app-text text-base font-medium break-all">+1 829-796-0509</p>
                                         </div>
                                     </div>
@@ -77,7 +77,7 @@ export default function ContactPage() {
                                             <span className="material-symbols-outlined">mail</span>
                                         </div>
                                         <div>
-                                            <p className="text-xs font-semibold text-app-text-sec uppercase tracking-wider mb-1">Correo Electrónico</p>
+                                            <p className="text-xs font-semibold text-app-text-sec uppercase tracking-wider mb-1">Email</p>
                                             <p className="text-app-text text-base font-medium break-all">Tecnavision1@gmail.com</p>
                                         </div>
                                     </div>
@@ -88,8 +88,8 @@ export default function ContactPage() {
                                             <span className="material-symbols-outlined">schedule</span>
                                         </div>
                                         <div>
-                                            <p className="text-xs font-semibold text-app-text-sec uppercase tracking-wider mb-1">Horario de Atención</p>
-                                            <p className="text-app-text text-base font-medium">Lun - Vie: 9:00 AM - 6:00 PM</p>
+                                            <p className="text-xs font-semibold text-app-text-sec uppercase tracking-wider mb-1">Business Hours</p>
+                                            <p className="text-app-text text-base font-medium">Mon - Fri: 9:00 AM - 6:00 PM</p>
                                         </div>
                                     </div>
                                 </div>
@@ -99,7 +99,7 @@ export default function ContactPage() {
                             <div className="relative w-full h-64 rounded-xl overflow-hidden shadow-sm group">
                                 {/* Map Image */}
                                 <Image
-                                    alt="Ubicación de TecnaVision en la región del Cibao, República Dominicana"
+                                    alt="TecnaVision Location in New Jersey, USA"
                                     className="object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300 grayscale hover:grayscale-0"
                                     fill
                                     sizes="(min-width: 1024px) 50vw, 100vw"
@@ -117,7 +117,7 @@ export default function ContactPage() {
                                 {/* View on maps badge */}
                                 <div className="absolute bottom-4 right-4">
                                     <button className="bg-app-surface/90 backdrop-blur text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm text-app-text flex items-center gap-1 hover:bg-app-surface transition-colors">
-                                        Ver en Mapa
+                                        View on Map
                                         <span className="material-symbols-outlined text-[14px]">open_in_new</span>
                                     </button>
                                 </div>
@@ -126,7 +126,7 @@ export default function ContactPage() {
 
                         {/* Right Column: Form */}
                         <div className="bg-app-surface rounded-2xl p-6 sm:p-10 shadow-lg shadow-app-border/50 order-1 lg:order-2">
-                            <h2 className="text-2xl font-bold text-app-text mb-6">Envíanos un mensaje</h2>
+                            <h2 className="text-2xl font-bold text-app-text mb-6">Send us a message</h2>
                             <ContactForm />
                         </div>
                     </div>

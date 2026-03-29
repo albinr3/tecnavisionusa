@@ -20,14 +20,14 @@ const siteUrl = getSiteUrl();
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "TecnaVision - Seguridad inteligente",
-  description: "Monitoreo avanzado con AI, resolución 4K ultra nítida e integración perfecta con la app para una tranquilidad total, estés donde estés.",
+  description: "Advanced AI monitoring, ultra-sharp 4K resolution, and seamless app integration for complete peace of mind wherever you are.",
   openGraph: {
     type: "website",
     url: siteUrl,
     siteName: "TecnaVision",
     locale: "es_DO",
     title: "TecnaVision - Seguridad inteligente",
-    description: "Monitoreo avanzado con AI, resolución 4K ultra nítida e integración perfecta con la app para una tranquilidad total, estés donde estés.",
+    description: "Advanced AI monitoring, ultra-sharp 4K resolution, and seamless app integration for complete peace of mind wherever you are.",
     images: [
       {
         url: "/web-app-manifest-512x512.png",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "TecnaVision - Seguridad inteligente",
-    description: "Monitoreo avanzado con AI, resolución 4K ultra nítida e integración perfecta con la app para una tranquilidad total, estés donde estés.",
+    description: "Advanced AI monitoring, ultra-sharp 4K resolution, and seamless app integration for complete peace of mind wherever you are.",
     images: ["/web-app-manifest-512x512.png"],
   },
   icons: {
@@ -94,5 +94,6 @@ export default function RootLayout({
     </html>
   );
 }
+
 
 

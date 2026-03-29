@@ -8,6 +8,8 @@ interface Category {
     id: string;
     slug: string;
     name: string;
+    name_es?: string | null;
+    name_en?: string | null;
     icon: string | null;
     description: string | null;
     _count: {
@@ -38,14 +40,14 @@ export default function AdminCategoriesPage() {
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm("¿Estás seguro de eliminar esta categoría?")) return;
+        if (!confirm("Are you sure you want to delete this category?")) return;
 
         try {
             const res = await fetch(`/api/categories/${id}`, { method: "DELETE" });
             if (!res.ok) throw new Error("Failed to delete category");
             setCategories(categories.filter((c) => c.id !== id));
         } catch (err) {
-            alert("Error al eliminar la categoría");
+            alert("Error deleting category");
         }
     };
 
@@ -57,16 +59,16 @@ export default function AdminCategoriesPage() {
                     <div className="flex items-center gap-2 text-[#645e8d] text-sm mb-1">
                         <span>Dashboard</span>
                         <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-                        <span className="text-app-text font-medium">Categorías</span>
+                        <span className="text-app-text font-medium">Categories</span>
                     </div>
-                    <h2 className="text-app-text text-2xl font-bold tracking-tight">Gestión de Categorías</h2>
+                    <h2 className="text-app-text text-2xl font-bold tracking-tight">Category Management</h2>
                 </div>
                 <Link
                     href="/admin/categories/new"
                     className="flex h-10 items-center justify-center rounded-lg px-6 bg-primary text-white text-sm font-semibold shadow-sm hover:bg-blue-800 transition-colors gap-2"
                 >
                     <span className="material-symbols-outlined text-[18px]">add</span>
-                    Añadir Categoría
+                    Add Category
                 </Link>
             </header>
 
@@ -76,7 +78,7 @@ export default function AdminCategoriesPage() {
                     {loading ? (
                         <div className="bg-app-surface rounded-xl border border-app-border p-12 text-center shadow-sm">
                             <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-                            <p className="text-[#645e8d]">Cargando categorías...</p>
+                            <p className="text-[#645e8d]">Loading categories...</p>
                         </div>
                     ) : error ? (
                         <div className="bg-white rounded-xl border border-red-200 p-12 text-center shadow-sm">
@@ -92,7 +94,7 @@ export default function AdminCategoriesPage() {
                                 className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-blue-800 transition-colors"
                             >
                                 <span className="material-symbols-outlined text-[18px]">refresh</span>
-                                Reintentar
+                                Retry
                             </button>
                         </div>
                     ) : categories.length === 0 ? (
@@ -100,14 +102,14 @@ export default function AdminCategoriesPage() {
                             <div className="w-16 h-16 bg-app-bg-subtle rounded-full flex items-center justify-center mx-auto mb-4">
                                 <span className="material-symbols-outlined text-gray-400 text-3xl">category</span>
                             </div>
-                            <h3 className="text-lg font-bold text-app-text mb-2">No hay categorías</h3>
-                            <p className="text-[#645e8d] mb-6">Comienza añadiendo tu primera categoría.</p>
+                            <h3 className="text-lg font-bold text-app-text mb-2">No categories yet</h3>
+                            <p className="text-[#645e8d] mb-6">Start by adding your first category.</p>
                             <Link
                                 href="/admin/categories/new"
                                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-blue-800 transition-colors"
                             >
                                 <span className="material-symbols-outlined text-[18px]">add</span>
-                                Añadir Categoría
+                                Add Category
                             </Link>
                         </div>
                     ) : (
@@ -116,11 +118,11 @@ export default function AdminCategoriesPage() {
                                 <table className="w-full min-w-[720px]">
                                     <thead className="bg-app-bg-subtle border-b border-app-border">
                                         <tr>
-                                            <th className="text-left px-6 py-4 text-sm font-semibold text-app-text">Nombre</th>
+                                            <th className="text-left px-6 py-4 text-sm font-semibold text-app-text">Name (EN / ES)</th>
                                             <th className="text-left px-6 py-4 text-sm font-semibold text-app-text hidden md:table-cell">Slug</th>
-                                            <th className="text-left px-6 py-4 text-sm font-semibold text-app-text hidden lg:table-cell">Descripción</th>
-                                            <th className="text-center px-6 py-4 text-sm font-semibold text-app-text">Productos</th>
-                                            <th className="text-right px-6 py-4 text-sm font-semibold text-app-text">Acciones</th>
+                                            <th className="text-left px-6 py-4 text-sm font-semibold text-app-text hidden lg:table-cell">Description</th>
+                                            <th className="text-center px-6 py-4 text-sm font-semibold text-app-text">Products</th>
+                                            <th className="text-right px-6 py-4 text-sm font-semibold text-app-text">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-[#dcdae7]">
@@ -131,7 +133,10 @@ export default function AdminCategoriesPage() {
                                                         <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                                                             <span className="material-symbols-outlined">{category.icon || "category"}</span>
                                                         </div>
-                                                        <span className="font-semibold text-app-text">{category.name}</span>
+                                                        <span className="font-semibold text-app-text">
+                                                            {(category.name_en || category.name) || "-"}
+                                                            {(category.name_es ? ` / ${category.name_es}` : "")}
+                                                        </span>
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4 hidden md:table-cell">
@@ -150,14 +155,14 @@ export default function AdminCategoriesPage() {
                                                         <Link
                                                             href={`/admin/categories/${category.id}/edit`}
                                                             className="p-2 text-[#645e8d] hover:text-primary hover:bg-primary/10 rounded-lg transition-colors"
-                                                            title="Editar"
+                                                            title="Edit"
                                                         >
                                                             <span className="material-symbols-outlined text-[20px]">edit</span>
                                                         </Link>
                                                         <button
                                                             onClick={() => handleDelete(category.id)}
                                                             className="p-2 text-[#645e8d] hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                                            title="Eliminar"
+                                                            title="Delete"
                                                         >
                                                             <span className="material-symbols-outlined text-[20px]">delete</span>
                                                         </button>
@@ -175,3 +180,6 @@ export default function AdminCategoriesPage() {
         </>
     );
 }
+
+
+

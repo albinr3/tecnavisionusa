@@ -31,7 +31,7 @@ function InlineEditor({ value, onChange, label, multiline, allowImageUpload, onC
         if (!file) return;
 
         setIsUploading(true);
-        const loadingToast = toast.loading("Subiendo imagen...");
+        const loadingToast = toast.loading("Uploading image...");
 
         try {
             const formData = new FormData();
@@ -44,16 +44,16 @@ function InlineEditor({ value, onChange, label, multiline, allowImageUpload, onC
 
             if (!res.ok) {
                 const data = await res.json();
-                throw new Error(data.error || "Error al subir la imagen");
+                throw new Error(data.error || "Error uploading image");
             }
 
             const data = await res.json();
             setTempValue(data.url);
             onChange(data.url);
-            toast.success("Imagen subida con éxito");
+            toast.success("Image uploaded successfully");
         } catch (err) {
             console.error(err);
-            toast.error(err instanceof Error ? err.message : "Error al subir la imagen");
+            toast.error(err instanceof Error ? err.message : "Error uploading image");
         } finally {
             setIsUploading(false);
             toast.dismiss(loadingToast);
@@ -96,11 +96,11 @@ function InlineEditor({ value, onChange, label, multiline, allowImageUpload, onC
                             disabled={isUploading}
                             className="w-full px-4 py-2.5 text-sm font-bold border border-primary/30 bg-primary/5 text-primary rounded-xl hover:bg-primary/10 transition-colors disabled:opacity-50"
                         >
-                            {isUploading ? "Subiendo..." : "Subir desde la computadora"}
+                            {isUploading ? "Uploading..." : "Upload from computer"}
                         </button>
                         {tempValue && (
                             <div className="mt-3 h-28 rounded-lg overflow-hidden border border-app-border bg-app-bg-subtle">
-                                <img src={tempValue} alt="Vista previa de imagen" className="w-full h-full object-cover" />
+                                <img src={tempValue} alt="Image preview" className="w-full h-full object-cover" />
                             </div>
                         )}
                     </div>
@@ -111,14 +111,14 @@ function InlineEditor({ value, onChange, label, multiline, allowImageUpload, onC
                         onClick={handleSave}
                         className="flex-1 px-4 py-2.5 text-sm font-bold bg-primary text-white rounded-xl hover:bg-primary-dark transition-colors"
                     >
-                        Guardar
+                        Save
                     </button>
                     <button
                         type="button"
                         onClick={onClose}
                         className="flex-1 px-4 py-2.5 text-sm font-bold border border-app-border text-app-text rounded-xl hover:bg-app-bg-subtle transition-colors"
                     >
-                        Cancelar
+                        Cancel
                     </button>
                 </div>
             </div>
@@ -127,16 +127,16 @@ function InlineEditor({ value, onChange, label, multiline, allowImageUpload, onC
 }
 
 const RELEVANT_ICON_OPTIONS = [
-    { value: "videocam", label: "Cámara" },
-    { value: "psychology", label: "IA" },
-    { value: "nightlight_round", label: "Visión Nocturna" },
-    { value: "settings_suggest", label: "Configuración" },
-    { value: "verified_user", label: "Garantía" },
-    { value: "support_agent", label: "Soporte" },
-    { value: "shield", label: "Protección" },
-    { value: "visibility", label: "Vigilancia" },
-    { value: "center_focus_strong", label: "Enfoque" },
-    { value: "wifi", label: "Conectividad" },
+    { value: "videocam", label: "Camera" },
+    { value: "psychology", label: "AI" },
+    { value: "nightlight_round", label: "Night Vision" },
+    { value: "settings_suggest", label: "Settings" },
+    { value: "verified_user", label: "Warranty" },
+    { value: "support_agent", label: "Support" },
+    { value: "shield", label: "Protection" },
+    { value: "visibility", label: "Surveillance" },
+    { value: "center_focus_strong", label: "Focus" },
+    { value: "wifi", label: "Connectivity" },
 ];
 
 interface IconPickerProps {
@@ -177,7 +177,7 @@ function IconPickerModal({ value, label, onChange, onClose }: IconPickerProps) {
                     onClick={onClose}
                     className="w-full mt-4 px-4 py-2.5 text-sm font-bold border border-app-border text-app-text rounded-xl hover:bg-app-bg-subtle transition-colors"
                 >
-                    Cerrar
+                    Close
                 </button>
             </div>
         </div>
@@ -253,8 +253,8 @@ export default function ProductPreview({
     nightVisionImg,
     appDemoImg,
     appDemoBadge = "Live Monitoring",
-    appDemoTitle = "Control total en la palma de tu mano.",
-    appDemoDesc = "Recibe notificaciones instantáneas, verifica grabaciones y gestiona permisos de seguridad desde nuestra app empresarial segura.",
+    appDemoTitle = "Total control in the palm of your hand.",
+    appDemoDesc = "Receive instant notifications, review recordings, and manage security permissions from our secure enterprise app.",
     aiSectionIcon = "psychology",
     nightVisionIcon = "nightlight_round",
     specsSectionIcon = "settings_suggest",
@@ -267,12 +267,12 @@ export default function ProductPreview({
     specs,
     categoryName = "",
     categorySlug = "",
-    aiSectionTitle = "Detección AI",
-    aiSectionDesc = "Algoritmos de aprendizaje profundo que clasifican objetivos humanos y vehiculares.",
-    nightVisionTitle = "Visión Nocturna EXIR",
-    nightVisionDesc = "Tecnología infrarroja avanzada que proporciona iluminación uniforme hasta 30m.",
-    specsTitle = "Especificaciones Pro",
-    specsDesc = "Hardware robusto preparado para integraciones profesionales.",
+    aiSectionTitle = "AI Detection",
+    aiSectionDesc = "Deep learning algorithms that classify human and vehicle targets.",
+    nightVisionTitle = "EXIR Night Vision",
+    nightVisionDesc = "Advanced infrared technology that provides uniform illumination up to 30m.",
+    specsTitle = "Pro Specifications",
+    specsDesc = "Robust hardware built for professional integrations.",
     onNameChange,
     onModelChange,
     onBadgeChange,
@@ -357,10 +357,10 @@ export default function ProductPreview({
                     </div>
                     <div className="flex-1 mx-4">
                         <div className="bg-app-bg rounded-lg px-3 py-1.5 text-[10px] text-app-text-sec text-center truncate">
-                            tecnavision.com/products/{name.toLowerCase().replace(/\s+/g, "-") || "producto"}-{model.toLowerCase()}
+                            tecnavision.com/products/{name.toLowerCase().replace(/\s+/g, "-") || "product"}-{model.toLowerCase()}
                         </div>
                     </div>
-                    <span className="text-[10px] text-primary font-semibold">Vista Previa</span>
+                    <span className="text-[10px] text-primary font-semibold">Preview</span>
                 </div>
 
                 {/* Content - Scrollable */}
@@ -381,14 +381,14 @@ export default function ProductPreview({
                                 ) : (
                                     <div className="text-app-text-sec text-center">
                                         <span className="material-symbols-outlined text-6xl mb-2 block opacity-30">image</span>
-                                        <span className="text-sm">Sin imagen</span>
+                                        <span className="text-sm">No image</span>
                                     </div>
                                 )}
                                 {/* Edit overlay */}
                                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                                     <div className="bg-primary text-white px-4 py-2 rounded-lg flex items-center gap-2">
                                         <span className="material-symbols-outlined text-sm">edit</span>
-                                        <span className="text-sm font-semibold">Cambiar Imagen</span>
+                                        <span className="text-sm font-semibold">Change Image</span>
                                     </div>
                                 </div>
                             </div>
@@ -404,7 +404,7 @@ export default function ProductPreview({
                                     </span>
                                 ) : (
                                     <span className="inline-block px-3 py-1 text-xs font-bold tracking-wider text-app-text-sec uppercase bg-app-bg-subtle rounded-full border border-dashed border-app-border">
-                                        + Añadir Badge
+                                        + Add Badge
                                     </span>
                                 )}
                             </Editable>
@@ -413,18 +413,18 @@ export default function ProductPreview({
                             <div>
                                 <Editable fieldId="name" className="inline">
                                     <h1 className="text-3xl font-bold tracking-tight text-app-text leading-tight inline">
-                                        {name || <span className="text-app-text-sec italic">Nombre del producto</span>}
+                                        {name || <span className="text-app-text-sec italic">Product name</span>}
                                     </h1>
                                 </Editable>
                                 {" "}
                                 <Editable fieldId="model" className="inline">
                                     <span className="text-3xl font-bold text-primary">
-                                        {model || <span className="text-app-text-sec italic">Modelo</span>}
+                                        {model || <span className="text-app-text-sec italic">Model</span>}
                                     </span>
                                 </Editable>
                                 <Editable fieldId="subtitle" className="mt-3">
                                     <p className="text-sm text-app-text-sec">
-                                        {subtitle || <span className="italic">Subtítulo del producto...</span>}
+                                        {subtitle || <span className="italic">Product subtitle...</span>}
                                     </p>
                                 </Editable>
                             </div>
@@ -442,7 +442,7 @@ export default function ProductPreview({
                             {/* Description */}
                             <Editable fieldId="description">
                                 <p className="text-base text-app-text-sec leading-relaxed font-light">
-                                    {description || <span className="italic">Descripción del producto...</span>}
+                                    {description || <span className="italic">Description del producto...</span>}
                                 </p>
                             </Editable>
 
@@ -450,7 +450,7 @@ export default function ProductPreview({
                             <div className="space-y-4">
                                 <button className="w-full bg-primary text-white text-lg font-semibold py-4 px-8 rounded-2xl shadow-xl">
                                     <span className="material-icons-outlined mr-2">request_quote</span>
-                                    Solicitar Cotización
+                                    Request a Quote
                                 </button>
                             </div>
 
@@ -468,7 +468,7 @@ export default function ProductPreview({
                                             <span className="material-icons-outlined">{guaranteeIcon}</span>
                                         </div>
                                         <div>
-                                            <p className="font-semibold text-sm text-app-text">Garantía Extendida</p>
+                                            <p className="font-semibold text-sm text-app-text">Warranty Extendida</p>
                                             <p className="text-xs text-app-text-sec mt-1">{guarantee || "—"}</p>
                                         </div>
                                     </div>
@@ -485,7 +485,7 @@ export default function ProductPreview({
                                             <span className="material-icons-outlined">{supportIcon}</span>
                                         </div>
                                         <div>
-                                            <p className="font-semibold text-sm text-app-text">Soporte Dedicado</p>
+                                            <p className="font-semibold text-sm text-app-text">Support Dedicado</p>
                                             <p className="text-xs text-app-text-sec mt-1">{support || "—"}</p>
                                         </div>
                                     </div>
@@ -514,11 +514,11 @@ export default function ProductPreview({
                     {/* Technology Features */}
                     <div>
                         <div className="text-center mb-8">
-                            <h2 className="text-2xl font-bold mb-2 text-app-text">{isNvrProduct ? "Rendimiento NVR para Operación Continua" : "Tecnología Superior"}</h2>
+                            <h2 className="text-2xl font-bold mb-2 text-app-text">{isNvrProduct ? "NVR Performance for Continuous Operation" : "Superior Technology"}</h2>
                             <p className="text-app-text-sec text-sm">
                                 {isNvrProduct
-                                    ? "Diseñado para monitoreo profesional con procesamiento eficiente, almacenamiento confiable y acceso rápido a evidencia."
-                                    : "Diseñada para operar en las condiciones más difíciles con la mayor inteligencia."}
+                                    ? "Designed for professional monitoring with efficient processing, reliable storage, and fast access to evidence."
+                                    : "Designed to operate in the toughest conditions with maximum intelligence."}
                             </p>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -531,12 +531,12 @@ export default function ProductPreview({
                                     <span className="material-icons-outlined text-2xl">{aiSectionIcon}</span>
                                 </div>
                                 <Editable fieldId="aiSectionTitle">
-                                    <h3 className="text-lg font-bold mb-2 text-app-text">{isNvrProduct ? "Inteligencia de Datos" : aiSectionTitle}</h3>
+                                    <h3 className="text-lg font-bold mb-2 text-app-text">{isNvrProduct ? "Data Intelligence" : aiSectionTitle}</h3>
                                 </Editable>
                                 <Editable fieldId="aiSectionDesc">
                                     <p className="text-xs text-app-text-sec mb-4 leading-relaxed">
                                         {isNvrProduct
-                                            ? "Motor de análisis Deep Learning integrado para clasificación de objetos, búsqueda rápida de eventos y reconocimiento de atributos en tiempo real."
+                                            ? "Integrated deep learning analytics engine for object classification, fast event search, and real-time attribute recognition."
                                             : aiSectionDesc}
                                     </p>
                                 </Editable>
@@ -548,7 +548,7 @@ export default function ProductPreview({
                                                 {feature}
                                             </li>
                                         )) : (
-                                            <li className="text-sm text-app-text-sec italic">Sin funciones definidas...</li>
+                                            <li className="text-sm text-app-text-sec italic">No features defined...</li>
                                         )}
                                     </ul>
                                 </Editable>
@@ -563,18 +563,18 @@ export default function ProductPreview({
                                     <span className="material-icons-outlined text-2xl">{isNvrProduct ? "storage" : nightVisionIcon}</span>
                                 </div>
                                 <Editable fieldId="nightVisionTitle">
-                                    <h3 className="text-lg font-bold mb-2 text-app-text">{isNvrProduct ? "Almacenamiento Inteligente" : nightVisionTitle}</h3>
+                                    <h3 className="text-lg font-bold mb-2 text-app-text">{isNvrProduct ? "Smart Storage" : nightVisionTitle}</h3>
                                 </Editable>
                                 <Editable fieldId="nightVisionDesc">
                                     <p className="text-xs text-app-text-sec mb-4 leading-relaxed">
                                         {isNvrProduct
-                                            ? "Optimización de espacio con compresión avanzada que reduce el ancho de banda y el consumo de almacenamiento sin perder calidad."
+                                            ? "Space optimization with advanced compression that reduces bandwidth and storage use without quality loss."
                                             : nightVisionDesc}
                                     </p>
                                 </Editable>
                                 {isNvrProduct ? (
                                     <div className="mt-auto rounded-xl overflow-hidden h-24 relative border border-app-border bg-app-bg-subtle">
-                                        <img alt="Gráfico NVR" className="w-full h-full object-cover" src="/graficonvr.webp" />
+                                        <img alt="NVR chart" className="w-full h-full object-cover" src="/graficonvr.webp" />
                                     </div>
                                 ) : (
                                     <div
@@ -587,11 +587,11 @@ export default function ProductPreview({
                                             src={nightVisionImg || mainImage || "/NIGHT.webp"}
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                                        <span className="absolute bottom-2 left-2 text-[10px] text-white font-medium px-2 py-0.5 bg-black/50 rounded">Modo Nocturno</span>
+                                        <span className="absolute bottom-2 left-2 text-[10px] text-white font-medium px-2 py-0.5 bg-black/50 rounded">Night Mode</span>
                                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                                             <div className="bg-primary text-white px-3 py-1.5 rounded-lg flex items-center gap-2">
                                                 <span className="material-symbols-outlined text-sm">edit</span>
-                                                <span className="text-xs font-semibold">Cambiar imagen</span>
+                                                <span className="text-xs font-semibold">Change image</span>
                                             </div>
                                         </div>
                                     </div>
@@ -607,21 +607,21 @@ export default function ProductPreview({
                                     <span className="material-icons-outlined text-2xl">{specsSectionIcon}</span>
                                 </div>
                                 <Editable fieldId="specsTitle">
-                                    <h3 className="text-lg font-bold mb-2 text-app-text">{isNvrProduct ? "Especificaciones NVR" : specsTitle}</h3>
+                                    <h3 className="text-lg font-bold mb-2 text-app-text">{isNvrProduct ? "NVR Specifications" : specsTitle}</h3>
                                 </Editable>
                                 <Editable fieldId="specsDesc">
                                     <p className="text-xs text-app-text-sec mb-4 leading-relaxed">
                                         {isNvrProduct
-                                            ? "Arquitectura de hardware diseñada para la continuidad operativa y alta disponibilidad de video."
+                                            ? "Hardware architecture designed for operational continuity and high video availability."
                                             : specsDesc}
                                     </p>
                                 </Editable>
                                 <div className="grid grid-cols-2 gap-2">
                                     {[
-                                        { label: isNvrProduct ? "HDD" : "Protección IP", value: isNvrProduct && protection === "N/A" ? "2x HDD" : protection, index: 0 },
-                                        { label: isNvrProduct ? "Megapixeles" : "Compresión", value: isNvrProduct && compression === "N/A" ? "8 MP" : compression, index: 1 },
-                                        { label: isNvrProduct ? "Salida Video" : "Lente", value: isNvrProduct && lens === "N/A" ? "4K UHD" : lens, index: 2 },
-                                        { label: isNvrProduct ? "PoE" : "Alimentación", value: power, index: 3 },
+                                        { label: isNvrProduct ? "HDD" : "IP Protection", value: isNvrProduct && protection === "N/A" ? "2x HDD" : protection, index: 0 },
+                                        { label: isNvrProduct ? "Megapixels" : "Compression", value: isNvrProduct && compression === "N/A" ? "8 MP" : compression, index: 1 },
+                                        { label: isNvrProduct ? "Video Output" : "Lens", value: isNvrProduct && lens === "N/A" ? "4K UHD" : lens, index: 2 },
+                                        { label: isNvrProduct ? "PoE" : "Power", value: power, index: 3 },
                                     ].map((spec, i) => (
                                         <div
                                             key={i}
@@ -668,20 +668,20 @@ export default function ProductPreview({
                                         </div>
                                     </Editable>
                                     <Editable fieldId="appDemoTitle">
-                                        <h2 className="text-2xl md:text-3xl font-bold leading-tight">{appDemoTitle || (isNvrProduct ? "Monitoreo centralizado 24/7" : "Control total en la palma de tu mano.")}</h2>
+                                        <h2 className="text-2xl md:text-3xl font-bold leading-tight">{appDemoTitle || (isNvrProduct ? "Centralized monitoring 24/7" : "Total control in the palm of your hand.")}</h2>
                                     </Editable>
                                     <Editable fieldId="appDemoDesc">
                                         <p className="text-gray-400 text-sm font-light">
                                             {appDemoDesc || (isNvrProduct
-                                                ? "Controla todas tus cámaras desde una única interfaz intuitiva. Visualización en directo, reproducción sincronizada y gestión de alarmas eficiente."
-                                                : "Recibe notificaciones instantáneas, verifica grabaciones y gestiona permisos de seguridad desde nuestra app empresarial segura.")}
+                                                ? "Control all your cameras from a single intuitive interface. Live view, synchronized playback, and efficient alarm management."
+                                                : "Receive instant notifications, review recordings, and manage security permissions from our secure enterprise app.")}
                                         </p>
                                     </Editable>
                                 </div>
                                 {isNvrProduct && (
                                     <div className="flex justify-center lg:justify-end">
                                         <div className="w-full max-w-sm aspect-video bg-gray-800 rounded-xl border-2 border-gray-700 overflow-hidden shadow-2xl">
-                                            <img alt="Vista NVR con cámaras" className="w-full h-full object-cover" src="/nvrcamaras.webp" />
+                                            <img alt="NVR view with cameras" className="w-full h-full object-cover" src="/nvrcamaras.webp" />
                                         </div>
                                     </div>
                                 )}
@@ -690,7 +690,7 @@ export default function ProductPreview({
                         <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none z-20">
                             <div className="bg-primary text-white px-4 py-2 rounded-lg flex items-center gap-2">
                                 <span className="material-symbols-outlined text-sm">edit</span>
-                                <span className="text-sm font-semibold">Cambiar fondo</span>
+                                <span className="text-sm font-semibold">Change background</span>
                             </div>
                         </div>
                     </section>
@@ -700,12 +700,12 @@ export default function ProductPreview({
             {/* Inline Editors - Outside the overflow container */}
             {
                 editingField === "name" && (
-                    <InlineEditor value={name} onChange={onNameChange} label="Nombre del Producto" onClose={() => setEditingField(null)} />
+                    <InlineEditor value={name} onChange={onNameChange} label="Product Name" onClose={() => setEditingField(null)} />
                 )
             }
             {
                 editingField === "model" && (
-                    <InlineEditor value={model} onChange={onModelChange} label="Modelo" onClose={() => setEditingField(null)} />
+                    <InlineEditor value={model} onChange={onModelChange} label="Model" onClose={() => setEditingField(null)} />
                 )
             }
             {
@@ -715,95 +715,95 @@ export default function ProductPreview({
             }
             {
                 editingField === "subtitle" && (
-                    <InlineEditor value={subtitle} onChange={onSubtitleChange} label="Subtítulo" onClose={() => setEditingField(null)} />
+                    <InlineEditor value={subtitle} onChange={onSubtitleChange} label="Subtitle" onClose={() => setEditingField(null)} />
                 )
             }
             {
                 editingField === "description" && (
-                    <InlineEditor value={description} onChange={onDescriptionChange} label="Descripción" multiline onClose={() => setEditingField(null)} />
+                    <InlineEditor value={description} onChange={onDescriptionChange} label="Description" multiline onClose={() => setEditingField(null)} />
                 )
             }
             {
                 editingField === "guarantee" && (
-                    <InlineEditor value={guarantee} onChange={onGuaranteeChange} label="Garantía" onClose={() => setEditingField(null)} />
+                    <InlineEditor value={guarantee} onChange={onGuaranteeChange} label="Warranty" onClose={() => setEditingField(null)} />
                 )
             }
             {
                 editingField === "support" && (
-                    <InlineEditor value={support} onChange={onSupportChange} label="Soporte" onClose={() => setEditingField(null)} />
+                    <InlineEditor value={support} onChange={onSupportChange} label="Support" onClose={() => setEditingField(null)} />
                 )
             }
             {
                 editingField === "aiFeatures" && (
-                    <InlineEditor value={aiFeatures} onChange={onAiFeaturesChange} label="Funciones IA (separadas por coma)" multiline onClose={() => setEditingField(null)} />
+                    <InlineEditor value={aiFeatures} onChange={onAiFeaturesChange} label="AI Features (comma-separated)" multiline onClose={() => setEditingField(null)} />
                 )
             }
             {editingField === "mainImage" && (
-                <InlineEditor value={mainImage} onChange={onMainImageChange} label="URL de Imagen Principal" allowImageUpload onClose={() => setEditingField(null)} />
+                <InlineEditor value={mainImage} onChange={onMainImageChange} label="Main Image URL" allowImageUpload onClose={() => setEditingField(null)} />
             )}
             {editingField === "nightVisionImg" && (
-                <InlineEditor value={nightVisionImg} onChange={onNightVisionImageChange} label="URL de Imagen Visión Nocturna" allowImageUpload onClose={() => setEditingField(null)} />
+                <InlineEditor value={nightVisionImg} onChange={onNightVisionImageChange} label="Night Vision Image URL" allowImageUpload onClose={() => setEditingField(null)} />
             )}
             {editingField === "appDemoImg" && (
-                <InlineEditor value={appDemoImg} onChange={onAppDemoImageChange} label="URL de Imagen Fondo App" allowImageUpload onClose={() => setEditingField(null)} />
+                <InlineEditor value={appDemoImg} onChange={onAppDemoImageChange} label="App Background Image URL" allowImageUpload onClose={() => setEditingField(null)} />
             )}
             {editingField === "appDemoBadge" && (
-                <InlineEditor value={appDemoBadge} onChange={onAppDemoBadgeChange} label="Badge Sección App" onClose={() => setEditingField(null)} />
+                <InlineEditor value={appDemoBadge} onChange={onAppDemoBadgeChange} label="App Section Badge" onClose={() => setEditingField(null)} />
             )}
             {editingField === "appDemoTitle" && (
-                <InlineEditor value={appDemoTitle} onChange={onAppDemoTitleChange} label="Título Sección App" multiline onClose={() => setEditingField(null)} />
+                <InlineEditor value={appDemoTitle} onChange={onAppDemoTitleChange} label="App Section Title" multiline onClose={() => setEditingField(null)} />
             )}
             {editingField === "appDemoDesc" && (
-                <InlineEditor value={appDemoDesc} onChange={onAppDemoDescChange} label="Descripción Sección App" multiline onClose={() => setEditingField(null)} />
+                <InlineEditor value={appDemoDesc} onChange={onAppDemoDescChange} label="App Section Description" multiline onClose={() => setEditingField(null)} />
             )}
             {editingField === "aiSectionIcon" && (
-                <IconPickerModal value={aiSectionIcon} onChange={onAiSectionIconChange} label="Icono de Detección AI" onClose={() => setEditingField(null)} />
+                <IconPickerModal value={aiSectionIcon} onChange={onAiSectionIconChange} label="AI Detection Icon" onClose={() => setEditingField(null)} />
             )}
             {editingField === "nightVisionIcon" && (
-                <IconPickerModal value={nightVisionIcon} onChange={onNightVisionIconChange} label="Icono de Visión Nocturna" onClose={() => setEditingField(null)} />
+                <IconPickerModal value={nightVisionIcon} onChange={onNightVisionIconChange} label="Night Vision Icon" onClose={() => setEditingField(null)} />
             )}
             {editingField === "specsSectionIcon" && (
-                <IconPickerModal value={specsSectionIcon} onChange={onSpecsSectionIconChange} label="Icono de Especificaciones" onClose={() => setEditingField(null)} />
+                <IconPickerModal value={specsSectionIcon} onChange={onSpecsSectionIconChange} label="Specifications Icon" onClose={() => setEditingField(null)} />
             )}
             {editingField === "guaranteeIcon" && (
-                <IconPickerModal value={guaranteeIcon} onChange={onGuaranteeIconChange} label="Icono de Garantía" onClose={() => setEditingField(null)} />
+                <IconPickerModal value={guaranteeIcon} onChange={onGuaranteeIconChange} label="Warranty Icon" onClose={() => setEditingField(null)} />
             )}
             {editingField === "supportIcon" && (
-                <IconPickerModal value={supportIcon} onChange={onSupportIconChange} label="Icono de Soporte" onClose={() => setEditingField(null)} />
+                <IconPickerModal value={supportIcon} onChange={onSupportIconChange} label="Support Icon" onClose={() => setEditingField(null)} />
             )}
             {editingField === "aiSectionTitle" && onAiSectionTitleChange && (
-                <InlineEditor value={aiSectionTitle} onChange={onAiSectionTitleChange} label="Título Sección AI" onClose={() => setEditingField(null)} />
+                <InlineEditor value={aiSectionTitle} onChange={onAiSectionTitleChange} label="AI Section Title" onClose={() => setEditingField(null)} />
             )}
             {editingField === "aiSectionDesc" && onAiSectionDescChange && (
-                <InlineEditor value={aiSectionDesc} onChange={onAiSectionDescChange} label="Descripción Sección AI" multiline onClose={() => setEditingField(null)} />
+                <InlineEditor value={aiSectionDesc} onChange={onAiSectionDescChange} label="AI Section Description" multiline onClose={() => setEditingField(null)} />
             )}
             {editingField === "nightVisionTitle" && onNightVisionTitleChange && (
-                <InlineEditor value={nightVisionTitle} onChange={onNightVisionTitleChange} label="Título Visión Nocturna" onClose={() => setEditingField(null)} />
+                <InlineEditor value={nightVisionTitle} onChange={onNightVisionTitleChange} label="Night Vision Title" onClose={() => setEditingField(null)} />
             )}
             {editingField === "nightVisionDesc" && onNightVisionDescChange && (
-                <InlineEditor value={nightVisionDesc} onChange={onNightVisionDescChange} label="Descripción Visión Nocturna" multiline onClose={() => setEditingField(null)} />
+                <InlineEditor value={nightVisionDesc} onChange={onNightVisionDescChange} label="Description Night Vision" multiline onClose={() => setEditingField(null)} />
             )}
             {editingField === "specsTitle" && onSpecsTitleChange && (
-                <InlineEditor value={specsTitle} onChange={onSpecsTitleChange} label="Título Especificaciones" onClose={() => setEditingField(null)} />
+                <InlineEditor value={specsTitle} onChange={onSpecsTitleChange} label="Specifications Title" onClose={() => setEditingField(null)} />
             )}
             {editingField === "specsDesc" && onSpecsDescChange && (
-                <InlineEditor value={specsDesc} onChange={onSpecsDescChange} label="Descripción Especificaciones" multiline onClose={() => setEditingField(null)} />
+                <InlineEditor value={specsDesc} onChange={onSpecsDescChange} label="Specifications Description" multiline onClose={() => setEditingField(null)} />
             )}
             {
                 editingSpecIndex !== null && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={() => setEditingSpecIndex(null)}>
                         <div className="bg-app-surface rounded-2xl shadow-2xl p-6 w-full max-w-md border border-primary" onClick={(e) => e.stopPropagation()}>
-                            <label className="text-sm font-bold text-primary uppercase tracking-wider mb-3 block">Editar Especificación</label>
+                            <label className="text-sm font-bold text-primary uppercase tracking-wider mb-3 block">Edit Specification</label>
                             <input
                                 type="text"
-                                placeholder="Característica"
+                                placeholder="Feature"
                                 value={specs[editingSpecIndex]?.key || ""}
                                 onChange={(e) => onSpecChange(editingSpecIndex, "key", e.target.value)}
                                 className="w-full p-3 text-sm border border-app-border rounded-xl bg-app-bg mb-3"
                             />
                             <input
                                 type="text"
-                                placeholder="Valor"
+                                placeholder="Value"
                                 value={specs[editingSpecIndex]?.value || ""}
                                 onChange={(e) => onSpecChange(editingSpecIndex, "value", e.target.value)}
                                 className="w-full p-3 text-sm border border-app-border rounded-xl bg-app-bg"
@@ -813,7 +813,7 @@ export default function ProductPreview({
                                 onClick={() => setEditingSpecIndex(null)}
                                 className="w-full mt-4 px-4 py-2.5 text-sm font-bold bg-primary text-white rounded-xl"
                             >
-                                Listo
+                                Done
                             </button>
                         </div>
                     </div>
@@ -822,3 +822,6 @@ export default function ProductPreview({
         </>
     );
 }
+
+
+

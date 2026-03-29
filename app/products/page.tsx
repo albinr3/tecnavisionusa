@@ -4,6 +4,7 @@ import Header from "@/app/components/Header";
 import { prisma } from "@/lib/db";
 import { getSiteMarket, type MarketCode } from "@/lib/market";
 import { getLocalizedProductDescription, getLocalizedProductName } from "@/lib/product-localization";
+import { getLocalizedCategoryName } from "@/lib/category-localization";
 import Link from "next/link";
 import Image from "next/image";
 import { Prisma } from "@prisma/client";
@@ -25,6 +26,21 @@ function isMissingAvailableMarketsColumn(error: unknown) {
         typeof error.meta?.column === "string" ? error.meta.column : "";
 
     return missingColumn === "" || missingColumn.includes("availableMarkets");
+}
+
+function isMissingCategoryI18nColumn(error: unknown) {
+    if (!(error instanceof Prisma.PrismaClientKnownRequestError)) {
+        return false;
+    }
+
+    if (error.code !== "P2022") {
+        return false;
+    }
+
+    const missingColumn =
+        typeof error.meta?.column === "string" ? error.meta.column.toLowerCase() : "";
+
+    return missingColumn === "" || missingColumn.includes("name_es") || missingColumn.includes("name_en");
 }
 
 async function getProducts(
@@ -196,8 +212,8 @@ export async function generateMetadata({ searchParams }: ShopPageProps): Promise
         || currentPage > 1;
 
     return {
-        title: "Catálogo de Productos - TecnaVision",
-        description: "Explora nuestra gama completa de cámaras de seguridad con IA, visión nocturna y tecnología 4K.",
+        title: "Product Catalog - TecnaVision",
+        description: "Explore our full range of security cameras with AI, night vision, and 4K technology.",
         alternates: {
             canonical: "/products",
         },
@@ -205,15 +221,15 @@ export async function generateMetadata({ searchParams }: ShopPageProps): Promise
             ? { index: false, follow: true }
             : { index: true, follow: true },
         openGraph: {
-            title: "Catálogo de Productos - TecnaVision",
-            description: "Explora nuestra gama completa de cámaras de seguridad con IA, visión nocturna y tecnología 4K.",
+            title: "Product Catalog - TecnaVision",
+            description: "Explore our full range of security cameras with AI, night vision, and 4K technology.",
             url: "/products",
             type: "website",
         },
         twitter: {
             card: "summary_large_image",
-            title: "Catálogo de Productos - TecnaVision",
-            description: "Explora nuestra gama completa de cámaras de seguridad con IA, visión nocturna y tecnología 4K.",
+            title: "Product Catalog - TecnaVision",
+            description: "Explore our full range of security cameras with AI, night vision, and 4K technology.",
         },
     };
 }
@@ -238,24 +254,59 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
         requestedQuery || undefined,
         currentPage
     );
-    const categories = await prisma.category.findMany({
-        select: {
-            id: true,
-            name: true,
-            slug: true,
-        },
-        orderBy: {
-            createdAt: "desc",
-        },
-    });
+    let categories: Array<{ id: string; name: string; slug: string; name_es?: string | null; name_en?: string | null }> = [];
+    try {
+        categories = await prisma.category.findMany({
+            select: {
+                id: true,
+                name: true,
+                name_es: true,
+                name_en: true,
+                slug: true,
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+        });
+    } catch (error) {
+        if (!isMissingCategoryI18nColumn(error)) {
+            throw error;
+        }
+
+        const fallbackCategories = await prisma.category.findMany({
+            select: {
+                id: true,
+                name: true,
+                slug: true,
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+        });
+        categories = fallbackCategories.map((item) => ({
+            ...item,
+            name_es: null,
+            name_en: null,
+        }));
+    }
     const categoryFilters = categories.length > 0
-        ? categories
-        : [
-            { id: "camaras-ip", name: "Camaras IP", slug: "camaras-ip" },
-            { id: "nvr-grabadores", name: "NVR / Grabadores", slug: "nvr-grabadores" },
-            { id: "cerraduras-inteligentes", name: "Cerraduras Inteligentes", slug: "cerraduras-inteligentes" },
-            { id: "accesorios", name: "Accesorios", slug: "accesorios" },
-        ];
+        ? categories.map((category) => ({
+            ...category,
+            name: getLocalizedCategoryName(category, activeMarket),
+        }))
+        : activeMarket === "RD"
+            ? [
+                { id: "camaras-ip", name: "Camaras IP", slug: "camaras-ip" },
+                { id: "nvr-grabadores", name: "NVR / Grabadores", slug: "nvr-grabadores" },
+                { id: "cerraduras-inteligentes", name: "Cerraduras Inteligentes", slug: "cerraduras-inteligentes" },
+                { id: "accesorios", name: "Accesorios", slug: "accesorios" },
+            ]
+            : [
+                { id: "security-cameras", name: "Security Cameras", slug: "security-cameras" },
+                { id: "nvr-recorders", name: "NVR / Recorders", slug: "nvr-recorders" },
+                { id: "smart-locks", name: "Smart Locks", slug: "smart-locks" },
+                { id: "accessories", name: "Accessories", slug: "accessories" },
+            ];
     let filterSourceProducts: Array<{ resolutionOpts: string[]; aiDetection: string[] }> = [];
     try {
         filterSourceProducts = await prisma.product.findMany({
@@ -312,10 +363,14 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
         : ["4 Megapixel", "6 Megapixel", "8 MP (4K Ultra)"];
     const safeFeatureFilters = featureFilters.length > 0
         ? featureFilters
-        : ["Cruce de linea", "Intrusion de area", "Reconocimiento facial"];
+        : ["Line crossing", "Area intrusion", "Facial recognition"];
     const activeCategoryName = requestedCategories.length === 1
-        ? (products[0]?.category?.name || requestedCategories[0].replace(/-/g, " "))
-        : "Todas las categorías";
+        ? (
+            products[0]?.category
+                ? getLocalizedCategoryName(products[0].category, activeMarket)
+                : requestedCategories[0].replace(/-/g, " ")
+        )
+        : "All categories";
     const createPageHref = (page: number) => {
         const params = new URLSearchParams();
         requestedCategories.forEach((category) => params.append("category", category));
@@ -345,14 +400,14 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                 {/* Main Content */}
                 <main className="flex-1 flex flex-col p-6 pb-28 lg:p-10 lg:pb-10">
                     <h1 className="text-app-text text-2xl sm:text-3xl font-bold tracking-tight mb-4">
-                        Catálogo de Productos de Seguridad
+                        Security Product Catalog
                     </h1>
 
                     {/* Breadcrumbs */}
                     <div className="flex flex-wrap gap-2 mb-6">
-                        <Link className="text-app-text-sec text-sm font-medium hover:text-primary transition-colors" href="/">Inicio</Link>
+                        <Link className="text-app-text-sec text-sm font-medium hover:text-primary transition-colors" href="/">Home</Link>
                         <span className="text-gray-300 text-sm font-medium">/</span>
-                        <Link className="text-app-text-sec text-sm font-medium hover:text-primary transition-colors" href="/products">Productos</Link>
+                        <Link className="text-app-text-sec text-sm font-medium hover:text-primary transition-colors" href="/products">Products</Link>
                         <span className="text-gray-300 text-sm font-medium">/</span>
                         <span className="text-app-text text-sm font-medium">{activeCategoryName}</span>
                     </div>
@@ -376,19 +431,19 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                                 name="q"
                                 defaultValue={requestedQuery}
                                 className="block w-full pl-10 pr-4 py-3 border-none rounded-xl bg-app-bg-subtle text-app-text placeholder:text-app-text-sec focus:ring-2 focus:ring-primary sm:text-sm shadow-sm"
-                                placeholder="Buscar modelo, SKU o característica..."
+                                placeholder="Search model, SKU, or feature..."
                             />
                         </form>
                         <div className="flex w-full flex-wrap items-center justify-between gap-3 md:w-auto md:justify-end">
-                            <p className="text-app-text-sec text-sm whitespace-nowrap hidden sm:block">Mostrando {products.length} de {total} productos</p>
+                            <p className="text-app-text-sec text-sm whitespace-nowrap hidden sm:block">Showing {products.length} of {total} products</p>
                             <div className="flex items-center gap-2 sm:gap-3">
-                                <span className="text-app-text-sec text-sm font-medium whitespace-nowrap">Ordenar por:</span>
+                                <span className="text-app-text-sec text-sm font-medium whitespace-nowrap">Sort by:</span>
                                 <div className="relative">
                                     <select className="appearance-none bg-transparent border-none text-app-text text-sm font-bold pr-8 focus:ring-0 cursor-pointer">
-                                        <option>Novedades</option>
-                                        <option>Precio: Bajo a Alto</option>
-                                        <option>Precio: Alto a Bajo</option>
-                                        <option>Popularidad</option>
+                                        <option>Newest</option>
+                                        <option>Price: Low to High</option>
+                                        <option>Price: High to Low</option>
+                                        <option>Popularity</option>
                                     </select>
                                     <span className="absolute right-0 top-1/2 -translate-y-1/2 material-symbols-outlined pointer-events-none text-app-text text-xl">expand_more</span>
                                 </div>
@@ -401,7 +456,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                         {products.length === 0 ? (
                             <div className="col-span-full py-20 text-center">
                                 <span className="material-symbols-outlined text-6xl text-gray-300 mb-4">inventory_2</span>
-                                <p className="text-app-text-sec">No se encontraron productos disponibles.</p>
+                                <p className="text-app-text-sec">No available products were found.</p>
                             </div>
                         ) : (
                             products.map((product, index) => (
@@ -435,14 +490,16 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                                                 <p className="text-xs text-app-text-sec mb-3 line-clamp-2">{product.localizedDescription}</p>
                                             )}
                                             <div className="flex flex-wrap gap-2 mb-4">
-                                                <span className="text-[11px] font-medium text-app-text-sec bg-app-bg-subtle px-2 py-1 rounded-md">{product.category?.name || 'General'}</span>
+                                                <span className="text-[11px] font-medium text-app-text-sec bg-app-bg-subtle px-2 py-1 rounded-md">
+                                                    {product.category ? getLocalizedCategoryName(product.category, activeMarket) : "General"}
+                                                </span>
                                                 {product.resolutionOpts.slice(0, 2).map((opt) => (
                                                     <span key={opt} className="text-[11px] font-medium text-app-text-sec bg-app-bg-subtle px-2 py-1 rounded-md">{opt}</span>
                                                 ))}
                                             </div>
                                         </div>
                                         <div className="mt-4 w-full h-10 rounded-full bg-primary text-white hover:bg-primary-dark transition-all duration-300 text-sm font-bold flex items-center justify-center shadow-lg shadow-primary/20">
-                                            Ver Detalles
+                                            View Details
                                         </div>
                                     </div>
                                 </Link>
@@ -487,3 +544,5 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
         </div>
     );
 }
+
+

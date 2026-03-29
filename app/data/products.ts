@@ -33,8 +33,8 @@ export const products: Product[] = [
         slug: "bullet-cam-pro-ai",
         name: "Bullet Cam",
         model: "Pro AI",
-        subtitle: "Vigilancia de última generación para entornos exigentes.",
-        description: "Combinando óptica de precisión con inteligencia artificial avanzada para una detección proactiva y cero falsas alarmas.",
+        subtitle: "Next-generation surveillance for demanding environments.",
+        description: "Combining precision optics with advanced artificial intelligence for proactive detection and zero false alarms.",
         badge: "Enterprise Series",
         rating: 5,
         reviews_count: 120,
@@ -51,17 +51,17 @@ export const products: Product[] = [
             resolution_options: ["4 Megapixel", "6 Megapixel", "8 MP (4K Ultra)"]
         },
         features: {
-            ai_detection: ["Cruce de línea", "Intrusión de área", "Reconocimiento facial"],
-            guarantee: "3 años de cobertura",
-            support: "Línea directa B2B"
+            ai_detection: ["Line crossing", "Area intrusion", "Facial recognition"],
+            guarantee: "3 years of coverage",
+            support: "Dedicated B2B hotline"
         }
     },
     {
         slug: "guardian-eye-360",
         name: "Guardian Eye",
         model: "360 PTZ",
-        subtitle: "Control total sin puntos ciegos.",
-        description: "Cámara PTZ motorizada con seguimiento automático y visión panorámica para cobertura completa de grandes espacios.",
+        subtitle: "Total control with no blind spots.",
+        description: "Motorized PTZ camera with automatic tracking and panoramic view for full coverage of large spaces.",
         badge: "Best Seller",
         rating: 4,
         reviews_count: 85,
@@ -77,8 +77,8 @@ export const products: Product[] = [
             resolution_options: ["1080p HD", "2K QHD"]
         },
         features: {
-            ai_detection: ["Seguimiento de Movimiento", "Detección de Humanos", "Alerta de Sonido"],
-            guarantee: "2 años de cobertura",
+            ai_detection: ["Motion tracking", "Human detection", "Sound alert"],
+            guarantee: "2 years of coverage",
             support: "Chat 24/7"
         }
     }

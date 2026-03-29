@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 
         if (!(file instanceof File)) {
             return NextResponse.json(
-                { error: "No se ha proporcionado ningún archivo" },
+                { error: "No file was provided" },
                 { status: 400 }
             );
         }
@@ -37,17 +37,19 @@ export async function POST(request: NextRequest) {
         const publicUrl = result.data?.ufsUrl || result.data?.url;
         if (!publicUrl) {
             return NextResponse.json(
-                { error: "No se recibió URL pública desde UploadThing." },
+                { error: "No public URL received from UploadThing." },
                 { status: 500 }
             );
         }
 
         return NextResponse.json({ url: publicUrl, key: result.data?.key });
     } catch (error) {
-        console.error("Error al subir archivo:", error);
+        console.error("Error uploading file:", error);
         return NextResponse.json(
-            { error: "Error interno al subir el archivo" },
+            { error: "Internal error uploading file" },
             { status: 500 }
         );
     }
 }
+
+

@@ -11,7 +11,7 @@ export async function PATCH(
         const { status } = body ?? {};
 
         if (typeof status !== "string" || status.trim().length === 0) {
-            return NextResponse.json({ error: "Estado inválido." }, { status: 400 });
+            return NextResponse.json({ error: "Invalid status." }, { status: 400 });
         }
 
         const quote = await prisma.quote.update({
@@ -22,7 +22,8 @@ export async function PATCH(
         return NextResponse.json(quote);
     } catch (error) {
         console.error("Error updating quote:", error);
-        return NextResponse.json({ error: "No se pudo actualizar la cotización." }, { status: 500 });
+        return NextResponse.json({ error: "Could not update quote." }, { status: 500 });
     }
 }
+
 

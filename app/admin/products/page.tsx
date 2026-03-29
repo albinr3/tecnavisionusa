@@ -36,14 +36,14 @@ export default function AdminProductsPage() {
     };
 
     const handleDelete = async (slug: string) => {
-        if (!confirm("¿Estás seguro de eliminar este producto?")) return;
+        if (!confirm("Are you sure you want to delete this product?")) return;
 
         try {
             const res = await fetch(`/api/products/${slug}`, { method: "DELETE" });
             if (!res.ok) throw new Error("Failed to delete product");
             setProducts(products.filter(p => p.slug !== slug));
         } catch (err) {
-            alert("Error al eliminar el producto");
+            alert("Error deleting product");
         }
     };
 
@@ -55,16 +55,16 @@ export default function AdminProductsPage() {
                     <div className="flex items-center gap-2 text-[#645e8d] text-sm mb-1">
                         <span>Dashboard</span>
                         <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-                        <span className="text-app-text font-medium">Productos</span>
+                        <span className="text-app-text font-medium">Products</span>
                     </div>
-                    <h2 className="text-app-text text-2xl font-bold tracking-tight">Gestión de Productos</h2>
+                    <h2 className="text-app-text text-2xl font-bold tracking-tight">Product Management</h2>
                 </div>
                 <Link
                     href="/admin/products/new"
                     className="flex h-10 items-center justify-center rounded-lg px-6 bg-primary text-white text-sm font-semibold shadow-sm hover:bg-blue-800 transition-colors gap-2"
                 >
                     <span className="material-symbols-outlined text-[18px]">add</span>
-                    Añadir Producto
+                    Add Product
                 </Link>
             </header>
 
@@ -74,7 +74,7 @@ export default function AdminProductsPage() {
                     {loading ? (
                         <div className="bg-app-surface rounded-xl border border-app-border p-12 text-center shadow-sm">
                             <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-                            <p className="text-[#645e8d]">Cargando productos...</p>
+                            <p className="text-[#645e8d]">Loading products...</p>
                         </div>
                     ) : error ? (
                         <div className="bg-white rounded-xl border border-red-200 p-12 text-center shadow-sm">
@@ -86,7 +86,7 @@ export default function AdminProductsPage() {
                                 className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-blue-800 transition-colors"
                             >
                                 <span className="material-symbols-outlined text-[18px]">refresh</span>
-                                Reintentar
+                                Retry
                             </button>
                         </div>
                     ) : products.length === 0 ? (
@@ -94,14 +94,14 @@ export default function AdminProductsPage() {
                             <div className="w-16 h-16 bg-app-bg-subtle rounded-full flex items-center justify-center mx-auto mb-4">
                                 <span className="material-symbols-outlined text-gray-400 text-3xl">inventory_2</span>
                             </div>
-                            <h3 className="text-lg font-bold text-app-text mb-2">No hay productos</h3>
-                            <p className="text-[#645e8d] mb-6">Comienza añadiendo tu primer producto al catálogo.</p>
+                            <h3 className="text-lg font-bold text-app-text mb-2">No products yet</h3>
+                            <p className="text-[#645e8d] mb-6">Start by adding your first product to the catalog.</p>
                             <Link
                                 href="/admin/products/new"
                                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-blue-800 transition-colors"
                             >
                                 <span className="material-symbols-outlined text-[18px]">add</span>
-                                Añadir Producto
+                                Add Product
                             </Link>
                         </div>
                     ) : (
@@ -110,10 +110,10 @@ export default function AdminProductsPage() {
                                 <table className="w-full min-w-[720px]">
                                 <thead className="bg-app-bg-subtle border-b border-app-border">
                                     <tr>
-                                        <th className="text-left px-6 py-4 text-sm font-semibold text-app-text">Producto</th>
+                                        <th className="text-left px-6 py-4 text-sm font-semibold text-app-text">Product</th>
                                         <th className="text-left px-6 py-4 text-sm font-semibold text-app-text hidden md:table-cell">Slug</th>
                                         <th className="text-left px-6 py-4 text-sm font-semibold text-app-text hidden lg:table-cell">Badge</th>
-                                        <th className="text-right px-6 py-4 text-sm font-semibold text-app-text">Acciones</th>
+                                        <th className="text-right px-6 py-4 text-sm font-semibold text-app-text">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-[#dcdae7]">
@@ -152,21 +152,21 @@ export default function AdminProductsPage() {
                                                         href={`/products/${product.slug}`}
                                                         target="_blank"
                                                         className="p-2 text-[#645e8d] hover:text-primary hover:bg-primary/10 rounded-lg transition-colors"
-                                                        title="Ver en sitio"
+                                                        title="View on site"
                                                     >
                                                         <span className="material-symbols-outlined text-[20px]">visibility</span>
                                                     </Link>
                                                     <Link
                                                         href={`/admin/products/${product.slug}/edit`}
                                                         className="p-2 text-[#645e8d] hover:text-primary hover:bg-primary/10 rounded-lg transition-colors"
-                                                        title="Editar"
+                                                        title="Edit"
                                                     >
                                                         <span className="material-symbols-outlined text-[20px]">edit</span>
                                                     </Link>
                                                     <button
                                                         onClick={() => handleDelete(product.slug)}
                                                         className="p-2 text-[#645e8d] hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                                        title="Eliminar"
+                                                        title="Delete"
                                                     >
                                                         <span className="material-symbols-outlined text-[20px]">delete</span>
                                                     </button>
@@ -184,3 +184,6 @@ export default function AdminProductsPage() {
         </>
     );
 }
+
+
+

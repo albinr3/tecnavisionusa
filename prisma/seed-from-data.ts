@@ -7,6 +7,8 @@ import { PrismaClient } from "@prisma/client";
 
 type SeedCategory = {
   name: string;
+  name_es?: string | null;
+  name_en?: string | null;
   slug: string;
   icon: string | null;
   description: string | null;
@@ -75,11 +77,15 @@ async function main() {
       where: { slug: category.slug },
       update: {
         name: category.name,
+        name_es: category.name_es ?? null,
+        name_en: category.name_en ?? null,
         icon: category.icon,
         description: category.description,
       },
       create: {
         name: category.name,
+        name_es: category.name_es ?? null,
+        name_en: category.name_en ?? null,
         slug: category.slug,
         icon: category.icon,
         description: category.description,

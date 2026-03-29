@@ -45,7 +45,7 @@ export default function AdminShell({ children }: AdminShellProps) {
                             type="button"
                             onClick={() => setIsMenuOpen(true)}
                             className="text-app-text p-2"
-                            aria-label="Abrir menú"
+                            aria-label="Open menu"
                             aria-expanded={isMenuOpen}
                             aria-controls="admin-mobile-drawer"
                         >
@@ -78,7 +78,7 @@ export default function AdminShell({ children }: AdminShellProps) {
                         type="button"
                         onClick={() => setIsMenuOpen(false)}
                         className="text-app-text p-2"
-                        aria-label="Cerrar menú"
+                        aria-label="Close menu"
                     >
                         <span className="material-symbols-outlined">close</span>
                     </button>
@@ -101,3 +101,5 @@ export default function AdminShell({ children }: AdminShellProps) {
         </div>
     );
 }
+
+

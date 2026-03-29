@@ -85,9 +85,11 @@ export default function AdminSidebar({ variant = "desktop" }: AdminSidebarProps)
                     className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-red-500 hover:bg-red-500/10 transition-colors"
                 >
                     <span className="material-symbols-outlined text-xl">logout</span>
-                    <span className="text-sm font-medium">Cerrar Sesión</span>
+                    <span className="text-sm font-medium">Sign Out</span>
                 </button>
             </div>
         </aside>
     );
 }
+
+

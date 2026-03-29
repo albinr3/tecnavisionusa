@@ -3,11 +3,11 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 
 export const metadata: Metadata = {
-  title: "Términos del servicio - TecnaVision",
+  title: "Terms of Service - TecnaVision",
   description:
-    "Términos y condiciones de uso del sitio web y de los servicios de TecnaVision, productos de seguridad y vigilancia.",
+    "Terms and conditions for using TecnaVision's website and services for security and surveillance products.",
   alternates: {
-    canonical: "/terminos",
+    canonical: "/terms",
   },
 };
 
@@ -18,112 +18,108 @@ export default function TerminosPage() {
       <main className="flex-grow">
         <div className="max-w-3xl mx-auto px-6 lg:px-10 py-12 sm:py-20">
           <h1 className="text-3xl sm:text-4xl font-bold text-app-text mb-4">
-            Términos del servicio
+            Terms of Service
           </h1>
           <p className="text-app-text-sec text-sm mb-12">
-            Última actualización: febrero 2025
+            Last updated: February 2025
           </p>
 
           <div className="space-y-8 text-app-text-sec leading-relaxed">
             <section>
               <h2 className="text-xl font-bold text-app-text mb-3">
-                1. Objeto y aceptación
+                1. Scope and acceptance
               </h2>
               <p>
-                Los presentes términos y condiciones (&quot;Términos&quot;) regulan el uso del sitio
-                web de TecnaVision y de los servicios ofrecidos a través del mismo (información
-                sobre productos de seguridad, cámaras, NVR, control de acceso, red de
-                distribuidores, solicitud de cotizaciones y contacto). El acceso y uso del sitio
-                implica la aceptación de estos Términos. Si no estás de acuerdo, no utilices el
-                sitio.
+                These terms and conditions (&quot;Terms&quot;) govern the use of the TecnaVision website
+                and the services offered through it (information about security products, cameras,
+                NVRs, access control, distributor network, quote requests, and contact channels).
+                Access to and use of the site implies acceptance of these Terms. If you do not
+                agree, do not use the site.
               </p>
             </section>
 
             <section>
               <h2 className="text-xl font-bold text-app-text mb-3">
-                2. Uso del sitio y contenido
+                2. Site use and content
               </h2>
               <p>
-                El contenido del sitio (textos, imágenes, especificaciones de productos) es
-                orientativo y puede ser modificado sin previo aviso. Te comprometes a usar el
-                sitio de forma lícita, sin fines fraudulentos ni que perjudiquen a terceros o a
-                TecnaVision. No está permitido el uso automatizado masivo (scraping), la
-                suplantación de identidad ni el intento de acceder a áreas restringidas sin
-                autorización.
+                Site content (text, images, product specifications) is for informational purposes
+                and may be changed without prior notice. You agree to use the site lawfully,
+                without fraudulent purposes and without harming third parties or TecnaVision.
+                Mass automated use (scraping), impersonation, and attempts to access restricted
+                areas without authorization are not allowed.
               </p>
             </section>
 
             <section>
               <h2 className="text-xl font-bold text-app-text mb-3">
-                3. Productos, cotizaciones y compras
+                3. Products, quotes, and purchases
               </h2>
               <p>
-                La información sobre productos y precios en el sitio no constituye una oferta
-                vinculante. Las ventas pueden realizarse a través de la web, de distribuidores
-                autorizados o por otros canales; en cada caso se aplicarán las condiciones
-                particulares que se te comuniquen. Las cotizaciones solicitadas a través del
-                sitio son orientativas y sujetas a confirmación. La instalación y el uso de
-                sistemas de vigilancia deben ajustarse a la legislación aplicable en tu país o
-                territorio.
+                Product and pricing information on the site does not constitute a binding offer.
+                Sales may be made through the website, authorized distributors, or other channels;
+                in each case, the specific terms communicated to you will apply. Quotes requested
+                through the site are indicative and subject to confirmation. Installation and use
+                of surveillance systems must comply with applicable laws in your country or
+                territory.
               </p>
             </section>
 
             <section>
               <h2 className="text-xl font-bold text-app-text mb-3">
-                4. Propiedad intelectual
+                4. Intellectual property
               </h2>
               <p>
-                Todos los derechos de propiedad intelectual sobre el sitio, el contenido y la
-                marca TecnaVision son propiedad de TecnaVision o de sus licenciantes. No está
-                permitida la reproducción, distribución o uso comercial del contenido sin
-                autorización previa por escrito.
+                All intellectual property rights related to the site, its content, and the
+                TecnaVision brand are owned by TecnaVision or its licensors. Reproduction,
+                distribution, or commercial use of content is not permitted without prior written
+                authorization.
               </p>
             </section>
 
             <section>
               <h2 className="text-xl font-bold text-app-text mb-3">
-                5. Limitación de responsabilidad
+                5. Limitation of liability
               </h2>
               <p>
-                TecnaVision no será responsable de daños indirectos, consecuentes o lucro cesante
-                derivados del uso o la imposibilidad de uso del sitio o de la información en él
-                contenida. En la medida permitida por la ley, nuestra responsabilidad se limitará
-                a los términos de la garantía de los productos que hayas adquirido. El sitio se
-                ofrece &quot;tal cual&quot;; no garantizamos la ausencia de errores o interrupciones.
+                TecnaVision will not be liable for indirect, consequential, or lost-profit damages
+                arising from the use or inability to use the site or the information contained on
+                it. To the extent permitted by law, our liability is limited to the warranty terms
+                of the products you have purchased. The site is provided &quot;as is&quot;; we do not
+                guarantee the absence of errors or interruptions.
               </p>
             </section>
 
             <section>
               <h2 className="text-xl font-bold text-app-text mb-3">
-                6. Enlaces a terceros
+                6. Third-party links
               </h2>
               <p>
-                El sitio puede contener enlaces a sitios de terceros (por ejemplo distribuidores o
-                redes sociales). No controlamos el contenido ni las prácticas de privacidad de
-                esos sitios; el acceso a los mismos es bajo tu propia responsabilidad.
+                The site may contain links to third-party sites (for example, distributors or
+                social media). We do not control the content or privacy practices of those sites;
+                access to them is at your own risk.
               </p>
             </section>
 
             <section>
               <h2 className="text-xl font-bold text-app-text mb-3">
-                7. Modificaciones y ley aplicable
+                7. Changes and governing law
               </h2>
               <p>
-                Nos reservamos el derecho de modificar estos Términos en cualquier momento; los
-                cambios serán efectivos desde su publicación en el sitio. El uso continuado del
-                sitio tras las modificaciones implica la aceptación de los nuevos Términos. La
-                ley aplicable y los tribunales competentes serán los que correspondan según tu
-                residencia y la normativa vigente.
+                We reserve the right to modify these Terms at any time; changes become effective
+                when published on the site. Continued use of the site after changes implies
+                acceptance of the updated Terms. Governing law and competent courts will be those
+                corresponding to your place of residence and applicable regulations.
               </p>
             </section>
 
             <section>
               <h2 className="text-xl font-bold text-app-text mb-3">
-                8. Contacto
+                8. Contact
               </h2>
               <p>
-                Para consultas sobre estos Términos puedes dirigirte a TecnaVision a través de
-                la sección de contacto de nuestra web.
+                For questions about these Terms, contact TecnaVision through the contact section of
+                our website.
               </p>
             </section>
           </div>
@@ -133,3 +129,6 @@ export default function TerminosPage() {
     </div>
   );
 }
+
+
+

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Category, Product, ProductVariant } from "@prisma/client";
+import { Product, ProductVariant } from "@prisma/client";
 import { toast } from "sonner";
 import ProductPreview from "@/app/admin/components/ProductPreview";
 
@@ -12,30 +12,36 @@ type ProductWithVariants = Product & {
     variants?: ProductVariant[];
 };
 
+type ProductCategoryOption = {
+    id: string;
+    name: string;
+    slug: string;
+};
+
 interface ProductFormProps {
-    categories: Category[];
+    categories: ProductCategoryOption[];
     initialData?: ProductWithVariants;
 }
 
 const CAMERA_SPEC_TEMPLATE = [
-    { key: "Protección IP", value: "" },
-    { key: "Compresión de Video", value: "" },
-    { key: "Lente", value: "" },
-    { key: "Alimentación / PoE", value: "" },
+    { key: "IP Protection", value: "" },
+    { key: "Video Compression", value: "" },
+    { key: "Lens", value: "" },
+    { key: "Power / PoE", value: "" },
 ];
 
 const NVR_SPEC_TEMPLATE = [
     { key: "HDD", value: "" },
-    { key: "Megapixeles", value: "" },
-    { key: "Salida de Video", value: "" },
+    { key: "Megapixels", value: "" },
+    { key: "Video Output", value: "" },
     { key: "PoE", value: "" },
 ];
 
 const CAMERA_NIGHT_VISION_DEFAULT = "/NIGHT.webp";
 const NVR_NIGHT_VISION_DEFAULT = "/graficonvr.webp";
 const MARKET_OPTIONS = [
-    { code: "RD", label: "República Dominicana (RD)" },
-    { code: "US", label: "Estados Unidos (US)" },
+    { code: "RD", label: "Dominican Republic (RD)" },
+    { code: "US", label: "United States (US)" },
 ] as const;
 
 export default function ProductForm({ categories, initialData }: ProductFormProps) {
@@ -70,8 +76,8 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
     const [nightVisionImg, setNightVisionImg] = useState(initialData?.nightVisionImg || CAMERA_NIGHT_VISION_DEFAULT);
     const [appDemoImg, setAppDemoImg] = useState(initialData?.appDemoImg || "");
     const [appDemoBadge, setAppDemoBadge] = useState(initialData?.appDemoBadge || "Live Monitoring");
-    const [appDemoTitle, setAppDemoTitle] = useState(initialData?.appDemoTitle || "Control total en la palma de tu mano.");
-    const [appDemoDesc, setAppDemoDesc] = useState(initialData?.appDemoDesc || "Recibe notificaciones instantáneas, verifica grabaciones y gestiona permisos de seguridad desde nuestra app empresarial segura.");
+    const [appDemoTitle, setAppDemoTitle] = useState(initialData?.appDemoTitle || "Total control in the palm of your hand.");
+    const [appDemoDesc, setAppDemoDesc] = useState(initialData?.appDemoDesc || "Receive instant notifications, review recordings, and manage security permissions from our secure enterprise app.");
     const [aiSectionIcon, setAiSectionIcon] = useState(initialData?.aiSectionIcon || "psychology");
     const [nightVisionIcon, setNightVisionIcon] = useState(initialData?.nightVisionIcon || "nightlight_round");
     const [specsSectionIcon, setSpecsSectionIcon] = useState(initialData?.specsSectionIcon || "settings_suggest");
@@ -80,17 +86,17 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
 
     // Specs
     const [specs, setSpecs] = useState([
-        { key: "Protección IP", value: initialData?.protection || "" },
-        { key: "Compresión de Video", value: initialData?.compression || "" },
-        { key: "Lente", value: initialData?.lens || "" },
-        { key: "Alimentación / PoE", value: initialData?.power || "" },
+        { key: "IP Protection", value: initialData?.protection || "" },
+        { key: "Video Compression", value: initialData?.compression || "" },
+        { key: "Lens", value: initialData?.lens || "" },
+        { key: "Power / PoE", value: initialData?.power || "" },
     ]);
     const [resolutionOptions, setResolutionOptions] = useState(initialData?.resolutionOpts?.join(", ") || "4 Megapixel, 6 Megapixel, 8 MP (4K Ultra)");
 
     // Features
-    const [aiFeatures, setAiFeatures] = useState(initialData?.aiDetection?.join(", ") || "Cruce de línea, Intrusión de área, Reconocimiento facial");
-    const [guarantee, setGuarantee] = useState(initialData?.guarantee || "3 años de cobertura");
-    const [support, setSupport] = useState(initialData?.support || "Línea directa B2B");
+    const [aiFeatures, setAiFeatures] = useState(initialData?.aiDetection?.join(", ") || "Line crossing, Area intrusion, Facial recognition");
+    const [guarantee, setGuarantee] = useState(initialData?.guarantee || "3 years of coverage");
+    const [support, setSupport] = useState(initialData?.support || "Dedicated B2B hotline");
 
     // Variants
     const [variants, setVariants] = useState<Partial<ProductVariant>[]>(initialData?.variants || []);
@@ -125,7 +131,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                 && (prevKeys.every((key, idx) => key === cameraTemplateKeys[idx])
                     || prevKeys.every((key, idx) => key === nvrTemplateKeys[idx]));
 
-            // Si el usuario personalizó nombres de campos, no sobrescribimos.
+            // If the user customized field names, do not overwrite them.
             if (!matchesKnownTemplate) {
                 return prev;
             }
@@ -178,18 +184,18 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
 
     const getSpecValuePlaceholder = (key: string) => {
         const normalizedKey = normalizeSpecKey(key);
-        if (normalizedKey.includes("hdd") || normalizedKey.includes("disco") || normalizedKey.includes("almacen")) return "Ej. 2x HDD hasta 10TB";
-        if (normalizedKey.includes("megapixel") || normalizedKey.includes("resolucion") || normalizedKey === "mp") return "Ej. 8 MP";
-        if (normalizedKey.includes("canales")) return "Ej. 16 canales IP";
-        if (normalizedKey.includes("salida") || normalizedKey.includes("video") || normalizedKey.includes("hdmi")) return "Ej. HDMI 4K";
-        if (normalizedKey.includes("protec") || normalizedKey.includes("ip")) return "Ej. IP67 / IK10";
-        if (normalizedKey.includes("compres")) return "Ej. H.265+ / H.264+";
-        if (normalizedKey.includes("lente")) return "Ej. 2.8 mm";
-        if (normalizedKey.includes("energ") || normalizedKey.includes("alimenta") || normalizedKey.includes("poe")) return "Ej. 12VDC / PoE";
-        if (normalizedKey.includes("sensor")) return "Ej. 1/2.7\" CMOS";
-        if (normalizedKey.includes("ir") || normalizedKey.includes("noct")) return "Ej. 30 m";
-        if (normalizedKey.includes("fps")) return "Ej. 30 fps";
-        return "Ej. Valor técnico";
+        if (normalizedKey.includes("hdd") || normalizedKey.includes("disco") || normalizedKey.includes("almacen")) return "e.g. 2x HDD hasta 10TB";
+        if (normalizedKey.includes("megapixel") || normalizedKey.includes("resolucion") || normalizedKey === "mp") return "e.g. 8 MP";
+        if (normalizedKey.includes("canales")) return "e.g. 16 canales IP";
+        if (normalizedKey.includes("salida") || normalizedKey.includes("video") || normalizedKey.includes("hdmi")) return "e.g. HDMI 4K";
+        if (normalizedKey.includes("protec") || normalizedKey.includes("ip")) return "e.g. IP67 / IK10";
+        if (normalizedKey.includes("compres")) return "e.g. H.265+ / H.264+";
+        if (normalizedKey.includes("lente")) return "e.g. 2.8 mm";
+        if (normalizedKey.includes("energ") || normalizedKey.includes("alimenta") || normalizedKey.includes("poe")) return "e.g. 12VDC / PoE";
+        if (normalizedKey.includes("sensor")) return "e.g. 1/2.7\" CMOS";
+        if (normalizedKey.includes("ir") || normalizedKey.includes("noct")) return "e.g. 30 m";
+        if (normalizedKey.includes("fps")) return "e.g. 30 fps";
+        return "e.g. Technical value";
     };
 
     const addSpec = () => {
@@ -229,7 +235,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
         successMessage: string
     ) => {
         setIsUploading(true);
-        const loadingToast = toast.loading("Subiendo imagen...");
+        const loadingToast = toast.loading("Uploading image...");
 
         try {
             const formData = new FormData();
@@ -242,7 +248,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
 
             if (!res.ok) {
                 const data = await res.json();
-                throw new Error(data.error || "Error al subir la imagen");
+                throw new Error(data.error || "Error uploading image");
             }
 
             const data = await res.json();
@@ -250,7 +256,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
             toast.success(successMessage);
         } catch (err) {
             console.error(err);
-            toast.error(err instanceof Error ? err.message : "Error al subir la imagen");
+            toast.error(err instanceof Error ? err.message : "Error uploading image");
         } finally {
             setIsUploading(false);
             toast.dismiss(loadingToast);
@@ -271,12 +277,12 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
     const handleMainMultipleUpload = async (files: FileList | File[]) => {
         const imageFiles = Array.from(files).filter((file) => file.type.startsWith("image/"));
         if (imageFiles.length === 0) {
-            toast.error("Selecciona archivos de imagen válidos.");
+            toast.error("Select valid image files.");
             return;
         }
 
         setIsUploading(true);
-        const loadingToast = toast.loading(`Subiendo ${imageFiles.length} imagen(es)...`);
+        const loadingToast = toast.loading(`Uploading ${imageFiles.length} image(s)...`);
 
         try {
             const uploadedUrls: string[] = [];
@@ -290,7 +296,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                 });
                 if (!res.ok) {
                     const data = await res.json();
-                    throw new Error(data.error || "Error al subir una imagen");
+                    throw new Error(data.error || "Error uploading an image");
                 }
                 const data = await res.json();
                 uploadedUrls.push(data.url);
@@ -305,10 +311,10 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                 }
             }
 
-            toast.success(`${uploadedUrls.length} imagen(es) subidas con éxito`);
+            toast.success(`${uploadedUrls.length} image(s) uploaded successfully`);
         } catch (err) {
             console.error(err);
-            toast.error(err instanceof Error ? err.message : "Error al subir imágenes");
+            toast.error(err instanceof Error ? err.message : "Error uploading images");
         } finally {
             setIsUploading(false);
             toast.dismiss(loadingToast);
@@ -327,7 +333,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                     setGalleryImages((prev: string[]) => Array.from(new Set([...prev, uploadedUrl])));
                 }
             },
-            "Imagen subida con éxito"
+            "Image uploaded successfully"
         );
     };
 
@@ -362,7 +368,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
 
         const file = e.dataTransfer.files?.[0];
         if (!file || !file.type.startsWith("image/")) {
-            toast.error("Suelta un archivo de imagen válido.");
+            toast.error("Drop a valid image file.");
             return;
         }
         if (zone === "main") {
@@ -376,13 +382,13 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
         e.preventDefault();
 
         if (!name || !model) {
-            const msg = "Por favor completa el nombre y modelo del producto.";
+            const msg = "Please complete the product name and model.";
             setError(msg);
             toast.warning(msg);
             return;
         }
         if (availableMarkets.length === 0) {
-            const msg = "Selecciona al menos un mercado disponible (RD o US).";
+            const msg = "Select at least one available market (RD or US).";
             setError(msg);
             toast.warning(msg);
             return;
@@ -442,12 +448,12 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
             }
 
             toast.dismiss(loadingToast);
-            toast.success(initialData ? "¡Producto actualizado!" : "¡Producto creado exitosamente!");
+            toast.success(initialData ? "Product updated!" : "Product created successfully!");
             router.push("/admin/products");
             router.refresh();
         } catch (err) {
             toast.dismiss(loadingToast);
-            const msg = err instanceof Error ? err.message : "Error al guardar el producto";
+            const msg = err instanceof Error ? err.message : "Error saving product";
             setError(msg);
             toast.error(msg);
             setIsSubmitting(false);
@@ -494,7 +500,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                             e.stopPropagation();
                             setDraggingZone((current) => (current === "main" ? null : current));
                         }}
-                        onDrop={(e) => handleImageDrop(e, "main", setMainImage, "Imagen principal subida con éxito")}
+                        onDrop={(e) => handleImageDrop(e, "main", setMainImage, "Main image uploaded successfully")}
                     >
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
                             <div className="rounded-lg overflow-hidden border border-app-border bg-app-surface relative h-40 md:h-52">
@@ -502,7 +508,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                                     <img src={mainImage} alt="Imagen principal" className="w-full h-full object-cover" />
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center text-app-text-sec text-sm">
-                                        Sin imagen principal
+                                        No main image
                                     </div>
                                 )}
                                 {mainImage && (
@@ -510,8 +516,8 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                                         type="button"
                                         onClick={() => setMainImage("")}
                                         className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/65 text-white hover:bg-red-600 transition-colors flex items-center justify-center"
-                                        aria-label="Eliminar imagen principal"
-                                        title="Eliminar imagen principal"
+                                        aria-label="Remove main image"
+                                        title="Remove main image"
                                     >
                                         <span className="material-symbols-outlined text-[16px]">close</span>
                                     </button>
@@ -535,9 +541,9 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                                     className="mt-3 w-full flex h-10 items-center justify-center gap-2 rounded-lg border border-primary/30 bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 transition-colors disabled:opacity-50"
                                 >
                                     <span className="material-symbols-outlined text-[18px]">upload</span>
-                                    {isUploading ? "Subiendo..." : "Subir imagen(es)"}
+                                    {isUploading ? "Uploading..." : "Upload image(es)"}
                                 </button>
-                                <p className="mt-2 text-[11px] text-app-text-sec">Puedes subir o arrastrar varias imágenes aquí.</p>
+                                <p className="mt-2 text-[11px] text-app-text-sec">You can upload or drag multiple images here.</p>
                             </div>
                         </div>
                         <input
@@ -557,18 +563,18 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                         />
                         {galleryImages.length > 0 && (
                             <div className="mt-3">
-                                <p className="text-xs font-semibold text-app-text mb-2">Galería ({galleryImages.length})</p>
+                                <p className="text-xs font-semibold text-app-text mb-2">Gallery ({galleryImages.length})</p>
                                 <div className="grid grid-cols-3 gap-2">
                                     {galleryImages.map((img: string, index: number) => (
                                         <div key={`${img}-${index}`} className="relative rounded-lg overflow-hidden border border-app-border bg-app-surface">
-                                            <img src={img} alt={`Galería ${index + 1}`} className="w-full h-20 object-cover" />
+                                            <img src={img} alt={`Gallery ${index + 1}`} className="w-full h-20 object-cover" />
                                             <div className="absolute inset-x-0 bottom-0 p-1 bg-black/50 flex gap-1">
                                                 <button
                                                     type="button"
                                                     onClick={() => makeImagePrimary(img)}
                                                     className="flex-1 text-[10px] font-semibold text-white bg-primary/80 rounded px-1 py-0.5"
                                                 >
-                                                    Hacer principal
+                                                    Set as main
                                                 </button>
                                                 <button
                                                     type="button"
@@ -582,7 +588,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                                     ))}
                                 </div>
                                 <p className="mt-2 text-[11px] text-app-text-sec">
-                                    Puedes cambiar la imagen principal en cualquier momento con el botón <span className="font-semibold">Hacer principal</span>.
+                                    You can change the main image at any time using the <span className="font-semibold">Set as main</span>.
                                 </p>
                             </div>
                         )}
@@ -593,19 +599,19 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                 <div className="bg-app-surface rounded-xl border border-app-border shadow-sm p-6">
                     <h3 className="text-lg font-bold text-app-text mb-5 flex items-center gap-2">
                         <span className="material-symbols-outlined text-primary">info</span>
-                        Información General
+                        General Information
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <label className="flex flex-col gap-2">
                             <span className="text-sm font-medium text-app-text">
-                                Nombre del Producto <span className="text-red-500">*</span>
+                                Product Name <span className="text-red-500">*</span>
                             </span>
                             <input
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 className="w-full rounded-lg border border-app-border bg-app-surface h-11 px-4 text-sm text-app-text focus:border-primary focus:ring-0 placeholder:text-app-text-sec/70"
-                                placeholder="Ej. Bullet Cam"
+                                placeholder="e.g. Bullet Cam"
                                 required
                             />
                         </label>
@@ -618,29 +624,29 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                                 value={model}
                                 onChange={(e) => setModel(e.target.value)}
                                 className="w-full rounded-lg border border-app-border bg-app-surface h-11 px-4 text-sm text-app-text focus:border-primary focus:ring-0 placeholder:text-app-text-sec/70"
-                                placeholder="Ej. Pro AI"
+                                placeholder="e.g. Pro AI"
                                 required
                             />
                         </label>
                         <label className="flex flex-col gap-2">
-                            <span className="text-sm font-medium text-app-text">Badge (Opcional)</span>
+                            <span className="text-sm font-medium text-app-text">Badge (Optional)</span>
                             <input
                                 type="text"
                                 value={badge}
                                 onChange={(e) => setBadge(e.target.value)}
                                 className="w-full rounded-lg border border-app-border bg-app-surface h-11 px-4 text-sm text-app-text focus:border-primary focus:ring-0 placeholder:text-app-text-sec/70"
-                                placeholder="Ej. Enterprise Series, Best Seller"
+                                placeholder="e.g. Enterprise Series, Best Seller"
                             />
                         </label>
                         <label className="flex flex-col gap-2">
-                            <span className="text-sm font-medium text-app-text">Categoría</span>
+                            <span className="text-sm font-medium text-app-text">Category</span>
                             <div className="relative">
                                 <select
                                     value={category}
                                     onChange={(e) => setCategory(e.target.value)}
                                     className="w-full rounded-lg border border-app-border bg-app-surface h-11 px-4 text-sm text-app-text focus:border-primary focus:ring-0 appearance-none"
                                 >
-                                    <option value="">Seleccionar categoría...</option>
+                                    <option value="">Select category...</option>
                                     {categories.map((cat) => (
                                         <option key={cat.id} value={cat.id}>
                                             {cat.name}
@@ -680,25 +686,25 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                 <div className="bg-app-surface rounded-xl border border-app-border shadow-sm p-6">
                     <h3 className="text-lg font-bold text-app-text mb-5 flex items-center gap-2">
                         <span className="material-symbols-outlined text-primary">description</span>
-                        Descripción
+                        Description
                     </h3>
                     <label className="flex flex-col gap-2 mb-4">
-                        <span className="text-sm font-medium text-app-text">Subtítulo</span>
+                        <span className="text-sm font-medium text-app-text">Subtitle</span>
                         <input
                             type="text"
                             value={subtitle}
                             onChange={(e) => setSubtitle(e.target.value)}
                             className="w-full rounded-lg border border-app-border bg-app-surface h-11 px-4 text-sm text-app-text focus:border-primary focus:ring-0 placeholder:text-app-text-sec/70"
-                            placeholder="Ej. Vigilancia de última generación para entornos exigentes."
+                            placeholder="e.g. Next-generation surveillance for demanding environments."
                         />
                     </label>
                     <label className="flex flex-col gap-2">
-                        <span className="text-sm font-medium text-app-text">Descripción Completa</span>
+                        <span className="text-sm font-medium text-app-text">Description Completa</span>
                         <textarea
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             className="w-full h-32 p-4 text-sm text-app-text border border-app-border rounded-lg focus:border-primary focus:ring-0 resize-y outline-none placeholder:text-app-text-sec/70"
-                            placeholder="Escribe una descripción detallada del producto aquí..."
+                            placeholder="Write a detailed product description here..."
                         />
                     </label>
                 </div>
@@ -707,24 +713,24 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                 <div className="bg-app-surface rounded-xl border border-app-border shadow-sm p-6">
                     <h3 className="text-lg font-bold text-app-text mb-5 flex items-center gap-2">
                         <span className="material-symbols-outlined text-primary">translate</span>
-                        Contenido Multi-idioma (Opcional)
+                        Multi-language Content (Optional)
                     </h3>
                     <p className="text-xs text-app-text-sec mb-4">
-                        Si un campo no se completa, el sitio usa el valor base (`name`/`description`) como fallback.
+                        If a field is not completed, the site uses the base value (`name`/`description`) as fallback.
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <label className="flex flex-col gap-2">
-                            <span className="text-sm font-medium text-app-text">Título (Español)</span>
+                            <span className="text-sm font-medium text-app-text">Title (Spanish)</span>
                             <input
                                 type="text"
                                 value={titleEs}
                                 onChange={(e) => setTitleEs(e.target.value)}
                                 className="w-full rounded-lg border border-app-border bg-app-surface h-11 px-4 text-sm text-app-text focus:border-primary focus:ring-0 placeholder:text-app-text-sec/70"
-                                placeholder="Ej. Cámara Bullet para exterior"
+                                placeholder="e.g. Outdoor bullet camera"
                             />
                         </label>
                         <label className="flex flex-col gap-2">
-                            <span className="text-sm font-medium text-app-text">Título (Inglés)</span>
+                            <span className="text-sm font-medium text-app-text">Title (English)</span>
                             <input
                                 type="text"
                                 value={titleEn}
@@ -734,16 +740,16 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                             />
                         </label>
                         <label className="flex flex-col gap-2">
-                            <span className="text-sm font-medium text-app-text">Descripción (Español)</span>
+                            <span className="text-sm font-medium text-app-text">Description (Spanish)</span>
                             <textarea
                                 value={descriptionEs}
                                 onChange={(e) => setDescriptionEs(e.target.value)}
                                 className="w-full h-28 p-4 text-sm text-app-text border border-app-border rounded-lg focus:border-primary focus:ring-0 resize-y outline-none placeholder:text-app-text-sec/70"
-                                placeholder="Descripción para mercado RD..."
+                                placeholder="Description para mercado RD..."
                             />
                         </label>
                         <label className="flex flex-col gap-2">
-                            <span className="text-sm font-medium text-app-text">Descripción (Inglés)</span>
+                            <span className="text-sm font-medium text-app-text">Description (English)</span>
                             <textarea
                                 value={descriptionEn}
                                 onChange={(e) => setDescriptionEn(e.target.value)}
@@ -768,7 +774,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                                 onClick={addSpec}
                                 className="text-xs font-semibold text-primary hover:text-blue-700 flex items-center gap-1"
                             >
-                                <span className="material-symbols-outlined text-sm">add</span> Añadir
+                                <span className="material-symbols-outlined text-sm">add</span> Add
                             </button>
                         </div>
                         <div className="flex flex-col gap-3">
@@ -779,7 +785,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                                         value={spec.key}
                                         onChange={(e) => handleSpecChange(index, "key", e.target.value)}
                                         className="w-full sm:w-1/3 rounded-lg border border-app-border bg-app-bg-subtle h-10 px-3 text-sm text-app-text focus:border-primary focus:ring-0"
-                                        placeholder="Ej. Protección IP, Sensor, IR"
+                                        placeholder="e.g. IP Protection, Sensor, IR"
                                     />
                                     <input
                                         type="text"
@@ -801,10 +807,10 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                         <p className="mt-3 text-xs text-app-text-sec">
                             {isNvrCategory
                                 ? "Sugerencia para NVR: HDD, Megapixeles, Salida de Video y PoE."
-                                : "Sugerencia para cámaras: Protección IP, Compresión (H.265+), Lente (mm), Alimentación (PoE), Sensor, IR, WDR y FPS."}
+                                : "Camera tip: IP Protection, Compression (H.265+), Lens (mm), Power (PoE), Sensor, IR, WDR, and FPS."}
                         </p>
                         <label className="flex flex-col gap-2 mt-4">
-                            <span className="text-sm font-medium text-app-text">Opciones de Resolución (separadas por coma)</span>
+                            <span className="text-sm font-medium text-app-text">Opciones de Resolution (separadas por coma)</span>
                             <input
                                 type="text"
                                 value={resolutionOptions}
@@ -819,37 +825,37 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                     <div className="bg-app-surface rounded-xl border border-app-border shadow-sm p-6">
                         <h3 className="text-lg font-bold text-app-text mb-5 flex items-center gap-2">
                             <span className="material-symbols-outlined text-primary">tune</span>
-                            Características
+                            Features
                         </h3>
                         <div className="flex flex-col gap-4">
                             <label className="flex flex-col gap-2">
-                                <span className="text-sm font-medium text-app-text">Funciones IA (separadas por coma)</span>
+                                <span className="text-sm font-medium text-app-text">AI Features (comma-separated)</span>
                                 <input
                                     type="text"
                                     value={aiFeatures}
                                     onChange={(e) => setAiFeatures(e.target.value)}
                                     className="w-full rounded-lg border border-app-border bg-app-surface h-10 px-3 text-sm text-app-text focus:border-primary focus:ring-0"
-                                    placeholder="Cruce de línea, Intrusión de área"
+                                    placeholder="Line crossing, Area intrusion"
                                 />
                             </label>
                             <label className="flex flex-col gap-2">
-                                <span className="text-sm font-medium text-app-text">Garantía</span>
+                                <span className="text-sm font-medium text-app-text">Warranty</span>
                                 <input
                                     type="text"
                                     value={guarantee}
                                     onChange={(e) => setGuarantee(e.target.value)}
                                     className="w-full rounded-lg border border-app-border bg-app-surface h-10 px-3 text-sm text-app-text focus:border-primary focus:ring-0"
-                                    placeholder="3 años de cobertura"
+                                    placeholder="3 years of coverage"
                                 />
                             </label>
                             <label className="flex flex-col gap-2">
-                                <span className="text-sm font-medium text-app-text">Soporte</span>
+                                <span className="text-sm font-medium text-app-text">Support</span>
                                 <input
                                     type="text"
                                     value={support}
                                     onChange={(e) => setSupport(e.target.value)}
                                     className="w-full rounded-lg border border-app-border bg-app-surface h-10 px-3 text-sm text-app-text focus:border-primary focus:ring-0"
-                                    placeholder="Línea directa B2B"
+                                    placeholder="Dedicated B2B hotline"
                                 />
                             </label>
                         </div>
@@ -861,19 +867,19 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                     <div className="flex items-center justify-between mb-5">
                         <h3 className="text-lg font-bold text-app-text flex items-center gap-2">
                             <span className="material-symbols-outlined text-primary">style</span>
-                            Variantes del Producto
+                            Product Variants
                         </h3>
                         <button
                             type="button"
                             onClick={addVariant}
                             className="text-xs font-semibold text-primary hover:text-blue-700 flex items-center gap-1"
                         >
-                            <span className="material-symbols-outlined text-sm">add</span> Añadir Variante
+                            <span className="material-symbols-outlined text-sm">add</span> Add Variant
                         </button>
                     </div>
                     {variants.length === 0 ? (
                         <p className="text-sm text-app-text-sec italic text-center py-4 bg-app-bg-subtle rounded-lg">
-                            No hay variantes definidas. Se usará la configuración base del producto.
+                            No variants defined. The product base configuration will be used.
                         </p>
                     ) : (
                         <div className="flex flex-col gap-4">
@@ -888,17 +894,17 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                                     </button>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <label className="flex flex-col gap-1">
-                                            <span className="text-xs font-medium text-app-text">Nombre (ej. 4MP)</span>
+                                            <span className="text-xs font-medium text-app-text">Name (e.g. 4MP)</span>
                                             <input
                                                 type="text"
                                                 value={variant.name || ""}
                                                 onChange={(e) => handleVariantChange(index, "name", e.target.value)}
                                                 className="w-full rounded-md border border-app-border bg-app-surface h-9 px-3 text-sm"
-                                                placeholder="Nombre de la variante"
+                                                placeholder="Variant name"
                                             />
                                         </label>
                                         <label className="flex flex-col gap-1">
-                                            <span className="text-xs font-medium text-app-text">Descripción Corta</span>
+                                            <span className="text-xs font-medium text-app-text">Short Description</span>
                                             <input
                                                 type="text"
                                                 value={variant.description || ""}
@@ -908,7 +914,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                                             />
                                         </label>
                                         <label className="flex flex-col gap-1">
-                                            <span className="text-xs font-medium text-app-text">URL Manual (Opcional)</span>
+                                            <span className="text-xs font-medium text-app-text">Manual URL (Optional)</span>
                                             <input
                                                 type="text"
                                                 value={variant.manual || ""}
@@ -918,7 +924,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                                             />
                                         </label>
                                         <label className="flex flex-col gap-1">
-                                            <span className="text-xs font-medium text-app-text">URL Datasheet (Opcional)</span>
+                                            <span className="text-xs font-medium text-app-text">Datasheet URL (Optional)</span>
                                             <input
                                                 type="text"
                                                 value={variant.datasheet || ""}
@@ -938,7 +944,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                 <div className="bg-app-surface rounded-xl border border-app-border shadow-sm p-6">
                     <h3 className="text-lg font-bold text-app-text mb-5 flex items-center gap-2">
                         <span className="material-symbols-outlined text-primary">imagesmode</span>
-                        Imágenes del Producto
+                        Product Images
                     </h3>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
@@ -954,9 +960,9 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                                 e.stopPropagation();
                                 setDraggingZone((current) => (current === "night" ? null : current));
                             }}
-                            onDrop={(e) => handleImageDrop(e, "night", setNightVisionImg, "Imagen de visión nocturna subida con éxito")}
+                            onDrop={(e) => handleImageDrop(e, "night", setNightVisionImg, "Night vision image uploaded successfully")}
                         >
-                            <h4 className="text-sm font-semibold text-app-text mb-3">Vista Nocturna</h4>
+                            <h4 className="text-sm font-semibold text-app-text mb-3">Night Vision</h4>
                             <label className="flex flex-col gap-2">
                                 <span className="text-xs font-medium text-app-text-sec">URL</span>
                                 <input
@@ -970,7 +976,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                             <input
                                 type="file"
                                 ref={nightVisionImageInputRef}
-                                onChange={(e) => handleFileUpload(e, setNightVisionImg, "Imagen de visión nocturna subida con éxito")}
+                                onChange={(e) => handleFileUpload(e, setNightVisionImg, "Night vision image uploaded successfully")}
                                 accept="image/*"
                                 className="hidden"
                             />
@@ -981,22 +987,22 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                                 className="mt-3 w-full flex h-10 items-center justify-center gap-2 rounded-lg border border-primary/30 bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 transition-colors disabled:opacity-50"
                             >
                                 <span className="material-symbols-outlined text-[18px]">upload</span>
-                                {isUploading ? "Subiendo..." : "Subir imagen"}
+                                {isUploading ? "Uploading..." : "Upload image"}
                             </button>
-                            <p className="mt-2 text-[11px] text-app-text-sec">También puedes arrastrar y soltar una imagen aquí.</p>
+                            <p className="mt-2 text-[11px] text-app-text-sec">You can also drag and drop an image here.</p>
                             {(normalizeNightVisionForCategory(nightVisionImg) || mainImage || defaultNightVisionImg) && (
                                 <div className="mt-3 h-28 rounded-lg overflow-hidden border border-app-border bg-app-surface relative">
                                     <img
                                         src={normalizeNightVisionForCategory(nightVisionImg) || mainImage || defaultNightVisionImg}
-                                        alt="Imagen de visión nocturna"
+                                        alt="Night vision image"
                                         className="w-full h-full object-cover"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setNightVisionImg("")}
                                         className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/65 text-white hover:bg-red-600 transition-colors flex items-center justify-center"
-                                        aria-label="Eliminar imagen de visión nocturna"
-                                        title="Eliminar imagen de visión nocturna"
+                                        aria-label="Remove night vision image"
+                                        title="Remove night vision image"
                                     >
                                         <span className="material-symbols-outlined text-[16px]">close</span>
                                     </button>
@@ -1016,9 +1022,9 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                                 e.stopPropagation();
                                 setDraggingZone((current) => (current === "app" ? null : current));
                             }}
-                            onDrop={(e) => handleImageDrop(e, "app", setAppDemoImg, "Imagen de fondo de app subida con éxito")}
+                            onDrop={(e) => handleImageDrop(e, "app", setAppDemoImg, "App background image uploaded successfully")}
                         >
-                            <h4 className="text-sm font-semibold text-app-text mb-3">Fondo Sección App</h4>
+                            <h4 className="text-sm font-semibold text-app-text mb-3">App Section Background</h4>
                             <label className="flex flex-col gap-2">
                                 <span className="text-xs font-medium text-app-text-sec">URL</span>
                                 <input
@@ -1032,7 +1038,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                             <input
                                 type="file"
                                 ref={appDemoImageInputRef}
-                                onChange={(e) => handleFileUpload(e, setAppDemoImg, "Imagen de fondo de app subida con éxito")}
+                                onChange={(e) => handleFileUpload(e, setAppDemoImg, "App background image uploaded successfully")}
                                 accept="image/*"
                                 className="hidden"
                             />
@@ -1043,18 +1049,18 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                                 className="mt-3 w-full flex h-10 items-center justify-center gap-2 rounded-lg border border-primary/30 bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 transition-colors disabled:opacity-50"
                             >
                                 <span className="material-symbols-outlined text-[18px]">upload</span>
-                                {isUploading ? "Subiendo..." : "Subir imagen"}
+                                {isUploading ? "Uploading..." : "Upload image"}
                             </button>
-                            <p className="mt-2 text-[11px] text-app-text-sec">También puedes arrastrar y soltar una imagen aquí.</p>
+                            <p className="mt-2 text-[11px] text-app-text-sec">You can also drag and drop an image here.</p>
                             {appDemoImg && (
                                 <div className="mt-3 h-28 rounded-lg overflow-hidden border border-app-border bg-app-surface relative">
-                                    <img src={appDemoImg} alt="Imagen de fondo para app" className="w-full h-full object-cover" />
+                                    <img src={appDemoImg} alt="App background image" className="w-full h-full object-cover" />
                                     <button
                                         type="button"
                                         onClick={() => setAppDemoImg("")}
                                         className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/65 text-white hover:bg-red-600 transition-colors flex items-center justify-center"
-                                        aria-label="Eliminar imagen de fondo app"
-                                        title="Eliminar imagen de fondo app"
+                                        aria-label="Remove app background image"
+                                        title="Remove app background image"
                                     >
                                         <span className="material-symbols-outlined text-[16px]">close</span>
                                     </button>
@@ -1066,20 +1072,20 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                                     value={appDemoBadge}
                                     onChange={(e) => setAppDemoBadge(e.target.value)}
                                     className="w-full rounded-lg border border-app-border bg-app-surface h-9 px-3 text-sm text-app-text focus:border-primary focus:ring-0"
-                                    placeholder="Badge (ej. Live Monitoring)"
+                                    placeholder="Badge (e.g. Live Monitoring)"
                                 />
                                 <input
                                     type="text"
                                     value={appDemoTitle}
                                     onChange={(e) => setAppDemoTitle(e.target.value)}
                                     className="w-full rounded-lg border border-app-border bg-app-surface h-9 px-3 text-sm text-app-text focus:border-primary focus:ring-0"
-                                    placeholder="Título de la sección app"
+                                    placeholder="App section title"
                                 />
                                 <textarea
                                     value={appDemoDesc}
                                     onChange={(e) => setAppDemoDesc(e.target.value)}
                                     className="w-full rounded-lg border border-app-border bg-app-surface min-h-20 px-3 py-2 text-sm text-app-text focus:border-primary focus:ring-0 resize-y"
-                                    placeholder="Descripción corta de la sección app"
+                                    placeholder="Short app section description"
                                 />
                             </div>
                         </div>
@@ -1093,13 +1099,13 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                         disabled={isSubmitting}
                         className="flex w-full h-12 items-center justify-center rounded-lg bg-primary text-white font-bold shadow-sm disabled:opacity-50"
                     >
-                        {isSubmitting ? "Guardando..." : (initialData ? "Guardar Cambios" : "Publicar Producto")}
+                        {isSubmitting ? "Saving..." : (initialData ? "Save Changes" : "Publish Product")}
                     </button>
                     <Link
                         href="/admin/products"
                         className="flex w-full h-12 items-center justify-center rounded-lg border border-app-border bg-app-surface text-app-text font-bold"
                     >
-                        Descartar
+                        Discard
                     </Link>
                 </div>
             </form>
@@ -1155,3 +1161,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
         </div>
     );
 }
+
+
+
+

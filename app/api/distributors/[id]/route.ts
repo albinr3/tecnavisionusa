@@ -18,6 +18,7 @@ export async function PATCH(
                 ...(body.address && { address: body.address }),
                 ...(body.city && { city: body.city }),
                 ...(body.state !== undefined && { state: body.state }),
+                ...(body.country !== undefined && { country: body.country }),
                 ...(body.phone && { phone: body.phone }),
                 ...(body.email && { email: body.email }),
                 ...(body.mapUrl !== undefined && { mapUrl: body.mapUrl }),

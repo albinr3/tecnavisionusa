@@ -12,26 +12,24 @@ export default function Footer() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20 blur-3xl" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full -ml-20 -mb-20 blur-3xl" />
           <h2 className="relative text-3xl font-bold text-white md:text-4xl">
-            ¿Listo para proteger tu mundo?
+            Ready to protect your world?
           </h2>
           <p className="relative mt-4 text-lg text-blue-100 max-w-2xl mx-auto">
-            Únete a más de 100+ clientes que confían en TecnaVision para sus
-            necesidades de seguridad. Comienza hoy con nuestra garantía de
-            devolución de dinero de 30 días.
+            Join over 100+ clients who trust TecnaVision for their security needs. Start today with our 30-day money-back guarantee.
           </p>
           <div className="relative mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <LoadingLink
               href="/products"
-              pendingLabel="Abriendo catálogo..."
+              pendingLabel="Opening catalog..."
               className="flex h-12 w-full items-center justify-center min-w-[160px] rounded-xl bg-app-surface px-6 font-bold text-primary dark:text-white transition hover:bg-app-bg-subtle sm:w-auto disabled:opacity-90 disabled:cursor-wait"
             >
-              Comenzar
+              Get started
             </LoadingLink>
             <Link
-              href="/contacto"
+              href="/contact"
               className="flex h-12 w-full items-center justify-center min-w-[160px] rounded-xl border border-white/30 bg-primary/20 px-6 font-bold text-white transition hover:bg-primary/30 sm:w-auto"
             >
-              Contactar ventas
+              Contact sales
             </Link>
           </div>
         </div>
@@ -41,9 +39,7 @@ export default function Footer() {
               <ThemeLogo className="h-10 w-auto" />
             </div>
             <p className="mb-6 max-w-xs text-sm text-app-text-sec">
-              Seguridad inteligente para casas y negocios con cámaras
-              confiables, monitoreo en tiempo real y control total desde tu
-              celular.
+              Smart security for homes and businesses with reliable cameras, real-time monitoring, and complete control from your phone.
             </p>
             <div className="flex gap-4">
               <a
@@ -81,11 +77,11 @@ export default function Footer() {
             </div>
           </div>
           <div>
-            <h3 className="mb-4 text-sm font-bold text-app-text">Productos</h3>
+            <h3 className="mb-4 text-sm font-bold text-app-text">Products</h3>
             <ul className="flex flex-col gap-2 text-sm text-app-text-sec">
               <li>
                 <LoadingLink href="/products" className="hover:text-primary">
-                  Cámaras
+                  Cameras
                 </LoadingLink>
               </li>
               <li>
@@ -95,50 +91,50 @@ export default function Footer() {
               </li>
               <li>
                 <LoadingLink href="/products" className="hover:text-primary">
-                  Cerraduras inteligentes
+                  Smart locks
                 </LoadingLink>
               </li>
               <li>
                 <LoadingLink href="/products" className="hover:text-primary">
-                  Accesorios
+                  Accessories
                 </LoadingLink>
               </li>
             </ul>
           </div>
           <div>
-            <h3 className="mb-4 text-sm font-bold text-app-text">Empresa</h3>
+            <h3 className="mb-4 text-sm font-bold text-app-text">Company</h3>
             <ul className="flex flex-col gap-2 text-sm text-app-text-sec">
               <li>
-                <a className="hover:text-primary" href="/sobre-nosotros">
-                  Sobre nosotros
+                <a className="hover:text-primary" href="/about-us">
+                  About us
                 </a>
               </li>
             </ul>
           </div>
           <div>
-            <h3 className="mb-4 text-sm font-bold text-app-text">Soporte</h3>
+            <h3 className="mb-4 text-sm font-bold text-app-text">Support</h3>
             <ul className="flex flex-col gap-2 text-sm text-app-text-sec">
               <li>
                 <a className="hover:text-primary" href="#">
-                  Centro de ayuda
+                  Help center
                 </a>
               </li>
               <li>
-                <a className="hover:text-primary" href="/contacto">
-                  Contáctanos
+                <a className="hover:text-primary" href="/contact">
+                  Contact us
                 </a>
               </li>
             </ul>
           </div>
         </div>
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-app-border pt-8 text-sm text-app-text-sec md:flex-row md:gap-0">
-          <p className="text-center md:text-left">© {new Date().getFullYear()} TecnaVision Inc. Todos los derechos reservados.</p>
+          <p className="text-center md:text-left">© {new Date().getFullYear()} TecnaVision Inc. All rights reserved.</p>
           <div className="mt-1 flex flex-wrap items-center justify-center gap-4 md:mt-0 md:justify-end md:gap-6">
-            <a className="hover:text-app-text" href="/privacidad">
-              Política de privacidad
+            <a className="hover:text-app-text" href="/privacy-policy">
+              Privacy policy
             </a>
-            <a className="hover:text-app-text" href="/terminos">
-              Términos del servicio
+            <a className="hover:text-app-text" href="/terms">
+              Terms of service
             </a>
             <a className="hover:text-app-text" href="/cookies">
               Cookies
@@ -152,3 +148,4 @@ export default function Footer() {
     </footer>
   );
 }
+

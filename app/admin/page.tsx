@@ -13,7 +13,7 @@ export default async function AdminDashboard() {
             {/* Page Header */}
             <header className="bg-app-surface border-b border-app-border px-8 py-5 flex-shrink-0 z-10">
                 <h2 className="text-app-text text-2xl font-bold tracking-tight">Dashboard</h2>
-                <p className="text-[#645e8d] text-sm mt-1">Bienvenido al panel de administración</p>
+                <p className="text-[#645e8d] text-sm mt-1">Welcome to the admin panel</p>
             </header>
 
             {/* Dashboard Content */}
@@ -28,7 +28,7 @@ export default async function AdminDashboard() {
                                 </div>
                                 <div>
                                     <p className="text-2xl font-bold text-app-text">{productsCount}</p>
-                                    <p className="text-sm text-[#645e8d]">Productos Activos</p>
+                                    <p className="text-sm text-[#645e8d]">Active Products</p>
                                 </div>
                             </div>
                         </div>
@@ -39,7 +39,7 @@ export default async function AdminDashboard() {
                                 </div>
                                 <div>
                                     <p className="text-2xl font-bold text-app-text">{pendingQuotesCount}</p>
-                                    <p className="text-sm text-[#645e8d]">Cotizaciones Pendientes</p>
+                                    <p className="text-sm text-[#645e8d]">Pending Quotes</p>
                                 </div>
                             </div>
                         </div>
@@ -50,7 +50,7 @@ export default async function AdminDashboard() {
                                 </div>
                                 <div>
                                     <p className="text-2xl font-bold text-app-text">{categoriesCount}</p>
-                                    <p className="text-sm text-[#645e8d]">Categorías</p>
+                                    <p className="text-sm text-[#645e8d]">Categories</p>
                                 </div>
                             </div>
                         </div>
@@ -60,7 +60,7 @@ export default async function AdminDashboard() {
                     <div className="bg-app-surface rounded-xl border border-app-border p-6 shadow-sm">
                         <h3 className="text-lg font-bold text-app-text mb-4 flex items-center gap-2">
                             <span className="material-symbols-outlined text-primary">bolt</span>
-                            Acciones Rápidas
+                            Quick Actions
                         </h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <Link
@@ -71,8 +71,8 @@ export default async function AdminDashboard() {
                                     <span className="material-symbols-outlined text-primary">add</span>
                                 </div>
                                 <div>
-                                    <p className="font-semibold text-app-text">Añadir Producto</p>
-                                    <p className="text-sm text-[#645e8d]">Crear un nuevo producto</p>
+                                    <p className="font-semibold text-app-text">Add Product</p>
+                                    <p className="text-sm text-[#645e8d]">Create a new product</p>
                                 </div>
                             </Link>
                             <Link
@@ -83,20 +83,20 @@ export default async function AdminDashboard() {
                                     <span className="material-symbols-outlined text-primary">list</span>
                                 </div>
                                 <div>
-                                    <p className="font-semibold text-app-text">Ver Productos</p>
-                                    <p className="text-sm text-[#645e8d]">Gestionar catálogo</p>
+                                    <p className="font-semibold text-app-text">View Products</p>
+                                    <p className="text-sm text-[#645e8d]">Manage catalog</p>
                                 </div>
                             </Link>
                             <Link
-                                href="/admin/distribuidores"
+                                href="/admin/distributors"
                                 className="flex items-center gap-4 p-4 border border-app-border rounded-lg hover:bg-app-bg-subtle hover:border-primary/50 transition-colors group"
                             >
                                 <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                                     <span className="material-symbols-outlined text-primary">store</span>
                                 </div>
                                 <div>
-                                    <p className="font-semibold text-app-text">Distribuidores</p>
-                                    <p className="text-sm text-[#645e8d]">Gestionar red de distribuidores</p>
+                                    <p className="font-semibold text-app-text">Distributors</p>
+                                    <p className="text-sm text-[#645e8d]">Manage distributor network</p>
                                 </div>
                             </Link>
                         </div>
@@ -106,3 +106,6 @@ export default async function AdminDashboard() {
         </>
     );
 }
+
+
+

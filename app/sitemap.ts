@@ -71,11 +71,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${siteUrl}/`, lastModified, changeFrequency: "weekly", priority: 1 },
     { url: `${siteUrl}/products`, lastModified, changeFrequency: "daily", priority: 0.9 },
-    { url: `${siteUrl}/donde-comprar`, lastModified, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${siteUrl}/sobre-nosotros`, lastModified, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${siteUrl}/contacto`, lastModified, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${siteUrl}/privacidad`, lastModified, changeFrequency: "yearly", priority: 0.4 },
-    { url: `${siteUrl}/terminos`, lastModified, changeFrequency: "yearly", priority: 0.4 },
+    { url: `${siteUrl}/where-to-buy`, lastModified, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${siteUrl}/about-us`, lastModified, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${siteUrl}/contact`, lastModified, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${siteUrl}/privacy-policy`, lastModified, changeFrequency: "yearly", priority: 0.4 },
+    { url: `${siteUrl}/terms`, lastModified, changeFrequency: "yearly", priority: 0.4 },
     { url: `${siteUrl}/cookies`, lastModified, changeFrequency: "yearly", priority: 0.4 },
   ];
 
@@ -88,3 +88,4 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [...staticRoutes, ...productRoutes];
 }
+

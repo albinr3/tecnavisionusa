@@ -7,10 +7,11 @@ export default function LoadingProductsPage() {
                         aria-hidden
                         className="size-10 animate-spin rounded-full border-4 border-primary/25 border-t-primary"
                     />
-                    <p className="text-lg font-semibold">Cargando productos...</p>
-                    <p className="text-sm text-app-text-sec">Estamos preparando el catálogo para ti.</p>
+                    <p className="text-lg font-semibold">Loading products...</p>
+                    <p className="text-sm text-app-text-sec">We are preparing the catalog for you.</p>
                 </div>
             </div>
         </div>
     );
 }
+

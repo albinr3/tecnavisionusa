@@ -15,6 +15,7 @@ interface DistributorFormProps {
         email: string;
         mapUrl: string | null;
         isActive: boolean;
+        country: string;
     } | null;
     onClose: () => void;
 }
@@ -43,6 +44,7 @@ export default function DistributorForm({ distributor, onClose }: DistributorFor
         email: "",
         mapUrl: "",
         isActive: true,
+        country: "Dominican Republic",
     });
     const [loading, setLoading] = useState(false);
 
@@ -58,6 +60,7 @@ export default function DistributorForm({ distributor, onClose }: DistributorFor
                 email: distributor.email,
                 mapUrl: distributor.mapUrl || "",
                 isActive: distributor.isActive,
+                country: distributor.country || "Dominican Republic",
             });
         }
     }, [distributor]);
@@ -81,17 +84,17 @@ export default function DistributorForm({ distributor, onClose }: DistributorFor
             if (response.ok) {
                 toast.success(
                     distributor
-                        ? "Distribuidor actualizado exitosamente"
-                        : "Distribuidor creado exitosamente"
+                        ? "Distributor updated successfully"
+                        : "Distributor created successfully"
                 );
                 onClose();
             } else {
                 const error = await response.json();
-                toast.error(error.error || "Error al guardar distribuidor");
+                toast.error(error.error || "Error saving distributor");
             }
         } catch (error) {
             console.error("Error saving distributor:", error);
-            toast.error("Error al guardar distribuidor");
+            toast.error("Error saving distributor");
         } finally {
             setLoading(false);
         }
@@ -101,11 +104,19 @@ export default function DistributorForm({ distributor, onClose }: DistributorFor
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
         const { name, value, type } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]:
-                type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
-        }));
+        setFormData((prev) => {
+            const updates = {
+                ...prev,
+                [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
+            };
+            
+            // Clear state/province if country changes
+            if (name === "country" && value !== prev.country) {
+                updates.state = "";
+            }
+            
+            return updates;
+        });
     };
 
     return (
@@ -113,7 +124,7 @@ export default function DistributorForm({ distributor, onClose }: DistributorFor
             <div className="bg-app-surface rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                 <div className="sticky top-0 bg-app-surface border-b border-app-border px-6 py-4 flex items-center justify-between">
                     <h3 className="text-xl font-bold text-app-text">
-                        {distributor ? "Editar Distribuidor" : "Nuevo Distribuidor"}
+                        {distributor ? "Edit Distributor" : "New Distributor"}
                     </h3>
                     <button
                         onClick={onClose}
@@ -127,7 +138,7 @@ export default function DistributorForm({ distributor, onClose }: DistributorFor
                     {/* Name */}
                     <div>
                         <label className="block text-sm font-semibold text-app-text mb-2">
-                            Nombre *
+                            Name *
                         </label>
                         <input
                             type="text"
@@ -136,14 +147,14 @@ export default function DistributorForm({ distributor, onClose }: DistributorFor
                             onChange={handleChange}
                             required
                             className="w-full px-4 py-3 rounded-xl border border-app-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                            placeholder="Ej. Seguridad Total RD"
+                            placeholder="e.g. Seguridad Total RD"
                         />
                     </div>
 
                     {/* Icon */}
                     <div>
                         <label className="block text-sm font-semibold text-app-text mb-2">
-                            Icono *
+                            Icon *
                         </label>
                         <select
                             name="icon"
@@ -162,14 +173,14 @@ export default function DistributorForm({ distributor, onClose }: DistributorFor
                             <span className="material-symbols-outlined text-primary">
                                 {formData.icon}
                             </span>
-                            <span>Vista previa del icono</span>
+                            <span>Icon preview</span>
                         </div>
                     </div>
 
                     {/* Address */}
                     <div>
                         <label className="block text-sm font-semibold text-app-text mb-2">
-                            Dirección *
+                            Address *
                         </label>
                         <input
                             type="text"
@@ -178,14 +189,14 @@ export default function DistributorForm({ distributor, onClose }: DistributorFor
                             onChange={handleChange}
                             required
                             className="w-full px-4 py-3 rounded-xl border border-app-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                            placeholder="Ej. Av. Winston Churchill #1100, Piantini"
+                            placeholder="e.g. Av. Winston Churchill #1100, Piantini"
                         />
                     </div>
 
                     {/* Google Maps URL */}
                     <div>
                         <label className="block text-sm font-semibold text-app-text mb-2">
-                            URL de Google Maps
+                            Google Maps URL
                         </label>
                         <input
                             type="url"
@@ -193,18 +204,35 @@ export default function DistributorForm({ distributor, onClose }: DistributorFor
                             value={formData.mapUrl}
                             onChange={handleChange}
                             className="w-full px-4 py-3 rounded-xl border border-app-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                            placeholder="Ej. https://maps.app.goo.gl/hcZPmVWmmPHEeNSD6"
+                            placeholder="e.g. https://maps.app.goo.gl/hcZPmVWmmPHEeNSD6"
                         />
                         <p className="text-xs text-app-text-sec mt-1">
-                            Opcional. Enlace directo a la ubicación en Google Maps
+                            Optional. Direct link to location on Google Maps
                         </p>
+                    </div>
+
+                    {/* Country */}
+                    <div>
+                        <label className="block text-sm font-semibold text-app-text mb-2">
+                            Country *
+                        </label>
+                        <select
+                            name="country"
+                            value={formData.country}
+                            onChange={handleChange}
+                            required
+                            className="w-full px-4 py-3 rounded-xl border border-app-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                        >
+                            <option value="Dominican Republic">Dominican Republic</option>
+                            <option value="United States">United States</option>
+                        </select>
                     </div>
 
                     {/* City and State */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-semibold text-app-text mb-2">
-                                Ciudad *
+                                City *
                             </label>
                             <input
                                 type="text"
@@ -213,54 +241,66 @@ export default function DistributorForm({ distributor, onClose }: DistributorFor
                                 onChange={handleChange}
                                 required
                                 className="w-full px-4 py-3 rounded-xl border border-app-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                                placeholder="Ej. Santo Domingo"
+                                placeholder={formData.country === "United States" ? "e.g. Miami" : "e.g. Santo Domingo"}
                             />
                         </div>
                         <div>
                             <label className="block text-sm font-semibold text-app-text mb-2">
-                                Provincia *
+                                {formData.country === "United States" ? "State *" : "Province *"}
                             </label>
-                            <select
-                                name="state"
-                                value={formData.state}
-                                onChange={handleChange}
-                                required
-                                className="w-full px-4 py-3 rounded-xl border border-app-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                            >
-                                <option value="">Seleccionar Provincia</option>
-                                <option value="Azua">Azua</option>
-                                <option value="Baoruco">Baoruco</option>
-                                <option value="Barahona">Barahona</option>
-                                <option value="Dajabón">Dajabón</option>
-                                <option value="Distrito Nacional">Distrito Nacional</option>
-                                <option value="Duarte">Duarte</option>
-                                <option value="Elías Piña">Elías Piña</option>
-                                <option value="El Seibo">El Seibo</option>
-                                <option value="Espaillat">Espaillat</option>
-                                <option value="Hato Mayor">Hato Mayor</option>
-                                <option value="Hermanas Mirabal">Hermanas Mirabal</option>
-                                <option value="Independencia">Independencia</option>
-                                <option value="La Altagracia">La Altagracia</option>
-                                <option value="La Romana">La Romana</option>
-                                <option value="La Vega">La Vega</option>
-                                <option value="María Trinidad Sánchez">María Trinidad Sánchez</option>
-                                <option value="Monseñor Nouel">Monseñor Nouel</option>
-                                <option value="Monte Cristi">Monte Cristi</option>
-                                <option value="Monte Plata">Monte Plata</option>
-                                <option value="Pedernales">Pedernales</option>
-                                <option value="Peravia">Peravia</option>
-                                <option value="Puerto Plata">Puerto Plata</option>
-                                <option value="Samaná">Samaná</option>
-                                <option value="San Cristóbal">San Cristóbal</option>
-                                <option value="San José de Ocoa">San José de Ocoa</option>
-                                <option value="San Juan">San Juan</option>
-                                <option value="San Pedro de Macorís">San Pedro de Macorís</option>
-                                <option value="Sánchez Ramírez">Sánchez Ramírez</option>
-                                <option value="Santiago">Santiago</option>
-                                <option value="Santiago Rodríguez">Santiago Rodríguez</option>
-                                <option value="Santo Domingo">Santo Domingo</option>
-                                <option value="Valverde">Valverde</option>
-                            </select>
+                            {formData.country === "Dominican Republic" ? (
+                                <select
+                                    name="state"
+                                    value={formData.state}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full px-4 py-3 rounded-xl border border-app-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                                >
+                                    <option value="">Select Province</option>
+                                    <option value="Azua">Azua</option>
+                                    <option value="Baoruco">Baoruco</option>
+                                    <option value="Barahona">Barahona</option>
+                                    <option value="Dajabón">Dajabón</option>
+                                    <option value="Distrito Nacional">Distrito Nacional</option>
+                                    <option value="Duarte">Duarte</option>
+                                    <option value="Elías Piña">Elías Piña</option>
+                                    <option value="El Seibo">El Seibo</option>
+                                    <option value="Espaillat">Espaillat</option>
+                                    <option value="Hato Mayor">Hato Mayor</option>
+                                    <option value="Hermanas Mirabal">Hermanas Mirabal</option>
+                                    <option value="Independencia">Independencia</option>
+                                    <option value="La Altagracia">La Altagracia</option>
+                                    <option value="La Romana">La Romana</option>
+                                    <option value="La Vega">La Vega</option>
+                                    <option value="María Trinidad Sánchez">María Trinidad Sánchez</option>
+                                    <option value="Monseñor Nouel">Monseñor Nouel</option>
+                                    <option value="Monte Cristi">Monte Cristi</option>
+                                    <option value="Monte Plata">Monte Plata</option>
+                                    <option value="Pedernales">Pedernales</option>
+                                    <option value="Peravia">Peravia</option>
+                                    <option value="Puerto Plata">Puerto Plata</option>
+                                    <option value="Samaná">Samaná</option>
+                                    <option value="San Cristóbal">San Cristóbal</option>
+                                    <option value="San José de Ocoa">San José de Ocoa</option>
+                                    <option value="San Juan">San Juan</option>
+                                    <option value="San Pedro de Macorís">San Pedro de Macorís</option>
+                                    <option value="Sánchez Ramírez">Sánchez Ramírez</option>
+                                    <option value="Santiago">Santiago</option>
+                                    <option value="Santiago Rodríguez">Santiago Rodríguez</option>
+                                    <option value="Santo Domingo">Santo Domingo</option>
+                                    <option value="Valverde">Valverde</option>
+                                </select>
+                            ) : (
+                                <input
+                                    type="text"
+                                    name="state"
+                                    value={formData.state}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full px-4 py-3 rounded-xl border border-app-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                                    placeholder="e.g. Florida"
+                                />
+                            )}
                         </div>
                     </div>
 
@@ -268,7 +308,7 @@ export default function DistributorForm({ distributor, onClose }: DistributorFor
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-semibold text-app-text mb-2">
-                                Teléfono *
+                                Phone *
                             </label>
                             <input
                                 type="tel"
@@ -277,7 +317,7 @@ export default function DistributorForm({ distributor, onClose }: DistributorFor
                                 onChange={handleChange}
                                 required
                                 className="w-full px-4 py-3 rounded-xl border border-app-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                                placeholder="Ej. +1 (809) 555-1234"
+                                placeholder="e.g. +1 (809) 555-1234"
                             />
                         </div>
                         <div>
@@ -291,7 +331,7 @@ export default function DistributorForm({ distributor, onClose }: DistributorFor
                                 onChange={handleChange}
                                 required
                                 className="w-full px-4 py-3 rounded-xl border border-app-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                                placeholder="Ej. contacto@distribuidor.do"
+                                placeholder="e.g. contacto@distribuidor.do"
                             />
                         </div>
                     </div>
@@ -307,7 +347,7 @@ export default function DistributorForm({ distributor, onClose }: DistributorFor
                             className="w-5 h-5 text-primary border-app-border rounded focus:ring-2 focus:ring-primary/20"
                         />
                         <label htmlFor="isActive" className="text-sm font-medium text-app-text">
-                            Distribuidor activo
+                            Active distributor
                         </label>
                     </div>
 
@@ -318,14 +358,14 @@ export default function DistributorForm({ distributor, onClose }: DistributorFor
                             onClick={onClose}
                             className="flex-1 px-6 py-3 border border-app-border rounded-xl font-semibold text-app-text hover:bg-app-bg-subtle transition-colors"
                         >
-                            Cancelar
+                            Cancel
                         </button>
                         <button
                             type="submit"
                             disabled={loading}
                             className="flex-1 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {loading ? "Guardando..." : distributor ? "Actualizar" : "Crear"}
+                            {loading ? "Saving..." : distributor ? "Update" : "Create"}
                         </button>
                     </div>
                 </form>
@@ -333,3 +373,6 @@ export default function DistributorForm({ distributor, onClose }: DistributorFor
         </div>
     );
 }
+
+
+

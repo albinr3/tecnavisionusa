@@ -6,6 +6,7 @@ import ProductDetail from "@/app/components/ProductDetail";
 import prisma from "@/lib/db";
 import { getSiteMarket, type MarketCode } from "@/lib/market";
 import { getLocalizedProductDescription, getLocalizedProductName } from "@/lib/product-localization";
+import { getLocalizedCategoryName } from "@/lib/category-localization";
 import { getSiteUrl } from "@/lib/site-url";
 
 // Define Props locally as Next.js types can be tricky
@@ -42,20 +43,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     if (!product) {
         return {
-            title: "Producto no encontrado - TecnaVision",
+            title: "Product not found - TecnaVision",
         };
     }
 
     const productPath = `/products/${product.slug}`;
     const localizedName = getLocalizedProductName(product, activeMarket);
-    const localizedDescription = getLocalizedProductDescription(product, activeMarket) || product.subtitle || "Producto TecnaVision";
+    const localizedDescription = getLocalizedProductDescription(product, activeMarket) || product.subtitle || "TecnaVision product";
     const imageUrl = toAbsoluteUrl(
         product.mainImage || "/web-app-manifest-512x512.png",
         siteUrl
     );
     const title = `${localizedName} ${product.model} - TecnaVision`;
     const description = localizedDescription;
-
     return {
         title,
         description,
@@ -110,7 +110,12 @@ export default async function ProductPage({ params }: Props) {
     const productUrl = `${siteUrl}${productPath}`;
     const imageUrl = toAbsoluteUrl(product.mainImage || "/web-app-manifest-512x512.png", siteUrl);
     const localizedName = getLocalizedProductName(product, activeMarket);
-    const localizedDescription = getLocalizedProductDescription(product, activeMarket) || product.subtitle || "Producto TecnaVision";
+    const localizedDescription = getLocalizedProductDescription(product, activeMarket) || product.subtitle || "TecnaVision product";
+    const localizedCategoryName = product.category
+        ? getLocalizedCategoryName(product.category, activeMarket)
+        : activeMarket === "RD"
+            ? "Seguridad"
+            : "Security";
     const productName = `${localizedName} ${product.model}`.trim();
     const description = localizedDescription;
     const localizedProduct = {
@@ -119,10 +124,10 @@ export default async function ProductPage({ params }: Props) {
         description: localizedDescription || product.description,
     };
     const additionalProperty = [
-        product.protection ? { "@type": "PropertyValue", name: "Protección", value: product.protection } : null,
-        product.compression ? { "@type": "PropertyValue", name: "Compresión", value: product.compression } : null,
-        product.lens ? { "@type": "PropertyValue", name: "Lente", value: product.lens } : null,
-        product.power ? { "@type": "PropertyValue", name: "Alimentación", value: product.power } : null,
+        product.protection ? { "@type": "PropertyValue", name: "Protection", value: product.protection } : null,
+        product.compression ? { "@type": "PropertyValue", name: "Compression", value: product.compression } : null,
+        product.lens ? { "@type": "PropertyValue", name: "Lens", value: product.lens } : null,
+        product.power ? { "@type": "PropertyValue", name: "Power", value: product.power } : null,
     ].filter((value): value is { "@type": "PropertyValue"; name: string; value: string } => Boolean(value));
 
     const productSchema = {
@@ -136,7 +141,7 @@ export default async function ProductPage({ params }: Props) {
             "@type": "Brand",
             name: "TecnaVision",
         },
-        category: product.category?.name || "Seguridad",
+        category: localizedCategoryName,
         url: productUrl,
         additionalProperty,
         ...(product.reviewsCount > 0 ? {
@@ -155,13 +160,13 @@ export default async function ProductPage({ params }: Props) {
             {
                 "@type": "ListItem",
                 position: 1,
-                name: "Inicio",
+                name: "Home",
                 item: `${siteUrl}/`,
             },
             {
                 "@type": "ListItem",
                 position: 2,
-                name: "Productos",
+                name: "Products",
                 item: `${siteUrl}/products`,
             },
             {
@@ -192,3 +197,5 @@ export default async function ProductPage({ params }: Props) {
         </div>
     );
 }
+
+

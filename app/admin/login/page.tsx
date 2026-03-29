@@ -29,10 +29,10 @@ export default function AdminLoginPage() {
                 router.push("/admin");
                 router.refresh();
             } else {
-                setError(data.error || "Error al iniciar sesión");
+                setError(data.error || "Error signing in");
             }
         } catch {
-            setError("Error de conexión");
+            setError("Connection error");
         } finally {
             setIsLoading(false);
         }
@@ -49,7 +49,7 @@ export default function AdminLoginPage() {
 
                     {/* Title */}
                     <h1 className="text-2xl font-bold text-center text-app-text mb-2">
-                        Panel de Administración
+                        Administration Panel
                     </h1>
                     <p className="text-sm text-app-text-sec text-center mb-8">
                         Ingresa tus credenciales para acceder
@@ -65,7 +65,7 @@ export default function AdminLoginPage() {
 
                         <div className="space-y-2">
                             <label htmlFor="email" className="block text-sm font-medium text-app-text">
-                                Correo electrónico
+                                Email
                             </label>
                             <div className="relative">
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-app-text-sec material-symbols-outlined text-xl">
@@ -85,7 +85,7 @@ export default function AdminLoginPage() {
 
                         <div className="space-y-2">
                             <label htmlFor="password" className="block text-sm font-medium text-app-text">
-                                Contraseña
+                                Password
                             </label>
                             <div className="relative">
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-app-text-sec material-symbols-outlined text-xl">
@@ -111,12 +111,12 @@ export default function AdminLoginPage() {
                             {isLoading ? (
                                 <>
                                     <span className="material-symbols-outlined animate-spin text-xl">progress_activity</span>
-                                    Iniciando sesión...
+                                    Signing in...
                                 </>
                             ) : (
                                 <>
                                     <span className="material-symbols-outlined text-xl">login</span>
-                                    Iniciar Sesión
+                                    Sign In
                                 </>
                             )}
                         </button>
@@ -131,3 +131,4 @@ export default function AdminLoginPage() {
         </div>
     );
 }
+

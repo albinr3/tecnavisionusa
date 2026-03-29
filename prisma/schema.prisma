@@ -89,6 +89,8 @@ model ProductVariant {
 model Category {
   id          String    @id @default(cuid())
   name        String
+  name_es     String?
+  name_en     String?
   slug        String    @unique
   icon        String?   // Material icon name
   description String?
@@ -114,6 +116,7 @@ model Distributor {
   id          String   @id @default(cuid())
   name        String
   icon        String   // Material icon name
+  country     String   @default("República Dominicana")
   address     String
   city        String   // Para filtrado
   state       String?

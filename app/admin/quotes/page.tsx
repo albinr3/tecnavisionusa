@@ -14,8 +14,8 @@ export default async function AdminQuotesPage() {
     return (
         <>
             <header className="bg-app-surface border-b border-app-border px-8 py-5 flex-shrink-0 z-10">
-                <h2 className="text-app-text text-2xl font-bold tracking-tight">Cotizaciones</h2>
-                <p className="text-[#645e8d] text-sm mt-1">Solicitudes recibidas desde la página de productos</p>
+                <h2 className="text-app-text text-2xl font-bold tracking-tight">Quotes</h2>
+                <p className="text-[#645e8d] text-sm mt-1">Requests received from the products page</p>
             </header>
 
             <div className="flex-1 overflow-y-auto p-4 md:p-8">
@@ -26,3 +26,4 @@ export default async function AdminQuotesPage() {
         </>
     );
 }
+

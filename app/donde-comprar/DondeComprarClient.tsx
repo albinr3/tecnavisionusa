@@ -16,6 +16,7 @@ type DistributorItem = {
     phone: string;
     email: string;
     mapUrl: string | null;
+    country: string;
 };
 
 interface DondeComprarClientProps {
@@ -27,12 +28,13 @@ export default function DondeComprarClient({ initialDistributors }: DondeComprar
     const [loading, setLoading] = useState(false);
     const [displayCount, setDisplayCount] = useState(6);
 
-    const fetchDistributors = async (name: string = "", state: string = "") => {
+    const fetchDistributors = async (name: string = "", state: string = "", country: string = "") => {
         setLoading(true);
         try {
             const params = new URLSearchParams();
             if (name) params.append("search", name);
             if (state) params.append("state", state);
+            if (country) params.append("country", country);
 
             const response = await fetch(`/api/distributors?${params.toString()}`, { cache: "no-store" });
             const data = await response.json();
@@ -46,8 +48,8 @@ export default function DondeComprarClient({ initialDistributors }: DondeComprar
         }
     };
 
-    const handleSearch = (name: string, state: string) => {
-        fetchDistributors(name, state);
+    const handleSearch = (name: string, state: string, country: string) => {
+        fetchDistributors(name, state, country);
     };
 
     const handleLoadMore = () => {
@@ -86,9 +88,9 @@ export default function DondeComprarClient({ initialDistributors }: DondeComprar
                 <section className="flex-1 bg-app-surface py-12 border-t border-app-border">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
                         <div className="mb-8 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
-                            <h2 className="text-2xl font-bold text-app-text">Resultados de Búsqueda</h2>
+                            <h2 className="text-2xl font-bold text-app-text">Search Results</h2>
                             <span className="text-sm font-medium text-app-text-sec bg-slate-100 dark:bg-white dark:text-primary px-3 py-1 rounded-full text-center">
-                                {loading ? "Cargando..." : `${distributors.length} Distribuidores encontrados`}
+                                {loading ? "Loading..." : `${distributors.length} Distributors found`}
                             </span>
                         </div>
 
@@ -103,14 +105,14 @@ export default function DondeComprarClient({ initialDistributors }: DondeComprar
                                 <div className="size-20 mx-auto mb-4 rounded-full bg-app-bg-subtle flex items-center justify-center text-app-text-sec">
                                     <span className="material-symbols-outlined text-4xl">search_off</span>
                                 </div>
-                                <h3 className="text-xl font-bold text-app-text mb-2">No se encontraron distribuidores</h3>
+                                <h3 className="text-xl font-bold text-app-text mb-2">No distributors found</h3>
                                 <p className="text-app-text-sec">
-                                    Intenta ajustar tus filtros de búsqueda o{" "}
+                                    Try adjusting your search filters or{" "}
                                     <button
-                                        onClick={() => handleSearch("", "")}
+                                        onClick={() => handleSearch("", "", "")}
                                         className="text-primary font-semibold hover:underline dark:bg-white dark:px-2 dark:py-1 dark:rounded-lg dark:inline-block"
                                     >
-                                        ver todos los distribuidores
+                                        view all distributors
                                     </button>
                                 </p>
                             </div>
@@ -129,7 +131,7 @@ export default function DondeComprarClient({ initialDistributors }: DondeComprar
                                             onClick={handleLoadMore}
                                             className="flex items-center gap-2 px-6 py-3 rounded-full border border-app-border bg-app-surface text-app-text font-medium hover:bg-app-bg-subtle transition-colors shadow-sm"
                                         >
-                                            Cargar más resultados
+                                            Load more results
                                             <span className="material-symbols-outlined">expand_more</span>
                                         </button>
                                     </div>
@@ -145,14 +147,14 @@ export default function DondeComprarClient({ initialDistributors }: DondeComprar
                             <div className="flex-1 space-y-6">
                                 <h2 className="text-3xl font-bold text-app-text">Cobertura Nacional</h2>
                                 <p className="text-app-text-sec text-lg">
-                                    Con más de 50 puntos de venta y soporte técnico en todo el país, siempre tendrás un experto TecnaVision cerca de ti para asesorarte en tus proyectos de seguridad.
+                                    With more than 50 points of sale and technical support nationwide, you will always have a TecnaVision expert nearby to advise you on your security projects.
                                 </p>
                                 <ul className="space-y-4 pt-2">
                                     <li className="flex items-center gap-3">
                                         <div className="size-8 rounded-full bg-primary/10 dark:bg-white flex items-center justify-center text-primary">
                                             <span className="material-symbols-outlined text-sm">check</span>
                                         </div>
-                                        <span className="text-app-text font-medium">Soporte Técnico Certificado</span>
+                                        <span className="text-app-text font-medium">Certified Technical Support</span>
                                     </li>
                                     <li className="flex items-center gap-3">
                                         <div className="size-8 rounded-full bg-primary/10 dark:bg-white flex items-center justify-center text-primary">
@@ -164,7 +166,7 @@ export default function DondeComprarClient({ initialDistributors }: DondeComprar
                                         <div className="size-8 rounded-full bg-primary/10 dark:bg-white flex items-center justify-center text-primary">
                                             <span className="material-symbols-outlined text-sm">check</span>
                                         </div>
-                                        <span className="text-app-text font-medium">Garantía Extendida Directa</span>
+                                        <span className="text-app-text font-medium">Direct Extended Warranty</span>
                                     </li>
                                 </ul>
                             </div>
@@ -190,7 +192,7 @@ export default function DondeComprarClient({ initialDistributors }: DondeComprar
                                                 <p className="text-xs text-app-text-sec uppercase tracking-wider font-bold">
                                                     Cobertura Nacional
                                                 </p>
-                                                <p className="text-sm text-app-text font-bold">República Dominicana</p>
+                                                <p className="text-sm text-app-text font-bold">Dominican Republic</p>
                                             </div>
                                         </div>
                                     </div>
@@ -205,3 +207,5 @@ export default function DondeComprarClient({ initialDistributors }: DondeComprar
         </div>
     );
 }
+
+

@@ -7,6 +7,8 @@ import { PrismaClient } from "@prisma/client";
 
 type SeedCategory = {
   name: string;
+  name_es?: string | null;
+  name_en?: string | null;
   slug: string;
   icon: string | null;
   description: string | null;
@@ -82,6 +84,8 @@ async function main() {
     exportedAt: new Date().toISOString(),
     categories: categories.map((category) => ({
       name: category.name,
+      name_es: category.name_es,
+      name_en: category.name_en,
       slug: category.slug,
       icon: category.icon,
       description: category.description,

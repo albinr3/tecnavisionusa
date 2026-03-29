@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
         const searchParams = request.nextUrl.searchParams;
         const search = searchParams.get("search") || "";
         const state = searchParams.get("state") || "";
+        const country = searchParams.get("country") || "";
 
         // Fetch all active distributors ordered by name
         const allDistributors = await prisma.distributor.findMany({
@@ -23,7 +24,7 @@ export async function GET(request: NextRequest) {
         });
 
         // If no search params, return all
-        if (!search && !state) {
+        if (!search && !state && !country) {
             return NextResponse.json(allDistributors);
         }
 
@@ -37,7 +38,11 @@ export async function GET(request: NextRequest) {
                 ? distributor.state && normalizeText(distributor.state).includes(normalizeText(state))
                 : true;
 
-            return matchesSearch && matchesState;
+            const matchesCountry = country
+                ? distributor.country && normalizeText(distributor.country) === normalizeText(country)
+                : true;
+
+            return matchesSearch && matchesState && matchesCountry;
         });
 
         return NextResponse.json(filteredDistributors);
@@ -73,6 +78,7 @@ export async function POST(request: NextRequest) {
                 address: body.address,
                 city: body.city,
                 state: body.state || null,
+                country: body.country || "Dominican Republic",
                 phone: body.phone,
                 email: body.email,
                 mapUrl: body.mapUrl || null,
@@ -89,3 +95,4 @@ export async function POST(request: NextRequest) {
         );
     }
 }
+

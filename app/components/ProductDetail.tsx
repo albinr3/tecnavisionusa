@@ -13,6 +13,33 @@ interface ProductDetailProps {
     product: ProductWithRelations;
 }
 
+function normalizeLegacySpanish(text: string): string {
+    const replacements: Array<[string, string]> = [
+        ["Control total en la palma de tu mano.", "Total control in the palm of your hand."],
+        ["Recibe notificaciones instantáneas, verifica grabaciones y gestiona permisos de seguridad desde nuestra app empresarial segura.", "Receive instant notifications, review recordings, and manage security permissions from our secure enterprise app."],
+        ["Cruce de línea", "Line crossing"],
+        ["Intrusión de área", "Area intrusion"],
+        ["Reconocimiento facial", "Facial recognition"],
+        ["Seguimiento de Movimiento", "Motion tracking"],
+        ["Detección de Humanos", "Human detection"],
+        ["Alerta de Sonido", "Sound alert"],
+        ["3 años de cobertura", "3 years of coverage"],
+        ["2 años de cobertura", "2 years of coverage"],
+        ["Línea directa B2B", "Dedicated B2B hotline"],
+        ["Inteligencia de Datos", "Data Intelligence"],
+        ["Almacenamiento Inteligente", "Smart Storage"],
+        ["Especificaciones NVR", "NVR Specifications"],
+        ["Megapixeles", "Megapixels"],
+        ["Salida de Video", "Video Output"],
+    ];
+
+    let value = text;
+    for (const [from, to] of replacements) {
+        value = value.replaceAll(from, to);
+    }
+    return value;
+}
+
 export default function ProductDetail({ product }: ProductDetailProps) {
     const [selectedVariantId, setSelectedVariantId] = useState<string | null>(
         product.variants.length > 0 ? product.variants[0].id : null
@@ -61,15 +88,15 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     };
 
     const features = {
-        ai_detection: product.aiDetection || [],
-        guarantee: product.guarantee || "Consultar",
-        support: product.support || "Soporte técnico",
+        ai_detection: (product.aiDetection || []).map((item) => normalizeLegacySpanish(item)),
+        guarantee: normalizeLegacySpanish(product.guarantee || "Check availability"),
+        support: normalizeLegacySpanish(product.support || "Technical support"),
     };
 
     const appShowcase = {
         badge: product.appDemoBadge || "Live Monitoring",
-        title: product.appDemoTitle || "Control total en la palma de tu mano.",
-        description: product.appDemoDesc || "Recibe notificaciones instantáneas, verifica grabaciones y gestiona permisos de seguridad desde nuestra app empresarial segura.",
+        title: normalizeLegacySpanish(product.appDemoTitle || "Total control in the palm of your hand."),
+        description: normalizeLegacySpanish(product.appDemoDesc || "Receive instant notifications, review recordings, and manage security permissions from our secure enterprise app."),
     };
 
     const sectionIcons = {
@@ -90,11 +117,11 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
     const getDefaultQuoteMessage = () => {
         return [
-            "Hola equipo de TecnaVision,",
+            "Hello TecnaVision team,",
             "",
-            `Deseo una cotización para el producto: ${quoteProductName}.`,
+            `I would like a quote for the product: ${quoteProductName}.`,
             "",
-            "Quedo atento(a) a su respuesta.",
+            "I look forward to your response.",
         ]
             .filter(Boolean)
             .join("\n");
@@ -114,7 +141,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
         const email = clientEmail.trim().toLowerCase();
         if (!email) {
-            setQuoteError("Ingresa un correo electrónico.");
+            setQuoteError("Enter an email address.");
             return;
         }
 
@@ -134,15 +161,15 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
             const data = await res.json();
             if (!res.ok) {
-                throw new Error(data?.error || "No se pudo enviar la solicitud.");
+                throw new Error(data?.error || "The request could not be sent.");
             }
 
-            setQuoteSuccess("Solicitud enviada. Puedes verla en /admin/quotes.");
+            setQuoteSuccess("Request sent. You can view it at /admin/quotes.");
             setTimeout(() => {
                 setIsQuoteModalOpen(false);
             }, 900);
         } catch (error) {
-            setQuoteError(error instanceof Error ? error.message : "No se pudo enviar la solicitud.");
+            setQuoteError(error instanceof Error ? error.message : "The request could not be sent.");
         } finally {
             setIsSendingQuote(false);
         }
@@ -272,7 +299,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     {product.variants.length > 0 && (
                         <div className="py-6 border-t border-b border-app-border">
                             <label className="block text-xs font-bold uppercase tracking-wider text-app-text-sec mb-4">
-                                Seleccionar Versión
+                                Select Version
                             </label>
                             <div className="flex flex-wrap gap-3">
                                 {product.variants.map((variant) => (
@@ -294,7 +321,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     {/* Resolution Options (Legacy/Base) - Show if no variants or just as info */}
                     {product.variants.length === 0 && specs.resolution_options.length > 0 && (
                         <div className="py-6 border-t border-b border-app-border">
-                            <label className="block text-xs font-bold uppercase tracking-wider text-app-text-sec mb-4">Resoluciones Disponibles</label>
+                            <label className="block text-xs font-bold uppercase tracking-wider text-app-text-sec mb-4">Available Resolutions</label>
                             <div className="flex flex-wrap gap-3">
                                 {specs.resolution_options.map((res: string, i: number) => (
                                     <span
@@ -316,7 +343,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                             className="w-full bg-primary hover:bg-primary-dark text-white text-lg font-semibold py-5 px-8 rounded-2xl shadow-xl shadow-primary/25 transform hover:-translate-y-1 transition-all duration-300 flex flex-wrap items-center justify-center gap-3 text-center"
                         >
                             <span className="material-icons-outlined">request_quote</span>
-                            Solicitar Cotización {selectedVariant ? `(${selectedVariant.name})` : ""}
+                            Request a Quote {selectedVariant ? `(${selectedVariant.name})` : ""}
                         </button>
 
                         {(displayData.manual || displayData.datasheet) && (
@@ -330,14 +357,14 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                                 {displayData.datasheet && (
                                     <a href={displayData.datasheet} target="_blank" className="w-full bg-app-surface hover:bg-app-bg-subtle text-app-text border border-app-border font-semibold py-4 px-4 rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 group text-sm">
                                         <span className="material-icons-outlined text-app-text-sec group-hover:text-primary transition-colors">description</span>
-                                        Ficha Técnica
+                                        Technical Sheet
                                     </a>
                                 )}
                             </div>
                         )}
 
                         <p className="text-center text-xs text-app-text-sec">
-                            Respuesta garantizada en menos de 2 horas hábiles.
+                            Guaranteed response in less than 2 business hours.
                         </p>
                     </div>
 
@@ -348,7 +375,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                                 <span className="material-icons-outlined">{sectionIcons.guarantee}</span>
                             </div>
                             <div>
-                                <p className="font-semibold text-sm text-app-text">Garantía Extendida</p>
+                                <p className="font-semibold text-sm text-app-text">Extended Warranty</p>
                                 <p className="text-xs text-app-text-sec mt-1">{features.guarantee}</p>
                             </div>
                         </div>
@@ -357,7 +384,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                                 <span className="material-icons-outlined">{sectionIcons.support}</span>
                             </div>
                             <div>
-                                <p className="font-semibold text-sm text-app-text">Soporte Dedicado</p>
+                                <p className="font-semibold text-sm text-app-text">Dedicated Support</p>
                                 <p className="text-xs text-app-text-sec mt-1">{features.support}</p>
                             </div>
                         </div>
@@ -369,20 +396,20 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 <>
                     <div className="mb-32">
                         <div className="text-center mb-16 max-w-2xl mx-auto">
-                            <h2 className="text-3xl font-bold mb-4 text-app-text">Rendimiento NVR para Operación Continua</h2>
-                            <p className="text-app-text-sec">Diseñado para monitoreo profesional con procesamiento eficiente, almacenamiento confiable y acceso rápido a evidencia.</p>
+                            <h2 className="text-3xl font-bold mb-4 text-app-text">NVR Performance for Continuous Operation</h2>
+                            <p className="text-app-text-sec">Designed for professional monitoring with efficient processing, reliable storage, and fast access to evidence.</p>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             <div className="group bg-app-surface rounded-3xl p-8 hover:shadow-lg transition-shadow duration-300 border border-transparent hover:border-app-border">
                                 <div className="flex size-12 items-center justify-center rounded-lg bg-blue-50 text-primary transition-colors group-hover:bg-primary group-hover:text-white mb-6">
                                     <span className="material-symbols-outlined">{sectionIcons.ai}</span>
                                 </div>
-                                <h3 className="text-xl font-bold mb-3 text-app-text">Inteligencia de Datos</h3>
+                                <h3 className="text-xl font-bold mb-3 text-app-text">Data Intelligence</h3>
                                 <p className="text-sm text-app-text-sec mb-6 leading-relaxed">
-                                    Motor de análisis Deep Learning integrado para clasificación de objetos, búsqueda rápida de eventos y reconocimiento de atributos en tiempo real.
+                                    Integrated deep learning analytics engine for object classification, fast event search, and real-time attribute recognition.
                                 </p>
                                 <ul className="space-y-3">
-                                    {(features.ai_detection.length ? features.ai_detection : ["Búsqueda por atributos", "Filtrado Persona/Vehículo", "Mapas de calor"]).slice(0, 3).map((feature: string, i: number) => (
+                                    {(features.ai_detection.length ? features.ai_detection : ["Attribute search", "Person/Vehicle filtering", "Heat maps"]).slice(0, 3).map((feature: string, i: number) => (
                                         <li key={i} className="flex items-center gap-3 text-sm font-medium text-app-text">
                                             <span className="material-icons-outlined text-primary text-lg">check</span>
                                             {feature}
@@ -394,13 +421,13 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                                 <div className="flex size-12 items-center justify-center rounded-lg bg-blue-50 text-primary transition-colors group-hover:bg-primary group-hover:text-white mb-6">
                                     <span className="material-symbols-outlined">storage</span>
                                 </div>
-                                <h3 className="text-xl font-bold mb-3 text-app-text">Almacenamiento Inteligente</h3>
+                                <h3 className="text-xl font-bold mb-3 text-app-text">Smart Storage</h3>
                                 <p className="text-sm text-app-text-sec mb-6 leading-relaxed">
-                                    Optimización de espacio con compresión avanzada que reduce el ancho de banda y el consumo de almacenamiento sin perder calidad.
+                                    Space optimization with advanced compression that reduces bandwidth and storage usage without losing quality.
                                 </p>
                                 <div className="mt-auto rounded-xl overflow-hidden h-40 relative group bg-app-bg-subtle border border-app-border flex items-center justify-center">
                                     <img
-                                        alt="Gráfico NVR"
+                                        alt="NVR chart"
                                         className="w-full h-full object-cover"
                                         decoding="async"
                                         fetchPriority="low"
@@ -413,9 +440,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                                 <div className="flex size-12 items-center justify-center rounded-lg bg-blue-50 text-primary transition-colors group-hover:bg-primary group-hover:text-white mb-6">
                                     <span className="material-symbols-outlined">settings_input_component</span>
                                 </div>
-                                <h3 className="text-xl font-bold mb-3 text-app-text">Especificaciones NVR</h3>
+                                <h3 className="text-xl font-bold mb-3 text-app-text">NVR Specifications</h3>
                                 <p className="text-sm text-app-text-sec mb-6 leading-relaxed">
-                                    Arquitectura de hardware diseñada para la continuidad operativa y alta disponibilidad de video.
+                                    Hardware architecture designed for operational continuity and high video availability.
                                 </p>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="bg-app-bg-subtle p-3 rounded-xl border border-app-border">
@@ -423,11 +450,11 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                                         <p className="font-semibold text-primary">{specs.protection !== "N/A" ? specs.protection : "2x HDD"}</p>
                                     </div>
                                     <div className="bg-app-bg-subtle p-3 rounded-xl border border-app-border">
-                                        <p className="text-[10px] uppercase text-app-text-sec font-bold mb-1">Megapixeles</p>
+                                        <p className="text-[10px] uppercase text-app-text-sec font-bold mb-1">Megapixels</p>
                                         <p className="font-semibold text-primary">{specs.compression !== "N/A" ? specs.compression : "8 MP"}</p>
                                     </div>
                                     <div className="bg-app-bg-subtle p-3 rounded-xl border border-app-border">
-                                        <p className="text-[10px] uppercase text-app-text-sec font-bold mb-1">Salida de Video</p>
+                                        <p className="text-[10px] uppercase text-app-text-sec font-bold mb-1">Video Output</p>
                                         <p className="font-semibold text-primary">{specs.lens !== "N/A" ? specs.lens : "4K UHD"}</p>
                                     </div>
                                     <div className="bg-app-bg-subtle p-3 rounded-xl border border-app-border">
@@ -463,7 +490,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                             <div className="flex justify-center lg:justify-end">
                                 <div className="relative w-full max-w-lg aspect-video bg-gray-800 rounded-xl border-4 border-gray-700 shadow-2xl overflow-hidden transform hover:scale-[1.02] transition-transform duration-500">
                                     <img
-                                        alt="Vista NVR con cámaras"
+                                        alt="NVR view with cameras"
                                         className="w-full h-full object-cover"
                                         decoding="async"
                                         fetchPriority="low"
@@ -480,8 +507,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     {/* Technology Features */}
                     <div className="mb-32">
                         <div className="text-center mb-16 max-w-2xl mx-auto">
-                            <h2 className="text-3xl font-bold mb-4 text-app-text">Tecnología Superior</h2>
-                            <p className="text-app-text-sec">Diseñada para operar en las condiciones más difíciles con la mayor inteligencia.</p>
+                            <h2 className="text-3xl font-bold mb-4 text-app-text">Superior Technology</h2>
+                            <p className="text-app-text-sec">Designed to operate in the toughest conditions with maximum intelligence.</p>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {/* AI Detection */}
@@ -489,9 +516,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                                 <div className="flex size-12 items-center justify-center rounded-lg bg-blue-50 text-primary transition-colors group-hover:bg-primary group-hover:text-white mb-6">
                                     <span className="material-symbols-outlined">{sectionIcons.ai}</span>
                                 </div>
-                                <h3 className="text-xl font-bold mb-3 text-app-text">Detección AI</h3>
+                                <h3 className="text-xl font-bold mb-3 text-app-text">AI Detection</h3>
                                 <p className="text-sm text-app-text-sec mb-6 leading-relaxed">
-                                    Algoritmos de aprendizaje profundo que clasifican objetivos humanos y vehiculares para filtrar alarmas irrelevantes.
+                                    Deep learning algorithms that classify human and vehicle targets to filter irrelevant alarms.
                                 </p>
                                 <ul className="space-y-3">
                                     {features.ai_detection.map((feature: string, i: number) => (
@@ -508,9 +535,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                                 <div className="flex size-12 items-center justify-center rounded-lg bg-blue-50 text-primary transition-colors group-hover:bg-primary group-hover:text-white mb-6">
                                     <span className="material-symbols-outlined">{sectionIcons.nightVision}</span>
                                 </div>
-                                <h3 className="text-xl font-bold mb-3 text-app-text">Visión Nocturna EXIR</h3>
+                                <h3 className="text-xl font-bold mb-3 text-app-text">EXIR Night Vision</h3>
                                 <p className="text-sm text-app-text-sec mb-6 leading-relaxed">
-                                    Tecnología infrarroja avanzada que proporciona una iluminación uniforme y de largo alcance hasta 30 metros en oscuridad total (0 Lux).
+                                    Advanced infrared technology that provides uniform long-range illumination up to 30 meters in complete darkness (0 Lux).
                                 </p>
                                 <div className="mt-auto rounded-xl overflow-hidden h-40 relative group">
                                     <img
@@ -526,7 +553,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                                         }}
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                                    <span className="absolute bottom-3 left-3 text-xs text-white font-medium px-2 py-1 bg-black/50 rounded backdrop-blur-sm">Modo Nocturno</span>
+                                    <span className="absolute bottom-3 left-3 text-xs text-white font-medium px-2 py-1 bg-black/50 rounded backdrop-blur-sm">Night Mode</span>
                                 </div>
                             </div>
 
@@ -535,25 +562,25 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                                 <div className="flex size-12 items-center justify-center rounded-lg bg-blue-50 text-primary transition-colors group-hover:bg-primary group-hover:text-white mb-6">
                                     <span className="material-symbols-outlined">{sectionIcons.specs}</span>
                                 </div>
-                                <h3 className="text-xl font-bold mb-3 text-app-text">Especificaciones Pro</h3>
+                                <h3 className="text-xl font-bold mb-3 text-app-text">Pro Specifications</h3>
                                 <p className="text-sm text-app-text-sec mb-6 leading-relaxed">
-                                    Hardware robusto preparado para integraciones profesionales y condiciones climáticas adversas.
+                                    Robust hardware built for professional integrations and harsh weather conditions.
                                 </p>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="bg-app-bg-subtle p-3 rounded-xl border border-app-border">
-                                        <p className="text-[10px] uppercase text-app-text-sec font-bold mb-1">Protección IP</p>
+                                        <p className="text-[10px] uppercase text-app-text-sec font-bold mb-1">IP Protection</p>
                                         <p className="font-semibold text-primary">{specs.protection}</p>
                                     </div>
                                     <div className="bg-app-bg-subtle p-3 rounded-xl border border-app-border">
-                                        <p className="text-[10px] uppercase text-app-text-sec font-bold mb-1">Compresión</p>
+                                        <p className="text-[10px] uppercase text-app-text-sec font-bold mb-1">Compression</p>
                                         <p className="font-semibold text-primary">{specs.compression}</p>
                                     </div>
                                     <div className="bg-app-bg-subtle p-3 rounded-xl border border-app-border">
-                                        <p className="text-[10px] uppercase text-app-text-sec font-bold mb-1">Lente</p>
+                                        <p className="text-[10px] uppercase text-app-text-sec font-bold mb-1">Lens</p>
                                         <p className="font-semibold text-primary">{specs.lens}</p>
                                     </div>
                                     <div className="bg-app-bg-subtle p-3 rounded-xl border border-app-border">
-                                        <p className="text-[10px] uppercase text-app-text-sec font-bold mb-1">Alimentación</p>
+                                        <p className="text-[10px] uppercase text-app-text-sec font-bold mb-1">Power</p>
                                         <p className="font-semibold text-primary">{specs.power}</p>
                                     </div>
                                 </div>
@@ -611,8 +638,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                                                     <span className="material-icons-outlined text-sm">warning</span>
                                                 </div>
                                                 <div>
-                                                    <p className="text-xs font-bold text-gray-800">Cruce de línea detectado</p>
-                                                    <p className="text-[10px] text-gray-500">Perímetro Norte • Hace 1 min</p>
+                                                    <p className="text-xs font-bold text-gray-800">Line crossing detected</p>
+                                                    <p className="text-[10px] text-gray-500">North Perimeter • 1 min ago</p>
                                                 </div>
                                             </div>
                                             <div className="bg-white p-3 rounded-lg shadow-sm border-l-4 border-primary flex gap-3">
@@ -620,8 +647,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                                                     <span className="material-icons-outlined text-sm">directions_car</span>
                                                 </div>
                                                 <div>
-                                                    <p className="text-xs font-bold text-gray-800">Vehículo en zona de carga</p>
-                                                    <p className="text-[10px] text-gray-500">Acceso Sur • Hace 3 min</p>
+                                                    <p className="text-xs font-bold text-gray-800">Vehicle in loading zone</p>
+                                                    <p className="text-[10px] text-gray-500">South Access • 3 min ago</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -637,12 +664,12 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
                     <div className="w-full max-w-xl rounded-2xl border border-app-border bg-app-surface shadow-2xl">
                         <div className="flex items-center justify-between border-b border-app-border px-5 py-4">
-                            <h3 className="text-lg font-bold text-app-text">Solicitar cotización</h3>
+                            <h3 className="text-lg font-bold text-app-text">Request quote</h3>
                             <button
                                 type="button"
                                 onClick={() => setIsQuoteModalOpen(false)}
                                 className="flex h-9 w-9 items-center justify-center rounded-lg text-app-text-sec hover:bg-app-bg-subtle"
-                                aria-label="Cerrar modal de cotización"
+                                aria-label="Close quote modal"
                             >
                                 <span className="material-symbols-outlined">close</span>
                             </button>
@@ -654,7 +681,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                             </div>
 
                             <label className="flex flex-col gap-2">
-                                <span className="text-sm font-medium text-app-text">Correo electrónico</span>
+                                <span className="text-sm font-medium text-app-text">Email</span>
                                 <input
                                     type="email"
                                     value={clientEmail}
@@ -666,7 +693,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                             </label>
 
                             <label className="flex flex-col gap-2">
-                                <span className="text-sm font-medium text-app-text">Mensaje</span>
+                                <span className="text-sm font-medium text-app-text">Message</span>
                                 <textarea
                                     value={quoteMessage}
                                     onChange={(e) => setQuoteMessage(e.target.value)}
@@ -689,14 +716,14 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                                     onClick={() => setIsQuoteModalOpen(false)}
                                     className="h-10 rounded-lg border border-app-border px-4 text-sm font-semibold text-app-text hover:bg-app-bg-subtle"
                                 >
-                                    Cancelar
+                                    Cancel
                                 </button>
                                 <button
                                     type="submit"
                                     disabled={isSendingQuote}
                                     className="h-10 rounded-lg bg-primary px-4 text-sm font-semibold text-white hover:bg-primary-dark disabled:opacity-60"
                                 >
-                                    {isSendingQuote ? "Enviando..." : "Enviar solicitud"}
+                                    {isSendingQuote ? "Sending..." : "Send request"}
                                 </button>
                             </div>
                         </form>
@@ -706,3 +733,5 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         </div>
     );
 }
+
+

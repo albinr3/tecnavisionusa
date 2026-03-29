@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-// Credenciales de admin (en producción, usar variables de entorno y hashing)
+// Admin credentials (in production, use env vars and hashing)
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
         const { email, password } = await request.json();
 
         if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-            // Crear un token simple (en producción usar JWT)
+            // Create a simple token (use JWT in production)
             const token = Buffer.from(`${email}:${Date.now()}`).toString("base64");
 
             const cookieStore = await cookies();
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: "lax",
-                maxAge: 60 * 60 * 24 * 7, // 7 días
+                maxAge: 60 * 60 * 24 * 7, // 7 days
                 path: "/",
             });
 
@@ -26,12 +26,12 @@ export async function POST(request: NextRequest) {
         }
 
         return NextResponse.json(
-            { success: false, error: "Credenciales inválidas" },
+            { success: false, error: "Invalid credentials" },
             { status: 401 }
         );
     } catch {
         return NextResponse.json(
-            { success: false, error: "Error en el servidor" },
+            { success: false, error: "Server error" },
             { status: 500 }
         );
     }

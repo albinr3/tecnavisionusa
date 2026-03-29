@@ -22,10 +22,10 @@ interface QuotesTableProps {
 }
 
 const STATUS_LABELS: Record<string, string> = {
-    pending: "Pendiente",
-    contacted: "Contactado",
-    completed: "Completado",
-    cancelled: "Cancelado",
+    pending: "Pending",
+    contacted: "Contacted",
+    completed: "Completed",
+    cancelled: "Cancelled",
 };
 
 const STATUS_CLASSES: Record<string, string> = {
@@ -36,7 +36,7 @@ const STATUS_CLASSES: Record<string, string> = {
 };
 
 const formatDate = (value: string) =>
-    new Date(value).toLocaleString("es-DO", {
+    new Date(value).toLocaleString("en-US", {
         year: "numeric",
         month: "2-digit",
         day: "2-digit",
@@ -68,7 +68,7 @@ export default function QuotesTable({ quotes }: QuotesTableProps) {
             });
             const data = await res.json();
             if (!res.ok) {
-                throw new Error(data?.error || "No se pudo actualizar el estado.");
+                throw new Error(data?.error || "Could not update status.");
             }
 
             const nextUpdatedAt =
@@ -84,7 +84,7 @@ export default function QuotesTable({ quotes }: QuotesTableProps) {
                 )
             );
         } catch (error) {
-            setStatusError(error instanceof Error ? error.message : "No se pudo actualizar el estado.");
+            setStatusError(error instanceof Error ? error.message : "Could not update status.");
         } finally {
             setIsUpdatingStatus(false);
         }
@@ -96,8 +96,8 @@ export default function QuotesTable({ quotes }: QuotesTableProps) {
                 <div className="w-16 h-16 bg-app-bg-subtle rounded-full flex items-center justify-center mx-auto mb-4">
                     <span className="material-symbols-outlined text-gray-400 text-3xl">request_quote</span>
                 </div>
-                <h3 className="text-lg font-bold text-app-text mb-2">No hay cotizaciones</h3>
-                <p className="text-[#645e8d]">Las solicitudes de productos aparecerán aquí.</p>
+                <h3 className="text-lg font-bold text-app-text mb-2">No quotes yet</h3>
+                <p className="text-[#645e8d]">Product requests will appear here.</p>
             </div>
         );
     }
@@ -109,11 +109,11 @@ export default function QuotesTable({ quotes }: QuotesTableProps) {
                     <table className="w-full min-w-[980px]">
                         <thead className="bg-app-bg-subtle border-b border-app-border">
                             <tr>
-                                <th className="text-left px-6 py-4 text-sm font-semibold text-app-text">Correo</th>
-                                <th className="text-left px-6 py-4 text-sm font-semibold text-app-text">Mensaje</th>
-                                <th className="text-left px-6 py-4 text-sm font-semibold text-app-text">Estado</th>
-                                <th className="text-left px-6 py-4 text-sm font-semibold text-app-text">Fecha</th>
-                                <th className="text-right px-6 py-4 text-sm font-semibold text-app-text">Acción</th>
+                                <th className="text-left px-6 py-4 text-sm font-semibold text-app-text">Email</th>
+                                <th className="text-left px-6 py-4 text-sm font-semibold text-app-text">Message</th>
+                                <th className="text-left px-6 py-4 text-sm font-semibold text-app-text">Status</th>
+                                <th className="text-left px-6 py-4 text-sm font-semibold text-app-text">Date</th>
+                                <th className="text-right px-6 py-4 text-sm font-semibold text-app-text">Action</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-[#dcdae7]">
@@ -121,7 +121,7 @@ export default function QuotesTable({ quotes }: QuotesTableProps) {
                                 <tr key={quote.id} className="hover:bg-app-bg-subtle transition-colors align-top">
                                     <td className="px-6 py-4 text-sm text-app-text">{quote.clientEmail}</td>
                                     <td className="px-6 py-4 text-sm text-[#645e8d] max-w-[380px]">
-                                        <p className="line-clamp-2 whitespace-pre-wrap">{quote.message || "Sin mensaje"}</p>
+                                        <p className="line-clamp-2 whitespace-pre-wrap">{quote.message || "No message"}</p>
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className={`inline-flex px-2 py-1 rounded-full text-xs font-semibold ${STATUS_CLASSES[quote.status] || "bg-gray-100 text-gray-700"}`}>
@@ -138,7 +138,7 @@ export default function QuotesTable({ quotes }: QuotesTableProps) {
                                             }}
                                             className="inline-flex h-9 items-center justify-center rounded-lg border border-app-border px-3 text-sm font-semibold text-app-text hover:bg-app-bg-subtle"
                                         >
-                                            Ver
+                                            View
                                         </button>
                                     </td>
                                 </tr>
@@ -166,8 +166,8 @@ export default function QuotesTable({ quotes }: QuotesTableProps) {
                                     <span className="material-symbols-outlined">request_quote</span>
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-bold text-app-text">Detalle de cotización</h3>
-                                <p className="text-xs text-app-text-sec">Solicitud recibida desde catálogo web</p>
+                                    <h3 className="text-lg font-bold text-app-text">Quote Details</h3>
+                                <p className="text-xs text-app-text-sec">Request received from web catalog</p>
                                 </div>
                             </div>
                             <button
@@ -177,7 +177,7 @@ export default function QuotesTable({ quotes }: QuotesTableProps) {
                                     setSelectedQuoteId(null);
                                 }}
                                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-app-border text-app-text-sec hover:bg-app-bg-subtle"
-                                aria-label="Cerrar modal de cotización"
+                                aria-label="Close quote modal"
                             >
                                 <span className="material-symbols-outlined">close</span>
                             </button>
@@ -185,13 +185,13 @@ export default function QuotesTable({ quotes }: QuotesTableProps) {
 
                         <div className="px-4 py-4 grid grid-cols-1 md:grid-cols-2 gap-2.5 overflow-y-auto">
                             <div className="rounded-xl border border-app-border bg-app-bg-subtle/70 p-3">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-app-text-sec">Producto</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-app-text-sec">Product</p>
                                 {selectedQuote.productSlug ? (
                                     <Link
                                         href={`/products/${selectedQuote.productSlug}`}
                                         target="_blank"
                                         className="mt-1 block text-base font-bold text-app-text hover:text-primary transition-colors"
-                                        title="Abrir producto en una pestaña nueva"
+                                        title="Open product in a new tab"
                                     >
                                         {selectedQuote.productName}
                                     </Link>
@@ -203,7 +203,7 @@ export default function QuotesTable({ quotes }: QuotesTableProps) {
                                         href={`/products/${selectedQuote.productSlug}`}
                                         target="_blank"
                                         className="text-xs bg-app-surface px-2 py-1 rounded mt-2 inline-block border border-app-border text-app-text-sec hover:text-primary hover:border-primary/40 transition-colors"
-                                        title="Abrir producto en una pestaña nueva"
+                                        title="Open product in a new tab"
                                     >
                                         <code>{selectedQuote.productSlug}</code>
                                     </Link>
@@ -211,46 +211,46 @@ export default function QuotesTable({ quotes }: QuotesTableProps) {
                             </div>
 
                             <div className="rounded-xl border border-app-border bg-app-bg-subtle/70 p-3">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-app-text-sec">Estado</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-app-text-sec">Status</p>
                                 <span className={`mt-2 inline-flex px-3 py-1 rounded-full text-xs font-semibold ${STATUS_CLASSES[selectedQuote.status] || "bg-gray-100 text-gray-700"}`}>
                                     {STATUS_LABELS[selectedQuote.status] || selectedQuote.status}
                                 </span>
                             </div>
 
                             <div className="rounded-xl border border-app-border bg-app-bg-subtle/70 p-3">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-app-text-sec">Cliente</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-app-text-sec">Customer</p>
                                 <p className="mt-1 text-sm text-app-text">{selectedQuote.clientName || "N/D"}</p>
                             </div>
 
                             <div className="rounded-xl border border-app-border bg-app-bg-subtle/70 p-3">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-app-text-sec">Correo</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-app-text-sec">Email</p>
                                 <p className="mt-1 text-sm text-app-text">{selectedQuote.clientEmail}</p>
                             </div>
 
                             <div className="rounded-xl border border-app-border bg-app-bg-subtle/70 p-3">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-app-text-sec">Teléfono</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-app-text-sec">Phone</p>
                                 <p className="mt-1 text-sm text-app-text">{selectedQuote.clientPhone || "N/D"}</p>
                             </div>
 
                             <div className="rounded-xl border border-app-border bg-app-bg-subtle/70 p-3">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-app-text-sec">Empresa</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-app-text-sec">Company</p>
                                 <p className="mt-1 text-sm text-app-text">{selectedQuote.company || "N/D"}</p>
                             </div>
 
                             <div className="md:col-span-2 rounded-xl border border-app-border bg-app-bg-subtle/70 p-3">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-app-text-sec">Mensaje</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-app-text-sec">Message</p>
                                 <p className="mt-2 text-[15px] text-app-text whitespace-pre-wrap leading-relaxed">
-                                    {selectedQuote.message || "Sin mensaje"}
+                                    {selectedQuote.message || "No message"}
                                 </p>
                             </div>
 
                             <div className="rounded-xl border border-app-border bg-app-bg-subtle/70 p-3">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-app-text-sec">Creada</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-app-text-sec">Created</p>
                                 <p className="mt-1 text-sm text-app-text">{formatDate(selectedQuote.createdAt)}</p>
                             </div>
 
                             <div className="rounded-xl border border-app-border bg-app-bg-subtle/70 p-3">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-app-text-sec">Actualizada</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-app-text-sec">Updated</p>
                                 <p className="mt-1 text-sm text-app-text">{formatDate(selectedQuote.updatedAt)}</p>
                             </div>
                         </div>
@@ -267,7 +267,7 @@ export default function QuotesTable({ quotes }: QuotesTableProps) {
                                         disabled={isUpdatingStatus}
                                         className="h-10 rounded-lg border border-green-300 bg-green-50 px-4 text-sm font-semibold text-green-700 hover:bg-green-100 disabled:opacity-60"
                                     >
-                                        {isUpdatingStatus ? "Guardando..." : "Marcar completada"}
+                                        {isUpdatingStatus ? "Saving..." : "Mark as completed"}
                                     </button>
                                 )}
                             <button
@@ -278,7 +278,7 @@ export default function QuotesTable({ quotes }: QuotesTableProps) {
                                 }}
                                 className="h-10 rounded-lg bg-primary px-5 text-sm font-semibold text-white hover:bg-primary-dark shadow-sm"
                             >
-                                Cerrar
+                                Close
                             </button>
                             </div>
                         </div>
@@ -288,3 +288,6 @@ export default function QuotesTable({ quotes }: QuotesTableProps) {
         </>
     );
 }
+
+
+

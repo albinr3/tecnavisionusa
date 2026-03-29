@@ -15,9 +15,10 @@ interface Distributor {
     email: string;
     mapUrl: string | null;
     isActive: boolean;
+    country: string;
 }
 
-export default function DistribuidoresPage() {
+export default function DistributorsPage() {
     const [distributors, setDistributors] = useState<Distributor[]>([]);
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
@@ -30,7 +31,7 @@ export default function DistribuidoresPage() {
             setDistributors(data);
         } catch (error) {
             console.error("Error fetching distributors:", error);
-            toast.error("Error al cargar distribuidores");
+            toast.error("Error loading distributors");
         } finally {
             setLoading(false);
         }
@@ -41,7 +42,7 @@ export default function DistribuidoresPage() {
     }, []);
 
     const handleDelete = async (id: string) => {
-        if (!confirm("¿Estás seguro de eliminar este distribuidor?")) return;
+        if (!confirm("Are you sure you want to delete this distributor?")) return;
 
         try {
             const response = await fetch(`/api/distributors/${id}`, {
@@ -49,14 +50,14 @@ export default function DistribuidoresPage() {
             });
 
             if (response.ok) {
-                toast.success("Distribuidor eliminado");
+                toast.success("Distributor deleted");
                 fetchDistributors();
             } else {
-                toast.error("Error al eliminar distribuidor");
+                toast.error("Error deleting distributor");
             }
         } catch (error) {
             console.error("Error deleting distributor:", error);
-            toast.error("Error al eliminar distribuidor");
+            toast.error("Error deleting distributor");
         }
     };
 
@@ -77,15 +78,15 @@ export default function DistribuidoresPage() {
             <header className="bg-app-surface border-b border-app-border px-8 py-5 flex-shrink-0 z-10">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h2 className="text-app-text text-2xl font-bold tracking-tight">Distribuidores</h2>
-                        <p className="text-[#645e8d] text-sm mt-1">Gestiona la red de distribuidores autorizados</p>
+                        <h2 className="text-app-text text-2xl font-bold tracking-tight">Distributors</h2>
+                        <p className="text-[#645e8d] text-sm mt-1">Manage the network of authorized distributors</p>
                     </div>
                     <button
                         onClick={() => setShowForm(true)}
                         className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark transition-colors"
                     >
                         <span className="material-symbols-outlined">add</span>
-                        Nuevo Distribuidor
+                        New Distributor
                     </button>
                 </div>
             </header>
@@ -104,20 +105,23 @@ export default function DistribuidoresPage() {
                                     <thead className="bg-app-bg-subtle border-b border-app-border">
                                         <tr>
                                             <th className="px-6 py-3 text-left text-xs font-bold text-app-text uppercase tracking-wider">
-                                                Nombre
+                                                Name
                                             </th>
                                             <th className="px-6 py-3 text-left text-xs font-bold text-app-text uppercase tracking-wider">
-                                                Ciudad
+                                                Country
                                             </th>
                                             <th className="px-6 py-3 text-left text-xs font-bold text-app-text uppercase tracking-wider">
-                                                Teléfono
+                                                City
+                                            </th>
+                                            <th className="px-6 py-3 text-left text-xs font-bold text-app-text uppercase tracking-wider">
+                                                Phone
                                             </th>
 
                                             <th className="px-6 py-3 text-left text-xs font-bold text-app-text uppercase tracking-wider">
-                                                Estado
+                                                Status
                                             </th>
                                             <th className="px-6 py-3 text-right text-xs font-bold text-app-text uppercase tracking-wider">
-                                                Acciones
+                                                Actions
                                             </th>
                                         </tr>
                                     </thead>
@@ -133,6 +137,9 @@ export default function DistribuidoresPage() {
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-[#645e8d]">
+                                                    {distributor.country}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-[#645e8d]">
                                                     {distributor.city}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-[#645e8d]">
@@ -146,7 +153,7 @@ export default function DistribuidoresPage() {
                                                             : "bg-app-bg-subtle text-app-text"
                                                             }`}
                                                     >
-                                                        {distributor.isActive ? "Activo" : "Inactivo"}
+                                                        {distributor.isActive ? "Active" : "Inactive"}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -183,3 +190,7 @@ export default function DistribuidoresPage() {
         </>
     );
 }
+
+
+
+

@@ -28,7 +28,7 @@ export default function ContactForm() {
             const payload = (await response.json()) as { error?: string };
 
             if (!response.ok) {
-                throw new Error(payload.error || "No se pudo enviar el mensaje.");
+                throw new Error(payload.error || "Message could not be sent.");
             }
 
             setFormData({
@@ -39,12 +39,12 @@ export default function ContactForm() {
                 message: "",
             });
 
-            alert("¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.");
+            alert("Message sent successfully! We will contact you soon.");
         } catch (error) {
             const message =
                 error instanceof Error
                     ? error.message
-                    : "Error inesperado al enviar el mensaje.";
+                    : "Unexpected error sending message.";
             alert(message);
         } finally {
             setIsSubmitting(false);
@@ -66,7 +66,7 @@ export default function ContactForm() {
             {/* Name */}
             <div className="space-y-1">
                 <label className="block text-sm font-semibold text-app-text" htmlFor="name">
-                    Nombre Completo
+                    Full Name
                 </label>
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-app-text-sec">
@@ -76,7 +76,7 @@ export default function ContactForm() {
                         className="block w-full pl-10 pr-3 py-3 rounded-lg border-transparent bg-app-surface text-app-text placeholder-app-text-sec focus:border-primary focus:bg-app-surface focus:ring-2 focus:ring-primary/20 transition-all sm:text-sm"
                         id="name"
                         name="name"
-                        placeholder="Tu nombre"
+                        placeholder="Your name"
                         type="text"
                         value={formData.name}
                         onChange={handleChange}
@@ -88,7 +88,7 @@ export default function ContactForm() {
             {/* Email */}
             <div className="space-y-1">
                 <label className="block text-sm font-semibold text-app-text" htmlFor="email">
-                    Correo Electrónico
+                    Email Address
                 </label>
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-app-text-sec">
@@ -98,7 +98,7 @@ export default function ContactForm() {
                         className="block w-full pl-10 pr-3 py-3 rounded-lg border-transparent bg-app-surface text-app-text placeholder-app-text-sec focus:border-primary focus:bg-app-surface focus:ring-2 focus:ring-primary/20 transition-all sm:text-sm"
                         id="email"
                         name="email"
-                        placeholder="ejemplo@correo.com"
+                        placeholder="example@email.com"
                         type="email"
                         value={formData.email}
                         onChange={handleChange}
@@ -110,7 +110,7 @@ export default function ContactForm() {
             {/* Company (Optional) */}
             <div className="space-y-1">
                 <label className="block text-sm font-semibold text-app-text" htmlFor="company">
-                    Empresa <span className="text-app-text-sec font-normal text-xs ml-1">(Opcional)</span>
+                    Company <span className="text-app-text-sec font-normal text-xs ml-1">(Optional)</span>
                 </label>
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-app-text-sec">
@@ -120,7 +120,7 @@ export default function ContactForm() {
                         className="block w-full pl-10 pr-3 py-3 rounded-lg border-transparent bg-app-surface text-app-text placeholder-app-text-sec focus:border-primary focus:bg-app-surface focus:ring-2 focus:ring-primary/20 transition-all sm:text-sm"
                         id="company"
                         name="company"
-                        placeholder="Nombre de tu empresa"
+                        placeholder="Your company name"
                         type="text"
                         value={formData.company}
                         onChange={handleChange}
@@ -131,7 +131,7 @@ export default function ContactForm() {
             {/* Subject */}
             <div className="space-y-1">
                 <label className="block text-sm font-semibold text-app-text" htmlFor="subject">
-                    Asunto
+                    Subject
                 </label>
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-app-text-sec">
@@ -141,7 +141,7 @@ export default function ContactForm() {
                         className="block w-full pl-10 pr-3 py-3 rounded-lg border-transparent bg-app-surface text-app-text placeholder-app-text-sec focus:border-primary focus:bg-app-surface focus:ring-2 focus:ring-primary/20 transition-all sm:text-sm"
                         id="subject"
                         name="subject"
-                        placeholder="¿En qué podemos ayudarte?"
+                        placeholder="How can we help you?"
                         type="text"
                         value={formData.subject}
                         onChange={handleChange}
@@ -153,13 +153,13 @@ export default function ContactForm() {
             {/* Message */}
             <div className="space-y-1">
                 <label className="block text-sm font-semibold text-app-text" htmlFor="message">
-                    Mensaje
+                    Message
                 </label>
                 <textarea
                     className="block w-full px-4 py-3 rounded-lg border-transparent bg-app-surface text-app-text placeholder-app-text-sec focus:border-primary focus:bg-app-surface focus:ring-2 focus:ring-primary/20 transition-all sm:text-sm resize-none"
                     id="message"
                     name="message"
-                    placeholder="Escribe tu mensaje aquí..."
+                    placeholder="Write your message here..."
                     rows={5}
                     value={formData.message}
                     onChange={handleChange}
@@ -173,7 +173,7 @@ export default function ContactForm() {
                 type="submit"
                 disabled={isSubmitting}
             >
-                <span>{isSubmitting ? "Enviando..." : "Enviar Mensaje"}</span>
+                <span>{isSubmitting ? "Sending..." : "Send Message"}</span>
                 {!isSubmitting && (
                     <span className="absolute right-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-x-2 group-hover:translate-x-0">
                         <span className="material-symbols-outlined text-lg">send</span>

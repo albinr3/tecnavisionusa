@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { getSiteUrl } from "@/lib/site-url";
 import DondeComprarClient from "./DondeComprarClient";
@@ -6,47 +7,104 @@ import DondeComprarClient from "./DondeComprarClient";
 const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
-    title: "Dónde comprar - Distribuidores TecnaVision",
+    title: "Where to Buy - TecnaVision Distributors",
     description:
-        "Encuentra distribuidores autorizados de TecnaVision en República Dominicana para cámaras IP, NVR y soluciones de seguridad.",
+        "Find authorized TecnaVision distributors in the Dominican Republic for IP cameras, NVRs, and security solutions.",
     alternates: {
-        canonical: "/donde-comprar",
+        canonical: "/where-to-buy",
     },
     openGraph: {
-        title: "Dónde comprar - Distribuidores TecnaVision",
+        title: "Where to Buy - TecnaVision Distributors",
         description:
-            "Encuentra distribuidores autorizados de TecnaVision en República Dominicana para cámaras IP, NVR y soluciones de seguridad.",
-        url: "/donde-comprar",
+            "Find authorized TecnaVision distributors in the Dominican Republic for IP cameras, NVRs, and security solutions.",
+        url: "/where-to-buy",
         type: "website",
     },
     twitter: {
         card: "summary_large_image",
-        title: "Dónde comprar - Distribuidores TecnaVision",
+        title: "Where to Buy - TecnaVision Distributors",
         description:
-            "Encuentra distribuidores autorizados de TecnaVision en República Dominicana para cámaras IP, NVR y soluciones de seguridad.",
+            "Find authorized TecnaVision distributors in the Dominican Republic for IP cameras, NVRs, and security solutions.",
     },
 };
 
+function isMissingCountryColumn(error: unknown) {
+    if (!(error instanceof Prisma.PrismaClientKnownRequestError)) {
+        return false;
+    }
+    if (error.code !== "P2022") {
+        return false;
+    }
+    const missingColumn =
+        typeof error.meta?.column === "string" ? error.meta.column.toLowerCase() : "";
+    return missingColumn === "" || missingColumn.includes("country");
+}
+
 export default async function DondeComprarPage() {
-    const initialDistributors = await prisma.distributor.findMany({
-        where: {
-            isActive: true,
-        },
-        select: {
-            id: true,
-            name: true,
-            icon: true,
-            address: true,
-            city: true,
-            state: true,
-            phone: true,
-            email: true,
-            mapUrl: true,
-        },
-        orderBy: {
-            name: "asc",
-        },
-    });
+    let initialDistributors: Array<{
+        id: string;
+        name: string;
+        icon: string;
+        country: string;
+        address: string;
+        city: string;
+        state: string | null;
+        phone: string;
+        email: string;
+        mapUrl: string | null;
+    }> = [];
+
+    try {
+        initialDistributors = await prisma.distributor.findMany({
+            where: {
+                isActive: true,
+            },
+            select: {
+                id: true,
+                name: true,
+                icon: true,
+                country: true,
+                address: true,
+                city: true,
+                state: true,
+                phone: true,
+                email: true,
+                mapUrl: true,
+            },
+            orderBy: {
+                name: "asc",
+            },
+        });
+    } catch (error) {
+        if (!isMissingCountryColumn(error)) {
+            throw error;
+        }
+
+        const fallback = await prisma.distributor.findMany({
+            where: {
+                isActive: true,
+            },
+            select: {
+                id: true,
+                name: true,
+                icon: true,
+                address: true,
+                city: true,
+                state: true,
+                phone: true,
+                email: true,
+                mapUrl: true,
+            },
+            orderBy: {
+                name: "asc",
+            },
+        });
+
+        initialDistributors = fallback.map((item) => ({
+            ...item,
+            country: "Dominican Republic",
+        }));
+    }
 
     return (
         <>
@@ -56,8 +114,8 @@ export default async function DondeComprarPage() {
                     __html: JSON.stringify({
                         "@context": "https://schema.org",
                         "@type": "ItemList",
-                        name: "Distribuidores TecnaVision",
-                        url: `${siteUrl}/donde-comprar`,
+                        name: "TecnaVision Distributors",
+                        url: `${siteUrl}/where-to-buy`,
                         numberOfItems: initialDistributors.length,
                         itemListElement: initialDistributors.slice(0, 20).map((distributor, index) => ({
                             "@type": "ListItem",
@@ -68,7 +126,7 @@ export default async function DondeComprarPage() {
                                 address: distributor.address,
                                 telephone: distributor.phone,
                                 email: distributor.email,
-                                url: distributor.mapUrl || `${siteUrl}/donde-comprar`,
+                                url: distributor.mapUrl || `${siteUrl}/where-to-buy`,
                             },
                         })),
                     }),
@@ -78,3 +136,6 @@ export default async function DondeComprarPage() {
         </>
     );
 }
+
+
+

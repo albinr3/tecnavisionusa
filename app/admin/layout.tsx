@@ -4,7 +4,7 @@ import AdminShell from "./components/AdminShell";
 
 export const metadata: Metadata = {
     title: "Admin Panel - TecnaVision",
-    description: "Panel de administración para gestionar productos y configuración de TecnaVision.",
+    description: "Admin panel to manage TecnaVision products and settings.",
     robots: {
         index: false,
         follow: false,
@@ -28,3 +28,5 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </AdminShell>
     );
 }
+
+

@@ -1,11 +1,30 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import ProductForm from "@/app/components/ProductForm";
+import { Prisma } from "@prisma/client";
+
+function isMissingCategoryI18nColumn(error: unknown) {
+    if (!(error instanceof Prisma.PrismaClientKnownRequestError)) return false;
+    if (error.code !== "P2022") return false;
+    const missingColumn =
+        typeof error.meta?.column === "string" ? error.meta.column.toLowerCase() : "";
+    return missingColumn === "" || missingColumn.includes("name_es") || missingColumn.includes("name_en");
+}
 
 export default async function NewProductPage() {
-    const categories = await prisma.category.findMany({
-        orderBy: { name: 'asc' }
-    });
+    let categories: Array<{ id: string; name: string; slug: string }> = [];
+    try {
+        categories = await prisma.category.findMany({
+            select: { id: true, name: true, slug: true },
+            orderBy: { name: "asc" }
+        });
+    } catch (error) {
+        if (!isMissingCategoryI18nColumn(error)) throw error;
+        categories = await prisma.category.findMany({
+            select: { id: true, name: true, slug: true },
+            orderBy: { name: "asc" }
+        });
+    }
 
     return (
         <>
@@ -14,19 +33,19 @@ export default async function NewProductPage() {
                 <div>
                     <div className="flex items-center gap-2 text-[#645e8d] text-sm mb-1">
                         <Link href="/admin/products" className="hover:text-primary transition-colors">
-                            Productos
+                            Products
                         </Link>
                         <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-                        <span className="text-app-text font-medium">Crear Nuevo</span>
+                        <span className="text-app-text font-medium">Create New</span>
                     </div>
-                    <h2 className="text-app-text text-2xl font-bold tracking-tight">Añadir Nuevo Producto</h2>
+                    <h2 className="text-app-text text-2xl font-bold tracking-tight">Add New Product</h2>
                 </div>
                 <div className="flex items-center gap-3">
                     <Link
                         href="/admin/products"
                         className="flex h-10 items-center justify-center rounded-lg px-4 border border-app-border bg-app-surface text-app-text text-sm font-semibold hover:bg-app-bg-subtle transition-colors"
                     >
-                        Descartar
+                        Discard
                     </Link>
                     {/* The submit button is now inside the ProductForm, but for the header layout we might want a trigger or just let the form handle it. 
                         For now, let's keep the header simple and let ProductForm handle submission in the mobile view or we can duplicate the trigger if needed.
@@ -49,7 +68,7 @@ export default async function NewProductPage() {
                         className="flex h-10 items-center justify-center rounded-lg px-6 bg-primary text-white text-sm font-semibold shadow-sm hover:bg-blue-800 transition-colors gap-2 disabled:opacity-50"
                     >
                         <span className="material-symbols-outlined text-[18px]">publish</span>
-                        Publicar Producto
+                        Publish Product
                     </button>
                 </div>
             </header>
@@ -61,5 +80,7 @@ export default async function NewProductPage() {
         </>
     );
 }
+
+
 
 

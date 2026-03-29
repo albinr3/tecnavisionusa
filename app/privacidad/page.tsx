@@ -3,11 +3,11 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 
 export const metadata: Metadata = {
-  title: "Política de privacidad - TecnaVision",
+  title: "Privacy Policy - TecnaVision",
   description:
-    "Política de privacidad de TecnaVision. Cómo recopilamos, usamos y protegemos tus datos en relación con nuestros productos de seguridad y vigilancia.",
+    "TecnaVision Privacy Policy. How we collect, use, and protect your data in relation to our security and surveillance products.",
   alternates: {
-    canonical: "/privacidad",
+    canonical: "/privacy-policy",
   },
 };
 
@@ -18,117 +18,111 @@ export default function PoliticaPrivacidadPage() {
       <main className="flex-grow">
         <div className="max-w-3xl mx-auto px-6 lg:px-10 py-12 sm:py-20">
           <h1 className="text-3xl sm:text-4xl font-bold text-app-text mb-4">
-            Política de privacidad
+            Privacy Policy
           </h1>
           <p className="text-app-text-sec text-sm mb-12">
-            Última actualización: febrero 2025
+            Last updated: February 2025
           </p>
 
           <div className="prose prose-app max-w-none space-y-8 text-app-text-sec leading-relaxed">
             <section>
               <h2 className="text-xl font-bold text-app-text mb-3">
-                1. Responsable del tratamiento
+                1. Data controller
               </h2>
               <p>
-                TecnaVision (&quot;nosotros&quot;, &quot;nuestra&quot; o &quot;la empresa&quot;) es
-                el responsable del tratamiento de los datos personales que recopilamos a través de
-                nuestro sitio web, tienda en línea, formularios de contacto, red de distribuidores
-                y en el marco de la venta e instalación de sistemas de seguridad y vigilancia
-                (cámaras, NVR, control de acceso y accesorios).
+                TecnaVision (&quot;we&quot;, &quot;our&quot;, or &quot;the company&quot;) is the data controller
+                of the personal data we collect through our website, online store, contact forms,
+                distributor network, and in connection with the sale and installation of security
+                and surveillance systems (cameras, NVRs, access control, and accessories).
               </p>
             </section>
 
             <section>
               <h2 className="text-xl font-bold text-app-text mb-3">
-                2. Datos que recopilamos
+                2. Data we collect
               </h2>
               <p className="mb-2">
-                Podemos recopilar los siguientes tipos de datos en función de tu interacción con
-                nosotros:
+                Depending on your interaction with us, we may collect the following types of data:
               </p>
               <ul className="list-disc pl-6 space-y-1">
                 <li>
-                  <strong className="text-app-text">Datos de identificación:</strong> nombre,
-                  apellidos, correo electrónico, teléfono, dirección (para envíos o instalación).
+                  <strong className="text-app-text">Identification data:</strong> first name, last
+                  name, email, phone number, and address (for shipping or installation).
                 </li>
                 <li>
-                  <strong className="text-app-text">Datos de compra y postventa:</strong> pedidos,
-                  facturación, garantías, soporte técnico y consultas sobre productos de seguridad.
+                  <strong className="text-app-text">Purchase and after-sales data:</strong> orders,
+                  billing, warranties, technical support, and inquiries about security products.
                 </li>
                 <li>
-                  <strong className="text-app-text">Datos de navegación:</strong> IP, tipo de
-                  navegador, páginas visitadas y cookies (ver nuestra política de cookies).
+                  <strong className="text-app-text">Browsing data:</strong> IP, browser type,
+                  visited pages, and cookies (see our cookie policy).
                 </li>
                 <li>
-                  <strong className="text-app-text">Datos de contacto comercial:</strong> cuando
-                  solicitas cotización, información de distribuidores o soporte.
+                  <strong className="text-app-text">Business contact data:</strong> when you request
+                  a quote, distributor information, or support.
                 </li>
               </ul>
               <p className="mt-3">
-                No recopilamos ni tratamos datos de imágenes o grabaciones de tus sistemas de
-                vigilancia; el tratamiento de esas grabaciones queda bajo tu exclusiva
-                responsabilidad y la de los instaladores autorizados.
+                We do not collect or process image or recording data from your surveillance
+                systems; processing of those recordings remains your sole responsibility and that
+                of authorized installers.
               </p>
             </section>
 
             <section>
               <h2 className="text-xl font-bold text-app-text mb-3">
-                3. Finalidad y base legal
+                3. Purpose and legal basis
               </h2>
               <p className="mb-2">
-                Utilizamos tus datos para: gestionar pedidos y entregas, atención al cliente y
-                garantías, envío de información comercial (con consentimiento), mejora del sitio y
-                de nuestros productos, y cumplimiento de obligaciones legales. La base legal es la
-                ejecución del contrato, tu consentimiento o el interés legítimo de TecnaVision,
-                según el caso.
+                We use your data to manage orders and deliveries, provide customer support and
+                warranties, send commercial information (with consent), improve the website and our
+                products, and comply with legal obligations. Legal basis may be contract
+                performance, your consent, or TecnaVision's legitimate interest, as applicable.
               </p>
             </section>
 
             <section>
               <h2 className="text-xl font-bold text-app-text mb-3">
-                4. Conservación y seguridad
+                4. Retention and security
               </h2>
               <p>
-                Conservamos los datos durante el tiempo necesario para las finalidades indicadas y
-                para cumplir obligaciones legales. Aplicamos medidas técnicas y organizativas
-                adecuadas para proteger tus datos personales.
+                We retain data for as long as necessary for the stated purposes and to comply with
+                legal obligations. We apply appropriate technical and organizational measures to
+                protect your personal data.
               </p>
             </section>
 
             <section>
               <h2 className="text-xl font-bold text-app-text mb-3">
-                5. Destinatarios y transferencias
+                5. Recipients and transfers
               </h2>
               <p>
-                Tus datos pueden ser compartidos con distribuidores autorizados (para instalación o
-                servicio en tu zona), proveedores de logística y pasarelas de pago, siempre con
-                garantías adecuadas. No realizamos transferencias internacionales fuera del
-                Espacio Económico Europeo salvo que sea estrictamente necesario y con las
-                garantías previstas por la normativa.
+                Your data may be shared with authorized distributors (for installation or service
+                in your area), logistics providers, and payment gateways, always with adequate
+                safeguards. We do not carry out international transfers outside the European
+                Economic Area unless strictly necessary and with safeguards required by regulation.
               </p>
             </section>
 
             <section>
               <h2 className="text-xl font-bold text-app-text mb-3">
-                6. Tus derechos
+                6. Your rights
               </h2>
               <p className="mb-2">
-                Puedes ejercer los derechos de acceso, rectificación, supresión, limitación del
-                tratamiento, portabilidad y oposición, así como retirar tu consentimiento, dirigiéndote
-                a nosotros (por ejemplo a través de la sección de contacto del sitio). Tienes
-                derecho a reclamar ante la autoridad de control de protección de datos
-                competente.
+                You can exercise your rights of access, rectification, deletion, restriction of
+                processing, portability, and objection, and you may withdraw your consent by
+                contacting us (for example through the site's contact section). You also have the
+                right to file a complaint with the competent data protection authority.
               </p>
             </section>
 
             <section>
               <h2 className="text-xl font-bold text-app-text mb-3">
-                7. Contacto
+                7. Contact
               </h2>
               <p>
-                Para cualquier consulta sobre esta política o sobre el ejercicio de tus derechos,
-                contáctanos a través de la página de contacto de TecnaVision o al correo que
-                figure en el sitio.
+                For any questions about this policy or the exercise of your rights, contact us
+                through TecnaVision's contact page or the email listed on the site.
               </p>
             </section>
           </div>
@@ -138,3 +132,6 @@ export default function PoliticaPrivacidadPage() {
     </div>
   );
 }
+
+
+
