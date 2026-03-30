@@ -83,7 +83,7 @@ export default function AboutUs() {
                                     Designed in the United States, the brand emerges from the work of a team with experience in technology, networks, and security systems, who identified the need for stable, compatible equipment designed for real environments, beyond technical specifications.
                                 </p>
                                 <p>
-                                    In its initial stage, TecnaVision began operations exclusively in the Dominican Republic, betting on a growing market with an increasing demand for professional security solutions. This decision allows the brand to adapt its products and distribution model to local conditions, such as climate, electrical infrastructure, and the specific needs of installers and end users.
+                                    In its initial stage, TecnaVision focused on building reliable operations in the United States, collaborating with installers, distributors, and technology partners to deliver dependable security solutions for real-world environments.
                                 </p>
                             </div>
                             <div className="relative group">
@@ -148,7 +148,7 @@ export default function AboutUs() {
                         <div className="max-w-3xl mx-auto space-y-8">
                             <h2 className="text-3xl font-bold text-app-text">Future Projection</h2>
                             <p className="text-xl leading-relaxed text-app-text-sec">
-                                With a solid base in the Dominican Republic, TecnaVision projects its gradual expansion to other countries in the region, bringing its value proposition to new markets that demand professional, scalable, and durable video surveillance solutions.
+                                With a solid base in the United States, TecnaVision continues expanding its footprint and partner network to bring professional, scalable, and durable video surveillance solutions to more communities.
                             </p>
                             <div className="pt-8 block">
                                 <div className="inline-flex flex-col items-center">

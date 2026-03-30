@@ -19,14 +19,14 @@ const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "TecnaVision - Seguridad inteligente",
+  title: "TecnaVision - Smart security",
   description: "Advanced AI monitoring, ultra-sharp 4K resolution, and seamless app integration for complete peace of mind wherever you are.",
   openGraph: {
     type: "website",
     url: siteUrl,
     siteName: "TecnaVision",
-    locale: "es_DO",
-    title: "TecnaVision - Seguridad inteligente",
+    locale: "en_US",
+    title: "TecnaVision - Smart security",
     description: "Advanced AI monitoring, ultra-sharp 4K resolution, and seamless app integration for complete peace of mind wherever you are.",
     images: [
       {
@@ -39,16 +39,16 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "TecnaVision - Seguridad inteligente",
+    title: "TecnaVision - Smart security",
     description: "Advanced AI monitoring, ultra-sharp 4K resolution, and seamless app integration for complete peace of mind wherever you are.",
     images: ["/web-app-manifest-512x512.png"],
   },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "48x48" },
       { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
     ],
+    shortcut: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
   appleWebApp: {
@@ -63,7 +63,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{

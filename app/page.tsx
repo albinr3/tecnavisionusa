@@ -11,14 +11,14 @@ const siteUrl = getSiteUrl();
 export const metadata: Metadata = {
   title: "TecnaVision - Smart security for home and business",
   description:
-    "IP cameras, NVR, and professional surveillance solutions with real-time monitoring, AI, and local support in the Dominican Republic.",
+    "IP cameras, NVR, and professional surveillance solutions with real-time monitoring, AI, and local support across the United States.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "TecnaVision - Smart security for home and business",
     description:
-      "IP cameras, NVR, and professional surveillance solutions with real-time monitoring, AI, and local support in the Dominican Republic.",
+      "IP cameras, NVR, and professional surveillance solutions with real-time monitoring, AI, and local support across the United States.",
     url: "/",
     type: "website",
     images: [
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "TecnaVision - Smart security for home and business",
     description:
-      "IP cameras, NVR, and professional surveillance solutions with real-time monitoring, AI, and local support in the Dominican Republic.",
+      "IP cameras, NVR, and professional surveillance solutions with real-time monitoring, AI, and local support across the United States.",
     images: ["/cameraHome.webp"],
   },
 };
@@ -46,7 +46,7 @@ const organizationSchema = {
   url: siteUrl,
   logo: `${siteUrl}/web-app-manifest-512x512.png`,
   email: "Tecnavision1@gmail.com",
-  telephone: "+1-829-796-0509",
+  telephone: "9083386650",
   sameAs: [],
 };
 
@@ -55,7 +55,7 @@ const websiteSchema = {
   "@type": "WebSite",
   name: "TecnaVision",
   url: siteUrl,
-  inLanguage: "es-DO",
+  inLanguage: "en-US",
   potentialAction: {
     "@type": "SearchAction",
     target: `${siteUrl}/products?q={search_term_string}`,
@@ -80,7 +80,7 @@ const faqSchema = {
       name: "Where can I buy TecnaVision products?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Through authorized installers and distributors nationwide in the Dominican Republic. To find the nearest distributor, visit our \"Where to buy\" section or contact us through the contact page and we will gladly guide you.",
+        text: "Through authorized installers and distributors across the United States. To find the nearest partner, visit our \"Where to buy\" section or contact us and we will gladly guide you.",
       },
     },
     {
@@ -521,7 +521,7 @@ export default function Home() {
                     </span>
                   </summary>
                   <p className="mt-3 text-sm text-app-text-sec">
-                    TecnaVision sells its products through authorized installers and distributors nationwide in the Dominican Republic. To find the nearest distributor, visit our &quot;Where to buy&quot; section or contact us through the contact page and we will gladly guide you.
+                    TecnaVision sells its products through authorized installers and distributors across the United States. To find the nearest partner, visit our &quot;Where to buy&quot; section or contact us and we will gladly guide you.
                   </p>
                 </details>
                 <details className="group rounded-xl bg-app-surface p-4 shadow-sm border border-app-border">
@@ -624,7 +624,7 @@ export default function Home() {
                     </span>
                   </summary>
                   <p className="mt-3 text-sm text-app-text-sec">
-                    Yes. All TecnaVision products come with an official 3-year warranty, backed by our authorized distributors in the Dominican Republic.
+                    Yes. All TecnaVision products come with an official 3-year warranty, backed by our authorized distributors in the United States.
                   </p>
                 </details>
               </div>

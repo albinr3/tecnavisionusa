@@ -22,6 +22,8 @@ model Product {
   title_es        String?
   title_en        String?
   subtitle        String?
+  subtitle_es     String?
+  subtitle_en     String?
   description     String?
   description_es  String?
   description_en  String?

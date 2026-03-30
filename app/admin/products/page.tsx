@@ -9,6 +9,8 @@ interface Product {
     name: string;
     model: string;
     subtitle: string | null;
+    subtitle_es: string | null;
+    subtitle_en: string | null;
     badge: string | null;
     mainImage: string | null;
 }
@@ -132,7 +134,15 @@ export default function AdminProductsPage() {
                                                     </div>
                                                     <div>
                                                         <p className="font-semibold text-app-text">{product.name} {product.model}</p>
-                                                        <p className="text-sm text-[#645e8d] line-clamp-1">{product.subtitle}</p>
+                                                        {product.subtitle_es && (
+                                                            <p className="text-sm text-[#645e8d] line-clamp-1">RD: {product.subtitle_es}</p>
+                                                        )}
+                                                        {product.subtitle_en && (
+                                                            <p className="text-sm text-[#645e8d] line-clamp-1">US: {product.subtitle_en}</p>
+                                                        )}
+                                                        {!product.subtitle_es && !product.subtitle_en && product.subtitle && (
+                                                            <p className="text-sm text-[#645e8d] line-clamp-1">{product.subtitle}</p>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </td>

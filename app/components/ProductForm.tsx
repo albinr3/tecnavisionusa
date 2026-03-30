@@ -59,6 +59,8 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
     const [name, setName] = useState(initialData?.name || "");
     const [model, setModel] = useState(initialData?.model || "");
     const [subtitle, setSubtitle] = useState(initialData?.subtitle || "");
+    const [subtitleEs, setSubtitleEs] = useState(initialData?.subtitle_es || initialData?.subtitle || "");
+    const [subtitleEn, setSubtitleEn] = useState(initialData?.subtitle_en || initialData?.subtitle || "");
     const [description, setDescription] = useState(initialData?.description || "");
     const [titleEs, setTitleEs] = useState(initialData?.title_es || "");
     const [titleEn, setTitleEn] = useState(initialData?.title_en || "");
@@ -409,7 +411,9 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                 body: JSON.stringify({
                     name,
                     model,
-                    subtitle,
+                    subtitle: subtitle.trim() || subtitleEs.trim() || subtitleEn.trim() || null,
+                    subtitle_es: subtitleEs.trim() || null,
+                    subtitle_en: subtitleEn.trim() || null,
                     description,
                     title_es: titleEs || null,
                     title_en: titleEn || null,
@@ -689,13 +693,13 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                         Description
                     </h3>
                     <label className="flex flex-col gap-2 mb-4">
-                        <span className="text-sm font-medium text-app-text">Subtitle</span>
+                        <span className="text-sm font-medium text-app-text">Subtitle (Fallback)</span>
                         <input
                             type="text"
                             value={subtitle}
                             onChange={(e) => setSubtitle(e.target.value)}
                             className="w-full rounded-lg border border-app-border bg-app-surface h-11 px-4 text-sm text-app-text focus:border-primary focus:ring-0 placeholder:text-app-text-sec/70"
-                            placeholder="e.g. Next-generation surveillance for demanding environments."
+                            placeholder="Used when localized subtitles are empty."
                         />
                     </label>
                     <label className="flex flex-col gap-2">
@@ -719,6 +723,26 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                         If a field is not completed, the site uses the base value (`name`/`description`) as fallback.
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <label className="flex flex-col gap-2">
+                            <span className="text-sm font-medium text-app-text">Subtitle (Spanish / RD)</span>
+                            <input
+                                type="text"
+                                value={subtitleEs}
+                                onChange={(e) => setSubtitleEs(e.target.value)}
+                                className="w-full rounded-lg border border-app-border bg-app-surface h-11 px-4 text-sm text-app-text focus:border-primary focus:ring-0 placeholder:text-app-text-sec/70"
+                                placeholder="Subtitle for Dominican Republic"
+                            />
+                        </label>
+                        <label className="flex flex-col gap-2">
+                            <span className="text-sm font-medium text-app-text">Subtitle (English / US)</span>
+                            <input
+                                type="text"
+                                value={subtitleEn}
+                                onChange={(e) => setSubtitleEn(e.target.value)}
+                                className="w-full rounded-lg border border-app-border bg-app-surface h-11 px-4 text-sm text-app-text focus:border-primary focus:ring-0 placeholder:text-app-text-sec/70"
+                                placeholder="Subtitle for United States"
+                            />
+                        </label>
                         <label className="flex flex-col gap-2">
                             <span className="text-sm font-medium text-app-text">Title (Spanish)</span>
                             <input
@@ -1116,7 +1140,7 @@ export default function ProductForm({ categories, initialData }: ProductFormProp
                     name={name}
                     model={model}
                     badge={badge}
-                    subtitle={subtitle}
+                    subtitle={subtitle.trim() || subtitleEs.trim() || subtitleEn.trim()}
                     description={description}
                     mainImage={mainImage}
                     nightVisionImg={nightVisionImg}

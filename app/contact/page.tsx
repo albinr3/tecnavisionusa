@@ -56,7 +56,7 @@ export default function ContactPage() {
                                         </div>
                                         <div>
                                             <p className="text-xs font-semibold text-app-text-sec uppercase tracking-wider mb-1">Location</p>
-                                            <p className="text-app-text text-base font-medium">New Jersey, USA</p>
+                                            <p className="text-app-text text-base font-medium">United States</p>
                                         </div>
                                     </div>
 
@@ -67,7 +67,7 @@ export default function ContactPage() {
                                         </div>
                                         <div>
                                             <p className="text-xs font-semibold text-app-text-sec uppercase tracking-wider mb-1">Phone</p>
-                                            <p className="text-app-text text-base font-medium break-all">+1 829-796-0509</p>
+                                            <p className="text-app-text text-base font-medium break-all">9083386650</p>
                                         </div>
                                     </div>
 
@@ -99,7 +99,7 @@ export default function ContactPage() {
                             <div className="relative w-full h-64 rounded-xl overflow-hidden shadow-sm group">
                                 {/* Map Image */}
                                 <Image
-                                    alt="TecnaVision Location in New Jersey, USA"
+                                    alt="TecnaVision location in the United States"
                                     className="object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300 grayscale hover:grayscale-0"
                                     fill
                                     sizes="(min-width: 1024px) 50vw, 100vw"

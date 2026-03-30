@@ -2,6 +2,15 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { normalizeMarket, sanitizeMarkets } from "@/lib/market";
 
+function normalizeOptionalText(value: unknown) {
+    if (typeof value !== "string") {
+        return null;
+    }
+
+    const trimmed = value.trim();
+    return trimmed.length > 0 ? trimmed : null;
+}
+
 type Props = {
     params: Promise<{ slug: string }>;
 };
@@ -61,6 +70,10 @@ export async function PUT(request: Request, { params }: Props) {
         const { slug } = await params;
         const body = await request.json();
         const sanitizedMarkets = sanitizeMarkets(body.availableMarkets);
+        const normalizedSubtitle = normalizeOptionalText(body.subtitle);
+        const normalizedSubtitleEs = normalizeOptionalText(body.subtitle_es);
+        const normalizedSubtitleEn = normalizeOptionalText(body.subtitle_en);
+        const subtitleFallback = normalizedSubtitle ?? normalizedSubtitleEs ?? normalizedSubtitleEn;
 
         if (sanitizedMarkets.length === 0) {
             return NextResponse.json(
@@ -76,7 +89,9 @@ export async function PUT(request: Request, { params }: Props) {
                 model: body.model,
                 title_es: body.title_es?.trim() || null,
                 title_en: body.title_en?.trim() || null,
-                subtitle: body.subtitle,
+                subtitle: subtitleFallback,
+                subtitle_es: normalizedSubtitleEs,
+                subtitle_en: normalizedSubtitleEn,
                 description: body.description,
                 description_es: body.description_es?.trim() || null,
                 description_en: body.description_en?.trim() || null,

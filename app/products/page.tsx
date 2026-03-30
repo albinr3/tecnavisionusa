@@ -96,10 +96,12 @@ async function getProducts(
         if (searchFilter) {
             const localizedTextFields = market === "RD"
                 ? [
+                    { subtitle_es: { contains: searchFilter, mode: "insensitive" as const } },
                     { title_es: { contains: searchFilter, mode: "insensitive" as const } },
                     { description_es: { contains: searchFilter, mode: "insensitive" as const } },
                 ]
                 : [
+                    { subtitle_en: { contains: searchFilter, mode: "insensitive" as const } },
                     { title_en: { contains: searchFilter, mode: "insensitive" as const } },
                     { description_en: { contains: searchFilter, mode: "insensitive" as const } },
                 ];

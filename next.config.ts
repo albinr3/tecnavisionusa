@@ -4,11 +4,7 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   async redirects() {
     return [
-      { source: "/donde-comprar", destination: "/where-to-buy", permanent: true },
-      { source: "/privacidad", destination: "/privacy-policy", permanent: true },
-      { source: "/terminos", destination: "/terms", permanent: true },
       { source: "/admin/distribuidores", destination: "/admin/distributors", permanent: true },
-      { source: "/contacto", destination: "/contact", permanent: true },
     ];
   },
   images: {

@@ -5,7 +5,7 @@ import Header from "@/app/components/Header";
 import ProductDetail from "@/app/components/ProductDetail";
 import prisma from "@/lib/db";
 import { getSiteMarket, type MarketCode } from "@/lib/market";
-import { getLocalizedProductDescription, getLocalizedProductName } from "@/lib/product-localization";
+import { getLocalizedProductDescription, getLocalizedProductName, getLocalizedProductSubtitle } from "@/lib/product-localization";
 import { getLocalizedCategoryName } from "@/lib/category-localization";
 import { getSiteUrl } from "@/lib/site-url";
 
@@ -49,7 +49,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     const productPath = `/products/${product.slug}`;
     const localizedName = getLocalizedProductName(product, activeMarket);
-    const localizedDescription = getLocalizedProductDescription(product, activeMarket) || product.subtitle || "TecnaVision product";
+    const localizedSubtitle = getLocalizedProductSubtitle(product, activeMarket);
+    const localizedDescription = getLocalizedProductDescription(product, activeMarket) || localizedSubtitle || "TecnaVision product";
     const imageUrl = toAbsoluteUrl(
         product.mainImage || "/web-app-manifest-512x512.png",
         siteUrl
@@ -110,7 +111,8 @@ export default async function ProductPage({ params }: Props) {
     const productUrl = `${siteUrl}${productPath}`;
     const imageUrl = toAbsoluteUrl(product.mainImage || "/web-app-manifest-512x512.png", siteUrl);
     const localizedName = getLocalizedProductName(product, activeMarket);
-    const localizedDescription = getLocalizedProductDescription(product, activeMarket) || product.subtitle || "TecnaVision product";
+    const localizedSubtitle = getLocalizedProductSubtitle(product, activeMarket);
+    const localizedDescription = getLocalizedProductDescription(product, activeMarket) || localizedSubtitle || "TecnaVision product";
     const localizedCategoryName = product.category
         ? getLocalizedCategoryName(product.category, activeMarket)
         : activeMarket === "RD"
@@ -121,6 +123,7 @@ export default async function ProductPage({ params }: Props) {
     const localizedProduct = {
         ...product,
         name: localizedName,
+        subtitle: localizedSubtitle || product.subtitle,
         description: localizedDescription || product.description,
     };
     const additionalProperty = [

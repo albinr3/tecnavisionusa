@@ -2,6 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { normalizeMarket, sanitizeMarkets } from "@/lib/market";
 
+function normalizeOptionalText(value: unknown) {
+    if (typeof value !== "string") {
+        return null;
+    }
+
+    const trimmed = value.trim();
+    return trimmed.length > 0 ? trimmed : null;
+}
+
 // GET /api/products - List all products
 export async function GET(request: NextRequest) {
     try {
@@ -48,6 +57,8 @@ export async function POST(request: Request) {
             name,
             model,
             subtitle,
+            subtitle_es,
+            subtitle_en,
             description,
             badge,
             mainImage,
@@ -79,6 +90,10 @@ export async function POST(request: Request) {
         } = body;
 
         const sanitizedMarkets = sanitizeMarkets(availableMarkets);
+        const normalizedSubtitle = normalizeOptionalText(subtitle);
+        const normalizedSubtitleEs = normalizeOptionalText(subtitle_es);
+        const normalizedSubtitleEn = normalizeOptionalText(subtitle_en);
+        const subtitleFallback = normalizedSubtitle ?? normalizedSubtitleEs ?? normalizedSubtitleEn;
         if (sanitizedMarkets.length === 0) {
             return NextResponse.json(
                 { error: "Select at least one market (RD or US)." },
@@ -110,7 +125,9 @@ export async function POST(request: Request) {
                 model,
                 title_es: title_es?.trim() || null,
                 title_en: title_en?.trim() || null,
-                subtitle,
+                subtitle: subtitleFallback,
+                subtitle_es: normalizedSubtitleEs,
+                subtitle_en: normalizedSubtitleEn,
                 description,
                 description_es: description_es?.trim() || null,
                 description_en: description_en?.trim() || null,

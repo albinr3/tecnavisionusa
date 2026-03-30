@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
                 address: body.address,
                 city: body.city,
                 state: body.state || null,
-                country: body.country || "Dominican Republic",
+                country: body.country || "United States",
                 phone: body.phone,
                 email: body.email,
                 mapUrl: body.mapUrl || null,
